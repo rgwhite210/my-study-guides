@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIW Advanced HTML5 & CSS3 Specialist — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2530;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-dim: #484f58;
+    --heading: #f0f6fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1a1f2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  #header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .exam-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--heading);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  h1 span { color: var(--accent); font-style: italic; }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+  .exam-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .meta-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .meta-chip strong { color: var(--heading); display: block; font-size: 16px; }
+  .meta-chip span { color: var(--text-muted); font-size: 12px; }
+
+  /* ── NAV ── */
+  #nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .nav-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 14px 18px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── MAIN ── */
+  #main { max-width: 1100px; margin: 0 auto; padding: 40px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── DOMAIN CARDS ── */
+  .domain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .domain-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .domain-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .domain-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .d1::before { background: var(--accent); }
+  .d2::before { background: var(--accent2); }
+  .d3::before { background: var(--accent4); }
+  .d4::before { background: var(--accent5); }
+  .d5::before { background: var(--accent3); }
+  .d6::before { background: #79c0ff; }
+  .d7::before { background: #56d364; }
+  .d8::before { background: #ffa657; }
+  .d9::before { background: #ff7b72; }
+  .d10::before { background: #d2a8ff; }
+
+  .domain-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .domain-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--heading);
+    margin-bottom: 8px;
+  }
+  .domain-card p { font-size: 13px; color: var(--text-muted); }
+
+  /* ── CONTENT PANELS ── */
+  .content-panel { display: none; }
+  .content-panel.open { display: block; }
+
+  .panel-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  .panel-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--heading);
+  }
+  .panel-close {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .panel-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 24px;
+  }
+
+  /* ── STUDY CONTENT STYLES ── */
+  .study-h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--heading);
+    margin: 24px 0 10px;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+  }
+  .study-h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 16px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .key-concept {
+    background: rgba(88,166,255,0.06);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .key-concept strong { color: var(--accent); }
+  .warning-box {
+    background: rgba(247,129,102,0.06);
+    border: 1px solid rgba(247,129,102,0.3);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .warning-box::before { content: '⚠ '; color: var(--accent3); }
+  .tip-box {
+    background: rgba(63,185,80,0.06);
+    border: 1px solid rgba(63,185,80,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .tip-box::before { content: '💡 '; }
+
+  code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 2px 6px;
+    color: #79c0ff;
+  }
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+    padding: 16px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .kw { color: #ff7b72; }
+  .attr { color: #79c0ff; }
+  .val { color: #a5d6ff; }
+  .str { color: #a5d6ff; }
+  .cm { color: #8b949e; font-style: italic; }
+  .tag { color: #7ee787; }
+  .prop { color: #79c0ff; }
+  .num { color: #ffa657; }
+  .fn { color: #d2a8ff; }
+
+  ul.study-list, ol.study-list {
+    padding-left: 20px;
+    margin: 8px 0 12px;
+  }
+  ul.study-list li, ol.study-list li {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  ul.study-list li::marker { color: var(--accent); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+  }
+  .mini-card strong { color: var(--heading); display: block; margin-bottom: 4px; }
+
+  table.study-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  table.study-table th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--heading);
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  table.study-table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    vertical-align: top;
+  }
+  table.study-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ── PRACTICE EXAM ── */
+  #exam-section { display: none; }
+  #exam-section.active { display: block; }
+
+  .exam-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .timer-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    color: var(--accent);
+  }
+  .timer-bar.warning { color: var(--accent3); border-color: rgba(247,129,102,0.4); }
+
+  .progress-wrap {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 6px;
+    width: 100%;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent), var(--accent4));
+    height: 100%;
+    transition: width 0.3s;
+  }
+
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .question-card.active { display: block; }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .q-domain-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .q-text {
+    font-size: 16px;
+    color: var(--heading);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(88,166,255,0.08); }
+  .opt-btn .opt-letter {
+    background: var(--border);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .opt-btn.correct { border-color: var(--accent2); background: rgba(63,185,80,0.1); }
+  .opt-btn.correct .opt-letter { background: var(--accent2); color: #000; }
+  .opt-btn.wrong { border-color: var(--accent3); background: rgba(247,129,102,0.1); }
+  .opt-btn.wrong .opt-letter { background: var(--accent3); color: #000; }
+  .opt-btn:disabled { cursor: default; }
+
+  .explanation {
+    background: rgba(88,166,255,0.06);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    margin-top: 14px;
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+
+  .exam-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn.secondary {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn.danger { background: var(--accent3); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .q-status-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0;
+  }
+  .q-dot {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .q-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .q-dot.answered { background: rgba(88,166,255,0.15); border-color: var(--accent); color: var(--accent); }
+  .q-dot.current { background: var(--accent); color: #000; border-color: var(--accent); }
+  .q-dot.correct-dot { background: rgba(63,185,80,0.2); border-color: var(--accent2); color: var(--accent2); }
+  .q-dot.wrong-dot { background: rgba(247,129,102,0.15); border-color: var(--accent3); color: var(--accent3); }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+  #results.show { display: block; }
+
+  .result-header {
+    text-align: center;
+    padding: 40px 20px 32px;
+  }
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    color: var(--heading);
+    line-height: 1;
+  }
+  .result-score span { color: var(--accent); }
+  .result-label {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+  .pass-badge {
+    display: inline-block;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 12px;
+    padding: 6px 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .pass-badge.pass { background: rgba(63,185,80,0.15); border: 1px solid var(--accent2); color: var(--accent2); }
+  .pass-badge.fail { background: rgba(247,129,102,0.12); border: 1px solid var(--accent3); color: var(--accent3); }
+
+  .result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .breakdown-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .breakdown-card .d-name { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .breakdown-card .d-score { font-size: 20px; font-weight: 700; color: var(--heading); }
+  .breakdown-card .d-bar { background: var(--surface2); border-radius: 3px; height: 4px; margin-top: 6px; overflow: hidden; }
+  .breakdown-card .d-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+  /* ── FLASHCARDS ── */
+  .fc-wrap {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 260px;
+    cursor: pointer;
+  }
+  .fc-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+  .fc-inner.flipped { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .fc-front {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    flex-direction: column;
+    gap: 12px;
+  }
+  .fc-front .fc-label { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+  .fc-front .fc-q { font-size: 18px; color: var(--heading); font-family: 'DM Serif Display', serif; line-height: 1.4; }
+  .fc-back {
+    background: var(--surface2);
+    border: 1px solid rgba(88,166,255,0.3);
+    transform: rotateY(180deg);
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fc-nav { display: flex; align-items: center; justify-content: space-between; max-width: 600px; margin: 16px auto 0; }
+  .fc-counter { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-muted); }
+
+  /* misc */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; color: var(--text-muted); }
+
+  .section-intro { color: var(--text-muted); font-size: 15px; margin-bottom: 28px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="exam-badge">EXAM 1D0-720 &nbsp;·&nbsp; CIW CERTIFICATION</div>
+  <h1>Advanced <span>HTML5 & CSS3</span> Specialist</h1>
+  <p class="subtitle">Complete Study Guide — Web and Mobile Design Series</p>
+  <div class="exam-meta">
+    <div class="meta-chip"><strong>56</strong><span>Questions</span></div>
+    <div class="meta-chip"><strong>75%</strong><span>Passing Score (42/56)</span></div>
+    <div class="meta-chip"><strong>75 min</strong><span>Time Limit</span></div>
+    <div class="meta-chip"><strong>10</strong><span>Domains</span></div>
+    <div class="meta-chip"><strong>3 Years</strong><span>Certification Valid</span></div>
+  </div>
+</div>
+
+<div id="nav">
+  <button class="nav-btn active" onclick="showSection('study')">📚 Study Guide</button>
+  <button class="nav-btn" onclick="showSection('exam')">🎯 Practice Exam</button>
+  <button class="nav-btn" onclick="showSection('flash')">🃏 Flashcards</button>
+  <button class="nav-btn" onclick="showSection('ref')">⚡ Quick Reference</button>
+</div>
+
+<div id="main">
+
+<!-- ══════════════════════════ STUDY SECTION ══════════════════════════ -->
+<div id="study-section" class="section active">
+  <p class="section-intro">
+    Click any domain card below to expand detailed study notes. Each domain maps directly to exam objectives for exam 1D0-720. Focus areas marked <strong style="color:var(--accent3)">★ High Priority</strong> appear most frequently on the exam.
+  </p>
+
+  <div class="domain-grid">
+    <div class="domain-card d1" onclick="togglePanel('p1')">
+      <div class="domain-num">DOMAIN 1 · 11 OBJECTIVES</div>
+      <h3>HTML5 Essentials</h3>
+      <p>Structure tags, multimedia elements, APIs, mobile design, validation</p>
+    </div>
+    <div class="domain-card d2" onclick="togglePanel('p2')">
+      <div class="domain-num">DOMAIN 2 · 14 OBJECTIVES</div>
+      <h3>CSS Technology & CSS3</h3>
+      <p>Box model, positioning, selectors, RWD, mobile layouts</p>
+    </div>
+    <div class="domain-card d3" onclick="togglePanel('p3')">
+      <div class="domain-num">DOMAIN 3 · 6 OBJECTIVES</div>
+      <h3>Advanced CSS3 Techniques</h3>
+      <p>Transforms, transitions, animations, SASS, menus, overlays</p>
+    </div>
+    <div class="domain-card d4" onclick="togglePanel('p4')">
+      <div class="domain-num">DOMAIN 4 · 7 OBJECTIVES</div>
+      <h3>Introduction to JavaScript</h3>
+      <p>Variables, objects, expressions, operators, conditionals, loops</p>
+    </div>
+    <div class="domain-card d5" onclick="togglePanel('p5')">
+      <div class="domain-num">DOMAIN 5 · 7 OBJECTIVES</div>
+      <h3>JS Events, Functions & Methods</h3>
+      <p>Event handlers, function definitions, promises, async/await</p>
+    </div>
+    <div class="domain-card d6" onclick="togglePanel('p6')">
+      <div class="domain-num">DOMAIN 6 · 8 OBJECTIVES</div>
+      <h3>Using HTML5 APIs</h3>
+      <p>DOM, Canvas, Geolocation, Drag-Drop, File, History, jQuery</p>
+    </div>
+    <div class="domain-card d7" onclick="togglePanel('p7')">
+      <div class="domain-num">DOMAIN 7 · 6 OBJECTIVES</div>
+      <h3>Developing HTML5 Forms</h3>
+      <p>Input types, datalist, output element, form attributes</p>
+    </div>
+    <div class="domain-card d8" onclick="togglePanel('p8')">
+      <div class="domain-num">DOMAIN 8 · 4 OBJECTIVES</div>
+      <h3>Completing & Validating Forms</h3>
+      <p>HTML5 validation attributes, JS validation, form submission</p>
+    </div>
+    <div class="domain-card d9" onclick="togglePanel('p9')">
+      <div class="domain-num">DOMAIN 9 · 8 OBJECTIVES</div>
+      <h3>Copyright, Ethics & Legal</h3>
+      <p>Accessibility (ADA/508), GDPR, HIPAA, copyright, netiquette</p>
+    </div>
+    <div class="domain-card d10" onclick="togglePanel('p10')">
+      <div class="domain-num">DOMAIN 10 · 7 OBJECTIVES</div>
+      <h3>Project Management</h3>
+      <p>PM strategies, troubleshooting, critical thinking, leadership</p>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 1 ── -->
+  <div id="p1" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p1')">
+      <h2>Domain 1: HTML5 Essentials</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="tip-box">The web development <strong>trifecta</strong>: HTML5 (structure), CSS3 (presentation), JavaScript (behavior). These three together are also called the "HTML5 Family."</div>
+
+      <div class="study-h3">HTML5 Structure Elements (Semantic Tags)</div>
+      <div class="study-h4">Key Semantic Elements</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>&lt;header&gt;</strong>Page or section header; introductory content, navigation links</div>
+        <div class="mini-card"><strong>&lt;nav&gt;</strong>Major navigation block; links to other pages or sections</div>
+        <div class="mini-card"><strong>&lt;main&gt;</strong>Dominant content of the document; only ONE per page</div>
+        <div class="mini-card"><strong>&lt;article&gt;</strong>Self-contained content (blog post, news item, comment)</div>
+        <div class="mini-card"><strong>&lt;section&gt;</strong>Thematic grouping of content with a heading</div>
+        <div class="mini-card"><strong>&lt;aside&gt;</strong>Tangentially related content; sidebar material</div>
+        <div class="mini-card"><strong>&lt;footer&gt;</strong>Footer for its nearest sectioning ancestor</div>
+        <div class="mini-card"><strong>&lt;figure&gt; / &lt;figcaption&gt;</strong>Self-contained figure with optional caption</div>
+        <div class="mini-card"><strong>&lt;details&gt; / &lt;summary&gt;</strong>Disclosure widget; expandable content</div>
+        <div class="mini-card"><strong>&lt;mark&gt;</strong>Highlighted/relevant text</div>
+        <div class="mini-card"><strong>&lt;time&gt;</strong>Date/time with optional machine-readable <code>datetime</code> attr</div>
+        <div class="mini-card"><strong>&lt;progress&gt;</strong>Completion progress of a task</div>
+      </div>
+
+      <div class="study-h3">HTML5 Multimedia Elements</div>
+      <pre><span class="cm">&lt;!-- VIDEO element --&gt;</span>
+<span class="tag">&lt;video</span> <span class="attr">width</span>=<span class="val">"640"</span> <span class="attr">height</span>=<span class="val">"360"</span> <span class="attr">controls</span> <span class="attr">autoplay</span> <span class="attr">loop</span> <span class="attr">muted</span> <span class="attr">poster</span>=<span class="val">"thumb.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video.mp4"</span>  <span class="attr">type</span>=<span class="val">"video/mp4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video.webm"</span> <span class="attr">type</span>=<span class="val">"video/webm"</span><span class="tag">&gt;</span>
+  Fallback text for unsupported browsers
+<span class="tag">&lt;/video&gt;</span>
+
+<span class="cm">&lt;!-- AUDIO element --&gt;</span>
+<span class="tag">&lt;audio</span> <span class="attr">controls</span> <span class="attr">preload</span>=<span class="val">"metadata"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"audio.ogg"</span> <span class="attr">type</span>=<span class="val">"audio/ogg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"audio.mp3"</span> <span class="attr">type</span>=<span class="val">"audio/mpeg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/audio&gt;</span>
+
+<span class="cm">&lt;!-- CANVAS --&gt;</span>
+<span class="tag">&lt;canvas</span> <span class="attr">id</span>=<span class="val">"myCanvas"</span> <span class="attr">width</span>=<span class="val">"500"</span> <span class="attr">height</span>=<span class="val">"300"</span><span class="tag">&gt;&lt;/canvas&gt;</span>
+
+<span class="cm">&lt;!-- EMBED (legacy / SVG / plugins) --&gt;</span>
+<span class="tag">&lt;embed</span> <span class="attr">src</span>=<span class="val">"file.pdf"</span> <span class="attr">type</span>=<span class="val">"application/pdf"</span> <span class="attr">width</span>=<span class="val">"800"</span> <span class="attr">height</span>=<span class="val">"600"</span><span class="tag">&gt;</span></pre>
+
+      <div class="study-h4">Video Attribute Summary</div>
+      <table class="study-table">
+        <tr><th>Attribute</th><th>Purpose</th></tr>
+        <tr><td><code>controls</code></td><td>Show browser-native playback controls</td></tr>
+        <tr><td><code>autoplay</code></td><td>Start playing when page loads (usually needs <code>muted</code>)</td></tr>
+        <tr><td><code>loop</code></td><td>Restart video when it ends</td></tr>
+        <tr><td><code>muted</code></td><td>Mute audio (enables autoplay in most browsers)</td></tr>
+        <tr><td><code>poster</code></td><td>Image shown before video plays</td></tr>
+        <tr><td><code>preload</code></td><td><code>none</code> | <code>metadata</code> | <code>auto</code></td></tr>
+      </table>
+
+      <div class="study-h3">HTML5 Validation</div>
+      <div class="key-concept">
+        <strong>W3C Markup Validator:</strong> validator.w3.org — validates HTML5 documents. Identify and fix: missing doctype, unclosed tags, invalid attribute values, deprecated elements.
+      </div>
+      <div class="warning-box">Always include <code>&lt;!DOCTYPE html&gt;</code> to trigger standards mode (not quirks mode).</div>
+
+      <div class="study-h3">Mobile Websites vs. Mobile Apps</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>Mobile Website</strong>Accessible via browser, URL-based, no download required, easier to update, cross-platform</div>
+        <div class="mini-card"><strong>Mobile App</strong>Downloaded/installed, access to device hardware (GPS, camera), works offline, better performance, platform-specific</div>
+      </div>
+
+      <div class="study-h3">Universal Markup Creation</div>
+      <ul class="study-list">
+        <li>Write valid, well-formed HTML that works across all browsers and devices</li>
+        <li>Separate structure (HTML), presentation (CSS), and behavior (JS)</li>
+        <li>Use semantic elements for screen readers and SEO</li>
+        <li>Design progressively: basic functionality works without CSS/JS</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 2 ── -->
+  <div id="p2" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p2')">
+      <h2>Domain 2: CSS Technology & CSS3</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">CSS Box Model</div>
+      <div class="key-concept">
+        <strong>Content → Padding → Border → Margin</strong> (inside to outside)<br>
+        <code>box-sizing: border-box</code> — width/height includes padding and border (recommended)<br>
+        <code>box-sizing: content-box</code> — default; width/height = content only
+      </div>
+
+      <div class="study-h3">CSS Selectors Cheatsheet</div>
+      <table class="study-table">
+        <tr><th>Selector</th><th>Targets</th></tr>
+        <tr><td><code>*</code></td><td>All elements (universal)</td></tr>
+        <tr><td><code>element</code></td><td>All of that element type</td></tr>
+        <tr><td><code>.class</code></td><td>Elements with that class</td></tr>
+        <tr><td><code>#id</code></td><td>Single element with that ID</td></tr>
+        <tr><td><code>A B</code></td><td>B that is a descendant of A</td></tr>
+        <tr><td><code>A > B</code></td><td>B that is a direct child of A</td></tr>
+        <tr><td><code>A + B</code></td><td>B immediately after A (adjacent sibling)</td></tr>
+        <tr><td><code>A ~ B</code></td><td>All B siblings after A</td></tr>
+        <tr><td><code>[attr]</code></td><td>Elements with that attribute</td></tr>
+        <tr><td><code>[attr="val"]</code></td><td>Exact attribute value match</td></tr>
+        <tr><td><code>:hover</code></td><td>Element being hovered</td></tr>
+        <tr><td><code>:first-child</code></td><td>First child of its parent</td></tr>
+        <tr><td><code>:nth-child(n)</code></td><td>nth child (use <code>odd</code>, <code>even</code>, or formula)</td></tr>
+        <tr><td><code>::before / ::after</code></td><td>Pseudo-elements (CSS3)</td></tr>
+      </table>
+
+      <div class="study-h3">CSS Positioning</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>static</strong>Default. Normal document flow. top/left/etc have no effect.</div>
+        <div class="mini-card"><strong>relative</strong>Offset from its normal position. Still in document flow.</div>
+        <div class="mini-card"><strong>absolute</strong>Removed from flow. Positioned relative to nearest non-static ancestor.</div>
+        <div class="mini-card"><strong>fixed</strong>Removed from flow. Positioned relative to viewport. Stays on scroll.</div>
+        <div class="mini-card"><strong>sticky</strong>Hybrid: relative until it hits scroll threshold, then fixed.</div>
+        <div class="mini-card"><strong>float</strong>Element pushed left/right; text wraps around. Clear with <code>clear</code>.</div>
+      </div>
+
+      <div class="study-h3">CSS3 New Features</div>
+      <pre><span class="cm">/* Rounded corners */</span>
+<span class="prop">border-radius</span>: <span class="num">10px</span>;
+
+<span class="cm">/* Box shadow */</span>
+<span class="prop">box-shadow</span>: <span class="num">2px 4px 8px</span> rgba(<span class="num">0,0,0,0.3</span>);
+
+<span class="cm">/* Text shadow */</span>
+<span class="prop">text-shadow</span>: <span class="num">1px 1px 2px</span> #<span class="num">000</span>;
+
+<span class="cm">/* Linear gradient background */</span>
+<span class="prop">background</span>: <span class="fn">linear-gradient</span>(to right, #ff0000, #0000ff);
+
+<span class="cm">/* Radial gradient */</span>
+<span class="prop">background</span>: <span class="fn">radial-gradient</span>(circle, #fff, #000);
+
+<span class="cm">/* Custom web fonts */</span>
+<span class="kw">@font-face</span> {
+  <span class="prop">font-family</span>: <span class="str">'MyFont'</span>;
+  <span class="prop">src</span>: <span class="fn">url</span>(<span class="str">'myfont.woff2'</span>) <span class="fn">format</span>(<span class="str">'woff2'</span>);
+}
+
+<span class="cm">/* Multiple backgrounds */</span>
+<span class="prop">background-image</span>: <span class="fn">url</span>(<span class="str">'top.png'</span>), <span class="fn">url</span>(<span class="str">'bottom.png'</span>);</pre>
+
+      <div class="study-h3">Responsive Web Design (RWD)</div>
+      <div class="key-concept">
+        <strong>Three pillars of RWD (Ethan Marcotte):</strong>
+        <ol class="study-list" style="margin-top:8px">
+          <li><strong>Fluid grids</strong> — use percentages, not fixed pixels</li>
+          <li><strong>Flexible images</strong> — <code>max-width: 100%</code></li>
+          <li><strong>Media queries</strong> — apply different CSS at different viewport sizes</li>
+        </ol>
+      </div>
+      <pre><span class="cm">/* Viewport meta tag — required for mobile RWD */</span>
+<span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+
+<span class="cm">/* Media query examples */</span>
+<span class="kw">@media</span> (max-width: <span class="num">768px</span>) {
+  <span class="prop">body</span> { <span class="prop">font-size</span>: <span class="num">14px</span>; }
+}
+
+<span class="kw">@media</span> (min-width: <span class="num">1024px</span>) {
+  .container { <span class="prop">max-width</span>: <span class="num">960px</span>; }
+}
+
+<span class="cm">/* Mobile-first approach (preferred) */</span>
+<span class="prop">/* Base styles target mobile, then expand upward */</span></pre>
+
+      <div class="study-h3">CSS Display Types</div>
+      <table class="study-table">
+        <tr><th>Value</th><th>Behavior</th></tr>
+        <tr><td><code>block</code></td><td>Full width, starts on new line (div, p, h1-h6)</td></tr>
+        <tr><td><code>inline</code></td><td>Only as wide as content, no block breaks (span, a, strong)</td></tr>
+        <tr><td><code>inline-block</code></td><td>Inline positioning but accepts width/height</td></tr>
+        <tr><td><code>flex</code></td><td>Flexbox container — modern 1D layout</td></tr>
+        <tr><td><code>grid</code></td><td>Grid container — modern 2D layout</td></tr>
+        <tr><td><code>none</code></td><td>Removes element from document entirely</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 3 ── -->
+  <div id="p3" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p3')">
+      <h2>Domain 3: Advanced CSS3 Techniques</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">CSS3 Transforms</div>
+      <pre><span class="cm">/* 2D Transforms */</span>
+.<span class="attr">box</span> {
+  <span class="prop">transform</span>: <span class="fn">translate</span>(<span class="num">50px, 20px</span>);    <span class="cm">/* move */</span>
+  <span class="prop">transform</span>: <span class="fn">rotate</span>(<span class="num">45deg</span>);            <span class="cm">/* rotate */</span>
+  <span class="prop">transform</span>: <span class="fn">scale</span>(<span class="num">1.5</span>);               <span class="cm">/* scale (both axes) */</span>
+  <span class="prop">transform</span>: <span class="fn">skew</span>(<span class="num">10deg, 5deg</span>);        <span class="cm">/* skew */</span>
+  <span class="prop">transform</span>: <span class="fn">matrix</span>(<span class="num">1,0,0,1,50,20</span>);   <span class="cm">/* matrix() combines all */</span>
+}
+
+<span class="cm">/* 3D Transforms */</span>
+.<span class="attr">box3d</span> {
+  <span class="prop">transform</span>: <span class="fn">rotateX</span>(<span class="num">30deg</span>) <span class="fn">rotateY</span>(<span class="num">45deg</span>);
+  <span class="prop">transform</span>: <span class="fn">perspective</span>(<span class="num">500px</span>) <span class="fn">translateZ</span>(<span class="num">100px</span>);
+  <span class="prop">transform-origin</span>: center center;
+}
+
+<span class="cm">/* Set perspective on parent for children's 3D */</span>
+.<span class="attr">parent</span> {
+  <span class="prop">perspective</span>: <span class="num">1000px</span>;
+  <span class="prop">transform-style</span>: preserve-3d;
+}</pre>
+
+      <div class="study-h3">CSS3 Transitions</div>
+      <pre><span class="cm">/* Shorthand: property duration timing-function delay */</span>
+.<span class="attr">btn</span> {
+  <span class="prop">background</span>: blue;
+  <span class="prop">transition</span>: <span class="str">background</span> <span class="num">0.3s</span> ease-in-out <span class="num">0s</span>;
+}
+.<span class="attr">btn</span>:hover { <span class="prop">background</span>: red; }
+
+<span class="cm">/* Multiple transitions */</span>
+.<span class="attr">card</span> {
+  <span class="prop">transition</span>: <span class="str">transform</span> <span class="num">0.2s</span> ease, <span class="str">box-shadow</span> <span class="num">0.2s</span> ease;
+}</pre>
+      <div class="key-concept">
+        <strong>Timing functions:</strong> <code>ease</code> (default) | <code>linear</code> | <code>ease-in</code> | <code>ease-out</code> | <code>ease-in-out</code> | <code>cubic-bezier()</code>
+      </div>
+
+      <div class="study-h3">CSS3 Animations</div>
+      <pre><span class="cm">/* Define keyframes */</span>
+<span class="kw">@keyframes</span> <span class="fn">slideIn</span> {
+  <span class="num">0%</span>   { <span class="prop">transform</span>: <span class="fn">translateX</span>(<span class="num">-100px</span>); <span class="prop">opacity</span>: <span class="num">0</span>; }
+  <span class="num">100%</span> { <span class="prop">transform</span>: <span class="fn">translateX</span>(<span class="num">0</span>); <span class="prop">opacity</span>: <span class="num">1</span>; }
+}
+
+<span class="cm">/* Apply animation */</span>
+.<span class="attr">element</span> {
+  <span class="prop">animation-name</span>: slideIn;
+  <span class="prop">animation-duration</span>: <span class="num">1s</span>;
+  <span class="prop">animation-timing-function</span>: ease-out;
+  <span class="prop">animation-delay</span>: <span class="num">0.5s</span>;
+  <span class="prop">animation-iteration-count</span>: infinite;  <span class="cm">/* or a number */</span>
+  <span class="prop">animation-direction</span>: alternate;         <span class="cm">/* normal | reverse | alternate */</span>
+  <span class="prop">animation-fill-mode</span>: forwards;           <span class="cm">/* none | forwards | backwards | both */</span>
+  <span class="cm">/* Shorthand: */</span>
+  <span class="prop">animation</span>: slideIn <span class="num">1s</span> ease-out <span class="num">0.5s</span> infinite alternate forwards;
+}</pre>
+
+      <div class="study-h3">SASS (Syntactically Awesome Style Sheets)</div>
+      <div class="key-concept">
+        SASS is a <strong>CSS preprocessor</strong> — it extends CSS with features not available natively, then <em>compiles</em> to standard CSS.
+        <br><br>
+        <strong>Key features:</strong> Variables (<code>$primary: #333</code>), Nesting, Mixins, Partials &amp; Imports, Inheritance (<code>@extend</code>), Operators (math in CSS)
+      </div>
+      <div class="warning-box">SASS is NOT a browser technology — it requires compilation to CSS before use.</div>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 4 ── -->
+  <div id="p4" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p4')">
+      <h2>Domain 4: Introduction to JavaScript</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">Embedding JavaScript</div>
+      <pre><span class="cm">&lt;!-- Inline (avoid for production) --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="val">"alert('clicked')"</span><span class="tag">&gt;</span>Click<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- Internal script --&gt;</span>
+<span class="tag">&lt;script&gt;</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hello World"</span>);
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="cm">&lt;!-- External file (preferred — place before &lt;/body&gt; or use defer) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"app.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span></pre>
+
+      <div class="study-h3">Variables & Data Types</div>
+      <pre><span class="kw">var</span>   name = <span class="str">"Rachel"</span>;  <span class="cm">// function-scoped, hoisted, can redeclare</span>
+<span class="kw">let</span>   age  = <span class="num">30</span>;        <span class="cm">// block-scoped, NOT hoisted, no redeclare</span>
+<span class="kw">const</span> PI   = <span class="num">3.14</span>;     <span class="cm">// block-scoped, must initialize, immutable binding</span>
+
+<span class="cm">// Data types</span>
+<span class="kw">typeof</span> <span class="str">"hello"</span>     <span class="cm">// "string"</span>
+<span class="kw">typeof</span> <span class="num">42</span>          <span class="cm">// "number"</span>
+<span class="kw">typeof</span> <span class="kw">true</span>        <span class="cm">// "boolean"</span>
+<span class="kw">typeof</span> <span class="kw">undefined</span>   <span class="cm">// "undefined"</span>
+<span class="kw">typeof</span> <span class="kw">null</span>        <span class="cm">// "object" (known quirk!)</span>
+<span class="kw">typeof</span> {}          <span class="cm">// "object"</span>
+<span class="kw">typeof</span> []          <span class="cm">// "object"</span>
+<span class="kw">typeof</span> <span class="fn">function</span>(){} <span class="cm">// "function"</span></pre>
+
+      <div class="study-h3">Operators & Control Flow</div>
+      <pre><span class="cm">// Comparison operators</span>
+==   <span class="cm">// equality (loose — type coercion)</span>
+===  <span class="cm">// strict equality (no coercion) ← PREFER THIS</span>
+!=   <span class="cm">// not equal (loose)</span>
+!==  <span class="cm">// strict not equal</span>
+
+<span class="cm">// Conditional</span>
+<span class="kw">if</span> (score >= <span class="num">75</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Pass"</span>);
+} <span class="kw">else if</span> (score >= <span class="num">60</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Near miss"</span>);
+} <span class="kw">else</span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Fail"</span>);
+}
+
+<span class="cm">// Ternary</span>
+<span class="kw">let</span> result = (score >= <span class="num">75</span>) ? <span class="str">"Pass"</span> : <span class="str">"Fail"</span>;
+
+<span class="cm">// Loops</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < <span class="num">10</span>; i++) { ... }
+<span class="kw">while</span> (condition) { ... }
+<span class="kw">do</span> { ... } <span class="kw">while</span> (condition);
+<span class="kw">for</span> (<span class="kw">let</span> item <span class="kw">of</span> array) { ... }   <span class="cm">// iterates values</span>
+<span class="kw">for</span> (<span class="kw">let</span> key <span class="kw">in</span> object) { ... }   <span class="cm">// iterates keys</span></pre>
+
+      <div class="study-h3">Arrays</div>
+      <pre><span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+arr.<span class="fn">push</span>(<span class="num">4</span>);         <span class="cm">// add to end</span>
+arr.<span class="fn">pop</span>();           <span class="cm">// remove from end</span>
+arr.<span class="fn">shift</span>();         <span class="cm">// remove from front</span>
+arr.<span class="fn">unshift</span>(<span class="num">0</span>);     <span class="cm">// add to front</span>
+arr.<span class="fn">length</span>;          <span class="cm">// number of elements</span>
+arr.<span class="fn">map</span>(x => x*<span class="num">2</span>);   <span class="cm">// transform each element</span>
+arr.<span class="fn">filter</span>(x => x><span class="num">2</span>); <span class="cm">// filter elements</span>
+arr.<span class="fn">forEach</span>(fn);     <span class="cm">// iterate (no return)</span>
+arr.<span class="fn">find</span>(fn);        <span class="cm">// first matching element</span>
+arr.<span class="fn">indexOf</span>(val);    <span class="cm">// find index</span></pre>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 5 ── -->
+  <div id="p5" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p5')">
+      <h2>Domain 5: JS Events, Functions & Methods</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">Event Handlers</div>
+      <pre><span class="cm">// Method 1: HTML attribute (avoid)</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="val">"handleClick()"</span><span class="tag">&gt;</span>Click<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">// Method 2: DOM property</span>
+document.<span class="fn">getElementById</span>(<span class="str">"btn"</span>).onclick = <span class="fn">handleClick</span>;
+
+<span class="cm">// Method 3: addEventListener (preferred)</span>
+element.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="fn">handleClick</span>);
+element.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="fn">handleClick</span>, <span class="kw">false</span>); <span class="cm">// bubble phase</span>
+
+<span class="cm">// Common events</span>
+click | dblclick | mouseover | mouseout | mouseenter
+keydown | keyup | keypress
+load | DOMContentLoaded | resize | scroll
+focus | blur | change | submit | input</pre>
+
+      <div class="study-h3">Functions</div>
+      <pre><span class="cm">// Function declaration (hoisted)</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name) {
+  <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>;
+}
+
+<span class="cm">// Function expression (NOT hoisted)</span>
+<span class="kw">const</span> greet = <span class="kw">function</span>(name) { <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>; };
+
+<span class="cm">// Arrow function (ES6) — no own 'this'</span>
+<span class="kw">const</span> <span class="fn">greet</span> = (name) => <span class="str">`Hello, ${name}!`</span>;
+
+<span class="cm">// Closures — inner function retains access to outer scope</span>
+<span class="kw">function</span> <span class="fn">counter</span>() {
+  <span class="kw">let</span> count = <span class="num">0</span>;
+  <span class="kw">return</span> <span class="kw">function</span>() { <span class="kw">return</span> ++count; };
+}</pre>
+
+      <div class="study-h3">Promises & Async/Await</div>
+      <pre><span class="cm">// Promise</span>
+<span class="kw">const</span> p = <span class="kw">new</span> <span class="fn">Promise</span>((resolve, reject) => {
+  <span class="cm">// async work...</span>
+  <span class="fn">resolve</span>(<span class="str">"success"</span>); <span class="cm">// or reject(new Error("fail"))</span>
+});
+p.<span class="fn">then</span>(val => <span class="fn">console</span>.<span class="fn">log</span>(val))
+ .<span class="fn">catch</span>(err => <span class="fn">console</span>.<span class="fn">error</span>(err));
+
+<span class="cm">// Async/Await (syntactic sugar over Promises)</span>
+<span class="kw">async function</span> <span class="fn">fetchData</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.example.com/data'</span>);
+    <span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();
+    <span class="kw">return</span> data;
+  } <span class="kw">catch</span> (err) {
+    <span class="fn">console</span>.<span class="fn">error</span>(err);
+  }
+}</pre>
+
+      <div class="key-concept">
+        <strong>Modules (ES6):</strong> Use <code>export</code> / <code>import</code> to share code across files. Script tags need <code>type="module"</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 6 ── -->
+  <div id="p6" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p6')">
+      <h2>Domain 6: Using HTML5 APIs</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">The DOM (Document Object Model)</div>
+      <div class="key-concept">
+        The DOM represents an HTML document as a <strong>tree of nodes</strong> that JavaScript can read and manipulate. The browser builds it automatically when a page loads.
+      </div>
+      <pre><span class="cm">// Selecting elements</span>
+document.<span class="fn">getElementById</span>(<span class="str">"id"</span>)
+document.<span class="fn">getElementsByClassName</span>(<span class="str">"class"</span>)  <span class="cm">// HTMLCollection</span>
+document.<span class="fn">getElementsByTagName</span>(<span class="str">"div"</span>)      <span class="cm">// HTMLCollection</span>
+document.<span class="fn">querySelector</span>(<span class="str">"#id .class"</span>)       <span class="cm">// first match</span>
+document.<span class="fn">querySelectorAll</span>(<span class="str">".class"</span>)        <span class="cm">// NodeList</span>
+
+<span class="cm">// Modifying</span>
+el.<span class="prop">textContent</span> = <span class="str">"text"</span>;
+el.<span class="prop">innerHTML</span> = <span class="str">"&lt;b&gt;bold&lt;/b&gt;"</span>;
+el.<span class="fn">setAttribute</span>(<span class="str">"href"</span>, <span class="str">"url"</span>);
+el.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">"red"</span>;
+el.<span class="prop">classList</span>.<span class="fn">add</span>(<span class="str">"active"</span>);
+el.<span class="prop">classList</span>.<span class="fn">remove</span>(<span class="str">"hidden"</span>);
+el.<span class="prop">classList</span>.<span class="fn">toggle</span>(<span class="str">"open"</span>);
+
+<span class="cm">// Creating/inserting elements</span>
+<span class="kw">const</span> div = document.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+parent.<span class="fn">appendChild</span>(div);
+parent.<span class="fn">removeChild</span>(child);</pre>
+
+      <div class="study-h3">Canvas API</div>
+      <pre><span class="kw">const</span> canvas = document.<span class="fn">getElementById</span>(<span class="str">"c"</span>);
+<span class="kw">const</span> ctx = canvas.<span class="fn">getContext</span>(<span class="str">"2d"</span>);
+
+ctx.<span class="prop">fillStyle</span> = <span class="str">"#ff0000"</span>;
+ctx.<span class="fn">fillRect</span>(<span class="num">10, 10, 100, 50</span>);      <span class="cm">// x, y, width, height</span>
+ctx.<span class="fn">strokeRect</span>(<span class="num">10, 10, 100, 50</span>);   <span class="cm">// outline only</span>
+ctx.<span class="fn">clearRect</span>(<span class="num">0, 0, 500, 300</span>);     <span class="cm">// clear area</span>
+
+ctx.<span class="fn">beginPath</span>();
+ctx.<span class="fn">arc</span>(<span class="num">100, 100, 50, 0, Math.PI * 2</span>);  <span class="cm">// circle</span>
+ctx.<span class="fn">fill</span>();
+
+ctx.<span class="fn">drawImage</span>(img, x, y, w, h);     <span class="cm">// draw image to canvas</span></pre>
+
+      <div class="study-h3">Geolocation API</div>
+      <pre>navigator.<span class="prop">geolocation</span>.<span class="fn">getCurrentPosition</span>(
+  (pos) => {
+    <span class="fn">console</span>.<span class="fn">log</span>(pos.coords.latitude, pos.coords.longitude);
+  },
+  (err) => { <span class="fn">console</span>.<span class="fn">error</span>(err); }
+);</pre>
+
+      <div class="study-h3">XMLHttpRequest & jQuery AJAX</div>
+      <pre><span class="cm">// XHR (XMLHttpRequest)</span>
+<span class="kw">const</span> xhr = <span class="kw">new</span> <span class="fn">XMLHttpRequest</span>();
+xhr.<span class="fn">open</span>(<span class="str">"GET"</span>, <span class="str">"data.json"</span>, <span class="kw">true</span>);   <span class="cm">// true = async</span>
+xhr.<span class="prop">onreadystatechange</span> = <span class="kw">function</span>() {
+  <span class="kw">if</span> (xhr.readyState === <span class="num">4</span> && xhr.status === <span class="num">200</span>) {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">JSON</span>.<span class="fn">parse</span>(xhr.responseText));
+  }
+};
+xhr.<span class="fn">send</span>();
+
+<span class="cm">// jQuery AJAX</span>
+$.<span class="fn">ajax</span>({ url: <span class="str">"data.json"</span>, success: (data) => <span class="fn">console</span>.<span class="fn">log</span>(data) });
+$.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <span class="fn">console</span>.<span class="fn">log</span>(data));</pre>
+
+      <div class="study-h4">XHR readyState values</div>
+      <table class="study-table">
+        <tr><th>Value</th><th>Meaning</th></tr>
+        <tr><td>0</td><td>UNSENT — open() not called</td></tr>
+        <tr><td>1</td><td>OPENED — open() called</td></tr>
+        <tr><td>2</td><td>HEADERS_RECEIVED — send() called, headers received</td></tr>
+        <tr><td>3</td><td>LOADING — response being received</td></tr>
+        <tr><td>4</td><td>DONE — operation complete</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 7 ── -->
+  <div id="p7" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p7')">
+      <h2>Domain 7: Developing HTML5 Forms</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">HTML5 Input Types</div>
+      <div class="two-col">
+        <div>
+          <div class="tag-row">
+            <span class="tag">text</span><span class="tag">password</span><span class="tag">email</span><span class="tag">url</span>
+            <span class="tag">tel</span><span class="tag">number</span><span class="tag">range</span><span class="tag">date</span>
+            <span class="tag">time</span><span class="tag">datetime-local</span><span class="tag">month</span><span class="tag">week</span>
+            <span class="tag">color</span><span class="tag">search</span><span class="tag">file</span><span class="tag">checkbox</span>
+            <span class="tag">radio</span><span class="tag">submit</span><span class="tag">reset</span><span class="tag">button</span>
+            <span class="tag">hidden</span><span class="tag">image</span>
+          </div>
+        </div>
+        <div class="mini-card"><strong>Benefits of HTML5 input types</strong>Mobile browsers show the appropriate keyboard. Built-in validation. Better UX without JavaScript.</div>
+      </div>
+
+      <div class="study-h3">New HTML5 Form Elements</div>
+      <pre><span class="cm">&lt;!-- datalist: suggested options for text input --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">list</span>=<span class="val">"browsers"</span> <span class="attr">name</span>=<span class="val">"browser"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;datalist</span> <span class="attr">id</span>=<span class="val">"browsers"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Chrome"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Firefox"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/datalist&gt;</span>
+
+<span class="cm">&lt;!-- output: result of a calculation --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"range"</span> <span class="attr">id</span>=<span class="val">"a"</span> <span class="attr">value</span>=<span class="val">"50"</span>
+       <span class="attr">oninput</span>=<span class="val">"x.value=a.value"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;output</span> <span class="attr">name</span>=<span class="val">"x"</span> <span class="attr">for</span>=<span class="val">"a"</span><span class="tag">&gt;</span>50<span class="tag">&lt;/output&gt;</span>
+
+<span class="cm">&lt;!-- fieldset and legend --&gt;</span>
+<span class="tag">&lt;fieldset&gt;</span>
+  <span class="tag">&lt;legend&gt;</span>Personal Info<span class="tag">&lt;/legend&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"name"</span><span class="tag">&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"name"</span> <span class="attr">name</span>=<span class="val">"name"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/fieldset&gt;</span></pre>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 8 ── -->
+  <div id="p8" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p8')">
+      <h2>Domain 8: Completing & Validating Forms</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">HTML5 Validation Attributes</div>
+      <table class="study-table">
+        <tr><th>Attribute</th><th>Purpose</th><th>Example</th></tr>
+        <tr><td><code>required</code></td><td>Field must not be empty</td><td><code>&lt;input required&gt;</code></td></tr>
+        <tr><td><code>minlength</code> / <code>maxlength</code></td><td>Character count limits</td><td><code>minlength="3"</code></td></tr>
+        <tr><td><code>min</code> / <code>max</code></td><td>Number/date range</td><td><code>min="1" max="100"</code></td></tr>
+        <tr><td><code>pattern</code></td><td>Regex pattern match</td><td><code>pattern="[A-Z]{3}"</code></td></tr>
+        <tr><td><code>type</code></td><td>Built-in format validation</td><td><code>type="email"</code></td></tr>
+        <tr><td><code>novalidate</code></td><td>Disable form-level validation</td><td>On <code>&lt;form&gt;</code></td></tr>
+        <tr><td><code>autocomplete</code></td><td>on | off — browser autofill</td><td><code>autocomplete="off"</code></td></tr>
+        <tr><td><code>placeholder</code></td><td>Hint text</td><td><code>placeholder="Enter email"</code></td></tr>
+        <tr><td><code>autofocus</code></td><td>Auto-focus on page load</td><td><code>&lt;input autofocus&gt;</code></td></tr>
+        <tr><td><code>disabled</code></td><td>Field not editable, not submitted</td><td><code>&lt;input disabled&gt;</code></td></tr>
+        <tr><td><code>readonly</code></td><td>Not editable, but IS submitted</td><td><code>&lt;input readonly&gt;</code></td></tr>
+      </table>
+
+      <div class="study-h3">JavaScript Form Validation</div>
+      <pre><span class="kw">const</span> form = document.<span class="fn">getElementById</span>(<span class="str">"myForm"</span>);
+form.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>, <span class="kw">function</span>(event) {
+  <span class="kw">const</span> email = document.<span class="fn">getElementById</span>(<span class="str">"email"</span>).value;
+  <span class="kw">const</span> regex = <span class="str">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+  
+  <span class="kw">if</span> (!regex.<span class="fn">test</span>(email)) {
+    event.<span class="fn">preventDefault</span>();  <span class="cm">// stop submission</span>
+    <span class="fn">alert</span>(<span class="str">"Invalid email address"</span>);
+  }
+});
+
+<span class="cm">// Constraint Validation API</span>
+input.<span class="prop">validity</span>.<span class="prop">valid</span>        <span class="cm">// true if all constraints pass</span>
+input.<span class="prop">validity</span>.<span class="prop">valueMissing</span>  <span class="cm">// true if required and empty</span>
+input.<span class="prop">validity</span>.<span class="prop">patternMismatch</span>
+input.<span class="fn">setCustomValidity</span>(<span class="str">"Custom message"</span>);
+input.<span class="fn">reportValidity</span>();</pre>
+
+      <div class="warning-box">Always validate on the server side too — client-side validation can be bypassed!</div>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 9 ── -->
+  <div id="p9" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p9')">
+      <h2>Domain 9: Copyright, Ethics & Legal</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">Accessibility Standards</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>ADA (Americans with Disabilities Act)</strong>Requires websites of public accommodations to be accessible. No specific technical standard mandated federally, but WCAG 2.1 AA is widely referenced.</div>
+        <div class="mini-card"><strong>Section 508</strong>Federal law requiring US government agencies to make electronic and IT accessible to people with disabilities. References WCAG 2.0 AA.</div>
+        <div class="mini-card"><strong>WCAG</strong>Web Content Accessibility Guidelines by W3C. Levels: A, AA, AAA. Four principles: Perceivable, Operable, Understandable, Robust (POUR)</div>
+        <div class="mini-card"><strong>ARIA</strong>Accessible Rich Internet Applications — HTML attributes (<code>role</code>, <code>aria-label</code>, <code>aria-hidden</code>) that improve screen reader support</div>
+      </div>
+
+      <div class="study-h3">Privacy Laws</div>
+      <table class="study-table">
+        <tr><th>Law/Regulation</th><th>Scope</th><th>Key Points</th></tr>
+        <tr><td><strong>GDPR</strong></td><td>EU residents</td><td>Consent required; right to erasure; data portability; notify breaches within 72 hrs</td></tr>
+        <tr><td><strong>HIPAA</strong></td><td>US healthcare</td><td>Protects PHI (Protected Health Information); applies to covered entities</td></tr>
+        <tr><td><strong>COPPA</strong></td><td>US children online</td><td>Parental consent required for data collection from children under 13</td></tr>
+        <tr><td><strong>CCPA</strong></td><td>California residents</td><td>Right to know, delete, and opt-out of data sale</td></tr>
+      </table>
+
+      <div class="study-h3">Copyright in Web Development</div>
+      <ul class="study-list">
+        <li>Original creative works are automatically copyrighted — no registration required</li>
+        <li><strong>Fair use</strong> allows limited use for commentary, education, news, parody</li>
+        <li><strong>Creative Commons</strong> licenses allow controlled sharing</li>
+        <li>Always obtain licenses for stock photos, fonts, and icons used commercially</li>
+        <li>Open-source licenses (MIT, GPL, Apache) have specific requirements</li>
+      </ul>
+
+      <div class="study-h3">Web Security Basics</div>
+      <ul class="study-list">
+        <li><strong>HTTPS</strong> — encrypts data in transit via TLS/SSL; required for forms handling sensitive data</li>
+        <li><strong>XSS (Cross-Site Scripting)</strong> — attacker injects malicious scripts; sanitize user input</li>
+        <li><strong>CSRF (Cross-Site Request Forgery)</strong> — use tokens; check referrer headers</li>
+        <li><strong>SQL Injection</strong> — use parameterized queries, never concatenate user input</li>
+        <li><strong>Content Security Policy (CSP)</strong> — HTTP header restricting resource origins</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── DOMAIN 10 ── -->
+  <div id="p10" class="content-panel">
+    <div class="panel-header" onclick="togglePanel('p10')">
+      <h2>Domain 10: Project Management & Critical Thinking</h2>
+      <button class="panel-close">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="study-h3">Web Project Management</div>
+      <ul class="study-list">
+        <li><strong>SDLC phases:</strong> Planning → Analysis → Design → Development → Testing → Deployment → Maintenance</li>
+        <li><strong>Agile</strong> — iterative, flexible, cross-functional teams, user stories, sprints</li>
+        <li><strong>Waterfall</strong> — sequential, rigid, each phase completes before next starts</li>
+        <li><strong>Scrum</strong> — Agile framework; sprints (1–4 weeks); Daily standups; Product backlog; Sprint backlog</li>
+      </ul>
+
+      <div class="study-h3">Common Website Issues & Troubleshooting</div>
+      <table class="study-table">
+        <tr><th>Issue</th><th>Cause</th><th>Fix</th></tr>
+        <tr><td>Broken links</td><td>URL changes, typos</td><td>Link checker tools</td></tr>
+        <tr><td>Slow load times</td><td>Large images, render-blocking JS</td><td>Compress assets, async/defer scripts</td></tr>
+        <tr><td>Cross-browser layout issues</td><td>CSS prefixes, non-standard features</td><td>Validate CSS; use autoprefixer</td></tr>
+        <tr><td>Mobile display problems</td><td>Missing viewport meta tag</td><td>Add viewport meta; test in DevTools</td></tr>
+        <tr><td>Form not submitting</td><td>JS error, missing action attribute</td><td>Check console; verify form attributes</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div><!-- end study section -->
+
+<!-- ══════════════════════════ EXAM SECTION ══════════════════════════ -->
+<div id="exam-section" class="section">
+  <div id="exam-start">
+    <div style="max-width:560px">
+      <h2 style="font-family:'DM Serif Display',serif; font-size:28px; color:var(--heading); margin-bottom:12px;">Practice Exam</h2>
+      <p style="color:var(--text-muted); margin-bottom:24px; line-height:1.7;">
+        This 56-question practice exam mirrors the structure of the CIW 1D0-720 certification exam. You'll have <strong style="color:var(--text)">75 minutes</strong>. A score of <strong style="color:var(--text)">75% (42/56)</strong> is required to pass.
+      </p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn" onclick="startExam()">Start Exam ↗</button>
+        <button class="btn secondary" onclick="startExamUntimed()">Untimed Practice</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exam-active" style="display:none">
+    <div class="exam-controls">
+      <div>
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">Question <span id="q-current-num">1</span> of 56</div>
+        <div class="q-status-row" id="q-dots"></div>
+      </div>
+      <div id="timer-display" class="timer-bar">75:00</div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div id="questions-container"></div>
+
+    <div class="exam-nav">
+      <button class="btn secondary" id="btn-prev" onclick="prevQ()" disabled>← Previous</button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn secondary" id="btn-submit-all" onclick="submitExam()">Submit Exam</button>
+        <button class="btn" id="btn-next" onclick="nextQ()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="result-header">
+      <div class="result-score" id="score-display">0<span>/56</span></div>
+      <div class="result-label" id="pct-display">0% — </div>
+      <div class="pass-badge" id="pass-badge">PASS</div>
+    </div>
+    <div class="result-breakdown" id="domain-breakdown"></div>
+    <hr class="divider">
+    <div id="review-answers"></div>
+    <div style="margin-top:24px; display:flex; gap:12px;">
+      <button class="btn" onclick="resetExam()">Try Again</button>
+      <button class="btn secondary" onclick="showSection('study')">Back to Study Guide</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ FLASHCARDS ══════════════════════════ -->
+<div id="flash-section" class="section">
+  <h2 style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--heading); margin-bottom:8px;">Flashcards</h2>
+  <p class="section-intro">Click the card to reveal the answer. Use the arrows to navigate.</p>
+  <div class="fc-wrap" onclick="flipCard()">
+    <div class="fc-inner" id="fc-inner">
+      <div class="fc-front">
+        <div class="fc-label" id="fc-domain">DOMAIN 1</div>
+        <div class="fc-q" id="fc-q">Loading...</div>
+        <div style="font-size:12px; color:var(--text-dim); margin-top:8px;">Click to flip</div>
+      </div>
+      <div class="fc-back">
+        <div id="fc-a">Answer loading...</div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button class="btn secondary" onclick="fcPrev()">← Prev</button>
+    <div class="fc-counter"><span id="fc-num">1</span> / <span id="fc-total">1</span></div>
+    <button class="btn secondary" onclick="fcNext()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════ QUICK REF ══════════════════════════ -->
+<div id="ref-section" class="section">
+  <h2 style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--heading); margin-bottom:16px;">Quick Reference</h2>
+
+  <div class="study-h3">HTML5 Semantic Elements</div>
+  <div class="tag-row">
+    <span class="tag">&lt;header&gt;</span><span class="tag">&lt;nav&gt;</span><span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;article&gt;</span><span class="tag">&lt;section&gt;</span><span class="tag">&lt;aside&gt;</span>
+    <span class="tag">&lt;footer&gt;</span><span class="tag">&lt;figure&gt;</span><span class="tag">&lt;figcaption&gt;</span>
+    <span class="tag">&lt;details&gt;</span><span class="tag">&lt;summary&gt;</span><span class="tag">&lt;mark&gt;</span>
+    <span class="tag">&lt;time&gt;</span><span class="tag">&lt;progress&gt;</span><span class="tag">&lt;meter&gt;</span>
+  </div>
+
+  <div class="study-h3">CSS Cascade Order (lowest → highest priority)</div>
+  <ol class="study-list">
+    <li>Browser default styles</li>
+    <li>External stylesheet (<code>&lt;link&gt;</code>)</li>
+    <li>Internal stylesheet (<code>&lt;style&gt;</code>)</li>
+    <li>Inline styles (<code>style="..."</code>)</li>
+    <li><code>!important</code> declarations</li>
+  </ol>
+  <div class="tip-box">Specificity also matters: ID (100) &gt; Class/Pseudo-class/Attribute (10) &gt; Element/Pseudo-element (1)</div>
+
+  <div class="study-h3">HTTP Status Codes</div>
+  <table class="study-table">
+    <tr><th>Code</th><th>Meaning</th></tr>
+    <tr><td>200</td><td>OK — success</td></tr>
+    <tr><td>301</td><td>Moved Permanently — redirect</td></tr>
+    <tr><td>400</td><td>Bad Request</td></tr>
+    <tr><td>401</td><td>Unauthorized</td></tr>
+    <tr><td>403</td><td>Forbidden</td></tr>
+    <tr><td>404</td><td>Not Found</td></tr>
+    <tr><td>500</td><td>Internal Server Error</td></tr>
+  </table>
+
+  <div class="study-h3">Key Differences to Know for the Exam</div>
+  <table class="study-table">
+    <tr><th>A</th><th>vs</th><th>B</th></tr>
+    <tr><td><code>==</code> loose equality</td><td>vs</td><td><code>===</code> strict equality</td></tr>
+    <tr><td><code>var</code> function scope</td><td>vs</td><td><code>let/const</code> block scope</td></tr>
+    <tr><td><code>disabled</code> not submitted</td><td>vs</td><td><code>readonly</code> is submitted</td></tr>
+    <tr><td><code>&lt;article&gt;</code> self-contained</td><td>vs</td><td><code>&lt;section&gt;</code> themed group</td></tr>
+    <tr><td>Transition (property A→B)</td><td>vs</td><td>Animation (@keyframes, loopable)</td></tr>
+    <tr><td>Mobile website (browser-based)</td><td>vs</td><td>Mobile app (installed, hardware access)</td></tr>
+    <tr><td>GDPR (EU)</td><td>vs</td><td>HIPAA (US healthcare)</td></tr>
+    <tr><td>Section 508 (government)</td><td>vs</td><td>ADA (public accommodations)</td></tr>
+  </table>
+
+  <div class="study-h3">Media Query Breakpoints (common)</div>
+  <pre><span class="kw">@media</span> (max-width: <span class="num">480px</span>)  { <span class="cm">/* Mobile phones */</span> }
+<span class="kw">@media</span> (max-width: <span class="num">768px</span>)  { <span class="cm">/* Tablets portrait */</span> }
+<span class="kw">@media</span> (max-width: <span class="num">1024px</span>) { <span class="cm">/* Tablets landscape / small desktops */</span> }
+<span class="kw">@media</span> (min-width: <span class="num">1200px</span>) { <span class="cm">/* Large desktops */</span> }
+<span class="kw">@media</span> print            { <span class="cm">/* Print styles */</span> }
+<span class="kw">@media</span> (prefers-color-scheme: dark) { <span class="cm">/* Dark mode */</span> }</pre>
+</div>
+
+</div><!-- end main -->
+
+<script>
+// ──────────────────────────────────────────────
+// UTILITIES
+// ──────────────────────────────────────────────
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ──────────────────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id + '-section').classList.add('active');
+  const idx = ['study','exam','flash','ref'].indexOf(id);
+  document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
+}
+
+function togglePanel(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.content-panel.open').forEach(p => p.classList.remove('open'));
+  if (!isOpen) {
+    el.classList.add('open');
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+
+// ──────────────────────────────────────────────
+// QUESTION BANK (56 questions)
+// ──────────────────────────────────────────────
+const questions = [
+  // Domain 1 - HTML5 Essentials (8 questions)
+  { d:1, q:"What does the web development 'trifecta' refer to?", opts:["HTML, CSS, JavaScript","HTML, PHP, MySQL","CSS, JavaScript, jQuery","HTML, XML, XSL"], a:0, e:"The web development trifecta (or 'HTML5 Family') refers to HTML5 (structure), CSS3 (presentation), and JavaScript (behavior) working together." },
+  { d:1, q:"Which HTML5 element is best suited for a self-contained piece of content such as a blog post or news story?", opts:["&lt;section&gt;","&lt;article&gt;","&lt;aside&gt;","&lt;div&gt;"], a:1, e:"&lt;article&gt; is for self-contained content that can stand alone (blog post, comment, news story). &lt;section&gt; groups thematic content with a heading." },
+  { d:1, q:"Which attribute on the &lt;video&gt; element displays a browser image before the video plays?", opts:["src","thumbnail","poster","preload"], a:2, e:"The 'poster' attribute specifies an image to display while the video is loading or until the user plays it." },
+  { d:1, q:"What is the primary purpose of the HTML5 &lt;canvas&gt; element?", opts:["Embed external content via a plugin","Display a static image","Provide a scriptable drawing surface via JavaScript","Create multi-column text layout"], a:2, e:"&lt;canvas&gt; is a container for graphics drawn via JavaScript using the Canvas 2D API or WebGL." },
+  { d:1, q:"When validating an HTML5 document, which DOCTYPE declaration is required?", opts:["&lt;!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN'&gt;","&lt;!DOCTYPE html&gt;","&lt;?xml version='1.0'?&gt;","No DOCTYPE is needed in HTML5"], a:1, e:"HTML5 uses the simple &lt;!DOCTYPE html&gt; declaration to trigger standards mode." },
+  { d:1, q:"What is the main difference between a mobile website and a mobile app?", opts:["Mobile apps are built with HTML; websites use native code","Mobile websites run in a browser; apps are installed on the device","Mobile websites work offline; apps require internet","Both are identical — the terms are interchangeable"], a:1, e:"Mobile websites are accessed through browsers (URL-based). Mobile apps are downloaded/installed and can access device hardware." },
+  { d:1, q:"Which HTML5 element marks content that is tangentially related to the main content, like a sidebar?", opts:["&lt;section&gt;","&lt;nav&gt;","&lt;aside&gt;","&lt;footer&gt;"], a:2, e:"&lt;aside&gt; represents content that is related to, but separate from, the main content — typically rendered as a sidebar." },
+  { d:1, q:"What is the benefit of using the 'preload=metadata' attribute on a &lt;video&gt; element?", opts:["The video plays automatically","Only metadata (dimensions, duration) is loaded, saving bandwidth","The full video is downloaded before playback","It prevents the video from displaying controls"], a:1, e:"preload='metadata' tells the browser to only fetch the video metadata (dimensions, duration), not the full video file." },
+
+  // Domain 2 - CSS (8 questions)
+  { d:2, q:"In the CSS Box Model, what is the correct order from outermost to innermost?", opts:["Margin → Border → Padding → Content","Content → Padding → Border → Margin","Border → Margin → Content → Padding","Padding → Content → Margin → Border"], a:0, e:"The CSS Box Model layers from outside in: Margin → Border → Padding → Content." },
+  { d:2, q:"Which CSS value for 'box-sizing' causes width and height to include padding and border?", opts:["content-box","border-box","padding-box","margin-box"], a:1, e:"border-box includes padding and border in the element's specified width and height. content-box (default) does not." },
+  { d:2, q:"Which CSS selector targets the first child of its parent?", opts:[":first-type","first-child","element:first-child",":first-child"], a:3, e:":first-child is the correct pseudo-class selector. It must be preceded by a colon and no space." },
+  { d:2, q:"What are the three pillars of Responsive Web Design as defined by Ethan Marcotte?", opts:["Breakpoints, Viewport, Flexbox","Fluid grids, Flexible images, Media queries","Min-width, Max-width, Percentages","HTML5, CSS3, JavaScript"], a:1, e:"Marcotte defined RWD as: (1) Fluid grids using relative units, (2) Flexible images with max-width:100%, (3) CSS Media queries." },
+  { d:2, q:"Which meta tag is required for responsive web pages to render correctly on mobile devices?", opts:['&lt;meta name="mobile" content="true"&gt;','&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;','&lt;meta name="responsive" content="yes"&gt;','&lt;meta http-equiv="mobile-optimize"&gt;'], a:1, e:"The viewport meta tag instructs the browser to set the viewport width equal to the device width and set the initial zoom to 1." },
+  { d:2, q:"A CSS rule that uses 'position: absolute' does which of the following?", opts:["Positions relative to its nearest non-static ancestor; removed from normal flow","Positions relative to itself; remains in normal flow","Stays fixed when the page scrolls","Flows with other elements normally"], a:0, e:"Absolute positioning removes the element from the document flow and positions it relative to its nearest ancestor with non-static positioning." },
+  { d:2, q:"What does the CSS adjacent sibling combinator (+) select?", opts:["All siblings of an element","The element immediately following a specified element","All descendants of an element","Direct children only"], a:1, e:"The + combinator selects the element that immediately follows the first element and shares the same parent." },
+  { d:2, q:"Which CSS property controls the stacking order of positioned elements?", opts:["stack-order","layer","z-index","depth"], a:2, e:"z-index controls stacking order. Higher values appear on top. Only works on positioned elements (not static)." },
+
+  // Domain 3 - Advanced CSS3 (6 questions)
+  { d:3, q:"Which CSS3 property is used to rotate an element 45 degrees?", opts:["rotate: 45deg","transform: rotate(45deg)","transition: rotate 45deg","animation: spin 45deg"], a:1, e:"2D and 3D transformations use the 'transform' property. rotate() is one of the transform functions." },
+  { d:3, q:"What is the difference between CSS transitions and CSS animations?", opts:["Transitions use @keyframes; animations use property changes","Transitions move between two states triggered by events; animations use @keyframes and can loop","They are identical, just different syntax","Transitions use JavaScript; animations are pure CSS"], a:1, e:"Transitions smoothly change from one CSS state to another (triggered by events like :hover). Animations use @keyframes, can loop, and run automatically." },
+  { d:3, q:"Which value for animation-iteration-count makes an animation play indefinitely?", opts:["loop","repeat","always","infinite"], a:3, e:"animation-iteration-count: infinite causes the animation to repeat indefinitely." },
+  { d:3, q:"What is SASS and what must be done before using it in a browser?", opts:["SASS is a JavaScript library; it must be imported with &lt;script&gt;","SASS is a CSS preprocessor; it must be compiled to CSS before use","SASS is a subset of CSS3; it works natively in all browsers","SASS is a server-side language that replaces CSS"], a:1, e:"SASS is a CSS preprocessor that adds features like variables, nesting, and mixins. It must be compiled to standard CSS because browsers do not understand SASS syntax." },
+  { d:3, q:"Which CSS3 property adds a shadow behind an element's entire box?", opts:["text-shadow","drop-shadow","box-shadow","element-shadow"], a:2, e:"box-shadow adds a shadow effect around the element's frame. text-shadow adds shadow to text only." },
+  { d:3, q:"To create a 3D transform effect, which property must be set on the parent container?", opts:["transform-style: preserve-3d","display: 3d","z-index: 3d","perspective-origin: center"], a:0, e:"transform-style: preserve-3d tells the browser that children of this element should be positioned in 3D space." },
+
+  // Domain 4 - JavaScript Intro (6 questions)
+  { d:4, q:"Which keyword creates a block-scoped variable that cannot be redeclared in the same scope?", opts:["var","let","const","define"], a:1, e:"'let' creates a block-scoped variable that cannot be redeclared in the same scope. 'const' also creates block-scoped variables but cannot be reassigned." },
+  { d:4, q:"What does 'typeof null' return in JavaScript?", opts:['"null"','"undefined"','"object"','"boolean"'], a:2, e:"typeof null returns 'object' — this is a well-known bug in JavaScript that has been preserved for backward compatibility." },
+  { d:4, q:"Which comparison operator checks both value AND type (strict equality)?", opts:["==","===","!=","="], a:1, e:"=== is the strict equality operator. It checks both value and type without type coercion. == is loose and performs type coercion." },
+  { d:4, q:"What is the correct way to declare a constant in JavaScript (ES6)?", opts:["constant PI = 3.14","var PI = 3.14","let PI = 3.14","const PI = 3.14"], a:3, e:"'const' declares a constant. The binding cannot be reassigned, though objects/arrays declared with const are still mutable." },
+  { d:4, q:"Which loop iterates over the values of an iterable (array, string, etc.)?", opts:["for...in","for...of","for...each","while...of"], a:1, e:"for...of iterates over iterable values (arrays, strings, maps). for...in iterates over enumerable property keys of an object." },
+  { d:4, q:"Which method adds an element to the END of an array?", opts:["array.add()","array.push()","array.append()","array.insert()"], a:1, e:"push() adds one or more elements to the end of an array and returns the new length." },
+
+  // Domain 5 - Events, Functions (6 questions)
+  { d:5, q:"Which method is the recommended way to attach an event listener in modern JavaScript?", opts:["element.onclick = fn","&lt;button onclick='fn()'&gt;","element.addEventListener('click', fn)","document.attachEvent('click', fn)"], a:2, e:"addEventListener() is preferred because it allows multiple listeners on one element and does not overwrite existing handlers." },
+  { d:5, q:"What is a JavaScript closure?", opts:["A method that closes the browser window","A function that retains access to variables from its outer scope even after the outer function returns","A CSS class that hides elements","A way to end a loop early"], a:1, e:"A closure is a function that remembers and has access to variables from its lexical scope even when executing outside that scope." },
+  { d:5, q:"What does async/await do in JavaScript?", opts:["Converts asynchronous code to synchronous execution","Provides syntactic sugar for working with Promises, making async code look synchronous","Creates multiple threads for parallel execution","Prevents any delays in code execution"], a:1, e:"async/await is syntactic sugar built on Promises. 'await' pauses execution of the async function until the Promise resolves, but doesn't block the main thread." },
+  { d:5, q:"What is the difference between a function declaration and a function expression?", opts:["They are identical","Function declarations are hoisted; expressions are not","Function expressions are hoisted; declarations are not","Declarations cannot return values"], a:1, e:"Function declarations are hoisted to the top of their scope (can be called before they're defined). Function expressions are not hoisted." },
+  { d:5, q:"What is a JavaScript Promise?", opts:["A guarantee that code will run without errors","An object representing the eventual completion or failure of an asynchronous operation","A method to synchronize multiple functions","A way to declare variables"], a:1, e:"A Promise is an object that represents an async operation. It can be in one of three states: pending, fulfilled, or rejected." },
+  { d:5, q:"Which built-in JavaScript method allows a function to use a different object as its 'this'?", opts:["switch()","apply()","bind() / call() / apply()","context()"], a:2, e:"bind(), call(), and apply() all allow you to set the 'this' context. call() and apply() invoke immediately; bind() returns a new function." },
+
+  // Domain 6 - HTML5 APIs (6 questions)
+  { d:6, q:"What is the Document Object Model (DOM)?", opts:["The HTML source code of a web page","A tree structure representing the HTML document that JavaScript can manipulate","A CSS styling system","A server-side scripting framework"], a:1, e:"The DOM is a programming interface that represents the HTML document as a tree of nodes. JavaScript uses the DOM to read and manipulate page content." },
+  { d:6, q:"Which Canvas API method is required before drawing shapes using paths?", opts:["ctx.start()","ctx.beginPath()","ctx.openPath()","ctx.initDraw()"], a:1, e:"beginPath() must be called to begin a new path. Without it, previously drawn path segments may interfere with new ones." },
+  { d:6, q:"What does the Geolocation API's getCurrentPosition() method return?", opts:["The user's IP address","The GPS coordinates (latitude, longitude) of the user's device","The city and country of the user","The user's timezone"], a:1, e:"getCurrentPosition() asynchronously calls a callback with a Position object containing coords.latitude, coords.longitude, and other data." },
+  { d:6, q:"What does XHR readyState 4 indicate?", opts:["Request has not started","Request is being sent","Headers have been received","Request is complete"], a:3, e:"readyState 4 (DONE) means the operation is complete. Combined with status 200, this means a successful response was received." },
+  { d:6, q:"What is AJAX?", opts:["A JavaScript library","A server-side language","A technique for making asynchronous HTTP requests without reloading the page","A CSS animation framework"], a:2, e:"AJAX (Asynchronous JavaScript and XML) is a technique that allows web pages to request data from a server asynchronously, updating content without full page reloads." },
+  { d:6, q:"Which jQuery method retrieves data from a server using an HTTP GET request?", opts:["$.post()","$.get()","$.ajax()","$.fetch()"], a:1, e:"$.get() is a shorthand jQuery method for making GET requests. $.post() is for POST requests. $.ajax() is the full-featured method." },
+
+  // Domain 7 - Forms (5 questions)
+  { d:7, q:"Which HTML5 input type provides a date picker UI in supporting browsers?", opts:['type="datetime"','type="calendar"','type="date"','type="datepicker"'], a:2, e:"type='date' provides a date-picker control in supporting browsers and validates that input is a valid date." },
+  { d:7, q:"What is the purpose of the HTML5 &lt;datalist&gt; element?", opts:["It creates a dropdown selection list (like &lt;select&gt;)","It provides a list of suggested options for a text input","It displays tabular data","It creates a bulleted list"], a:1, e:"&lt;datalist&gt; provides a list of predefined options (hints/suggestions) for an &lt;input&gt; element. Users can still type anything — it's not restrictive like &lt;select&gt;." },
+  { d:7, q:"What is the function of the HTML5 &lt;output&gt; element?", opts:["It displays server output like PHP results","It represents the result of a calculation or user action","It creates a text area for user input","It shows debug information"], a:1, e:"&lt;output&gt; represents the result of a calculation or user interaction, typically connected to form inputs via the 'for' attribute." },
+  { d:7, q:"What is the purpose of the &lt;fieldset&gt; and &lt;legend&gt; elements in HTML5?", opts:["fieldset styles form fields; legend adds a caption","fieldset groups related form controls; legend provides a caption for the group","Both are deprecated in HTML5","fieldset creates a table of inputs; legend labels rows"], a:1, e:"&lt;fieldset&gt; groups related form fields together visually (with a box). &lt;legend&gt; provides a caption/title for the fieldset group." },
+  { d:7, q:"Which HTML5 input type is most appropriate for collecting a phone number?", opts:['type="number"','type="phone"','type="tel"','type="text" pattern="[0-9]+"'], a:2, e:"type='tel' is specifically for telephone numbers. It triggers a numeric keypad on mobile devices and doesn't validate format (use pattern for that)." },
+
+  // Domain 8 - Form Validation (4 questions)
+  { d:8, q:"Which HTML5 attribute prevents a form field from being submitted while also making it non-editable?", opts:["readonly","disabled","required","hidden"], a:1, e:"'disabled' fields are non-editable AND excluded from form submission. 'readonly' fields are non-editable but ARE submitted." },
+  { d:8, q:"Which HTML5 validation attribute uses a regular expression to constrain input?", opts:["regex","validate","pattern","match"], a:2, e:"The 'pattern' attribute accepts a regular expression. Input must match the pattern for the form to be valid." },
+  { d:8, q:"Which JavaScript event should you listen to in order to intercept form submission and validate before sending?", opts:["click","change","submit","input"], a:2, e:"The 'submit' event fires when the user submits the form. Call event.preventDefault() to stop submission and show validation errors." },
+  { d:8, q:"According to security best practices, client-side validation should:", opts:["Replace server-side validation entirely since it is faster","Never be used because it can be bypassed","Supplement server-side validation, not replace it","Only be used for cosmetic feedback, never security"], a:2, e:"Client-side validation improves UX but can always be bypassed (JS can be disabled, requests can be forged). Server-side validation must always be the authoritative check." },
+
+  // Domain 9 - Ethics/Legal (5 questions)
+  { d:9, q:"Which US law requires federal government websites to be accessible to people with disabilities?", opts:["ADA (Americans with Disabilities Act)","HIPAA","Section 508 of the Rehabilitation Act","WCAG"], a:2, e:"Section 508 of the Rehabilitation Act specifically requires US federal agencies to make their electronic and IT accessible. ADA applies more broadly to public accommodations." },
+  { d:9, q:"Which privacy regulation gives EU residents the right to request deletion of their personal data?", opts:["HIPAA","COPPA","CCPA","GDPR"], a:3, e:"GDPR (General Data Protection Regulation) applies to EU residents and includes the 'right to erasure' (right to be forgotten), among other rights." },
+  { d:9, q:"WCAG accessibility guidelines are organized around four principles. Which acronym describes them?", opts:["ARIA","POUR","CORP","WAVE"], a:1, e:"POUR: Perceivable (users can perceive all information), Operable (UI components are operable), Understandable, Robust (works with assistive technologies)." },
+  { d:9, q:"Which type of web attack involves injecting malicious scripts into a website that are then executed by other users?", opts:["SQL Injection","CSRF","XSS (Cross-Site Scripting)","Man-in-the-Middle"], a:2, e:"XSS (Cross-Site Scripting) involves injecting malicious scripts into web content that is then rendered by victims' browsers. Defense: sanitize and escape all user input." },
+  { d:9, q:"What is the purpose of HTTPS on websites collecting user information?", opts:["It makes pages load faster","It encrypts data in transit between browser and server","It validates HTML code","It prevents CSS errors"], a:1, e:"HTTPS uses TLS/SSL to encrypt the connection, protecting data from interception. Required for any site handling logins, payments, or personal data." },
+
+  // Domain 10 - Project Management (2 questions)
+  { d:10, q:"In Agile/Scrum methodology, what is a 'sprint'?", opts:["A code review meeting","A time-boxed iteration (typically 1–4 weeks) for completing a set of work","A sprint is when developers rush to finish a deadline","The final testing phase before deployment"], a:1, e:"A sprint is a fixed-length development cycle in Scrum, usually 1–4 weeks, during which a team completes a specific set of user stories from the backlog." },
+  { d:10, q:"Which type of website issue would you troubleshoot first if a mobile site has incorrect layout but works fine on desktop?", opts:["JavaScript errors","Server configuration","Missing viewport meta tag or unresponsive CSS","Database connection"], a:2, e:"Mobile layout issues most commonly stem from a missing viewport meta tag or CSS that does not include media queries for smaller screens." }
+];
+
+// ──────────────────────────────────────────────
+// EXAM LOGIC
+// ──────────────────────────────────────────────
+let currentQ = 0;
+let userAnswers = new Array(questions.length).fill(null);
+let examSubmitted = false;
+let timedMode = true;
+let timerInterval = null;
+let timeLeft = 75 * 60;
+
+function startExam(timed = true) {
+  timedMode = timed;
+  timeLeft = 75 * 60;
+  userAnswers = new Array(questions.length).fill(null);
+  examSubmitted = false;
+  currentQ = 0;
+  document.getElementById('exam-start').style.display = 'none';
+  document.getElementById('exam-active').style.display = 'block';
+  document.getElementById('results').classList.remove('show');
+  buildQuestions();
+  buildDots();
+  if (timedMode) startTimer();
+  showQ(0);
+}
+
+function startExamUntimed() { startExam(false); }
+
+function buildQuestions() {
+  const c = document.getElementById('questions-container');
+  c.innerHTML = '';
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'qcard-' + i;
+    const dColors = ['','#58a6ff','#3fb950','#d2a8ff','#ffa657','#f78166','#79c0ff','#56d364','#ffa657','#ff7b72','#d2a8ff'];
+    card.innerHTML = `
+      <div class="q-num">Question ${i+1} of ${questions.length}</div>
+      <span class="q-domain-tag" style="background:${dColors[q.d]}22;color:${dColors[q.d]};border:1px solid ${dColors[q.d]}44">Domain ${q.d}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts-${i}">
+        ${q.opts.map((o,j) => `<button class="opt-btn" id="opt-${i}-${j}" onclick="selectAnswer(${i},${j})">
+          <span class="opt-letter">${'ABCD'[j]}</span><span>${o}</span>
+        </button>`).join('')}
+      </div>
+      <div class="explanation" id="exp-${i}"><strong>Explanation:</strong> ${q.e}</div>
+    `;
+    c.appendChild(card);
+  });
+}
+
+function buildDots() {
+  const d = document.getElementById('q-dots');
+  d.innerHTML = '';
+  questions.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'q-dot';
+    dot.id = 'dot-' + i;
+    dot.textContent = i + 1;
+    dot.onclick = () => showQ(i);
+    d.appendChild(dot);
+  });
+}
+
+function showQ(i) {
+  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('qcard-' + i)?.classList.add('active');
+  currentQ = i;
+  document.getElementById('q-current-num').textContent = i + 1;
+  document.getElementById('progress-fill').style.width = ((i + 1) / questions.length * 100) + '%';
+  document.getElementById('btn-prev').disabled = i === 0;
+  document.getElementById('btn-next').textContent = i === questions.length - 1 ? 'Submit ✓' : 'Next →';
+  // Update dot active
+  document.querySelectorAll('.q-dot').forEach((d, di) => {
+    d.classList.remove('current');
+    if (!examSubmitted) {
+      d.classList.toggle('answered', userAnswers[di] !== null);
+    }
+  });
+  document.getElementById('dot-' + i)?.classList.add('current');
+}
+
+function selectAnswer(qIndex, optIndex) {
+  if (examSubmitted) return;
+  userAnswers[qIndex] = optIndex;
+  // Update dot
+  const dot = document.getElementById('dot-' + qIndex);
+  dot?.classList.add('answered');
+  // Highlight selected
+  for (let j = 0; j < 4; j++) {
+    const btn = document.getElementById(`opt-${qIndex}-${j}`);
+    if (btn) btn.style.borderColor = j === optIndex ? 'var(--accent)' : '';
+    if (btn) btn.style.background = j === optIndex ? 'rgba(88,166,255,0.12)' : '';
+  }
+}
+
+function nextQ() {
+  if (currentQ === questions.length - 1) { submitExam(); return; }
+  showQ(currentQ + 1);
+}
+function prevQ() { if (currentQ > 0) showQ(currentQ - 1); }
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    const display = document.getElementById('timer-display');
+    if (display) {
+      display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      display.classList.toggle('warning', timeLeft < 300);
+    }
+    if (timeLeft <= 0) { clearInterval(timerInterval); submitExam(); }
+  }, 1000);
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  examSubmitted = true;
+
+  let correct = 0;
+  const domainStats = {};
+  for (let d = 1; d <= 10; d++) domainStats[d] = { correct: 0, total: 0, name: getDomainName(d) };
+
+  questions.forEach((q, i) => {
+    domainStats[q.d].total++;
+    const isCorrect = userAnswers[i] === q.a;
+    if (isCorrect) { correct++; domainStats[q.d].correct++; }
+
+    // Color the options
+    for (let j = 0; j < q.opts.length; j++) {
+      const btn = document.getElementById(`opt-${i}-${j}`);
+      if (!btn) continue;
+      btn.disabled = true;
+      btn.style.borderColor = '';
+      btn.style.background = '';
+      if (j === q.a) btn.classList.add('correct');
+      else if (j === userAnswers[i] && userAnswers[i] !== q.a) btn.classList.add('wrong');
+    }
+    document.getElementById('exp-' + i)?.classList.add('show');
+
+    // Update dots
+    const dot = document.getElementById('dot-' + i);
+    dot?.classList.remove('answered', 'current');
+    dot?.classList.add(isCorrect ? 'correct-dot' : 'wrong-dot');
+  });
+
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById('score-display').innerHTML = `${correct}<span>/${questions.length}</span>`;
+  document.getElementById('pct-display').textContent = `${pct}%`;
+  const badge = document.getElementById('pass-badge');
+  badge.textContent = pct >= 75 ? 'PASS' : 'FAIL';
+  badge.className = 'pass-badge ' + (pct >= 75 ? 'pass' : 'fail');
+
+  // Domain breakdown
+  const bd = document.getElementById('domain-breakdown');
+  bd.innerHTML = Object.entries(domainStats).map(([d, s]) => {
+    const p = s.total > 0 ? Math.round(s.correct/s.total*100) : 0;
+    return `<div class="breakdown-card">
+      <div class="d-name">Domain ${d}: ${s.name}</div>
+      <div class="d-score">${s.correct}/${s.total} <span style="font-size:14px;color:var(--text-muted)">(${p}%)</span></div>
+      <div class="d-bar"><div class="d-fill" style="width:${p}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('exam-active').style.display = 'none';
+  document.getElementById('results').classList.add('show');
+}
+
+function getDomainName(d) {
+  const names = {1:'HTML5 Essentials',2:'CSS Technology',3:'Advanced CSS3',4:'Intro to JavaScript',5:'JS Events & Functions',6:'HTML5 APIs',7:'HTML5 Forms',8:'Form Validation',9:'Ethics & Legal',10:'Project Management'};
+  return names[d] || '';
+}
+
+function resetExam() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('exam-start').style.display = 'block';
+  document.getElementById('exam-active').style.display = 'none';
+}
+
+// ──────────────────────────────────────────────
+// FLASHCARDS
+// ──────────────────────────────────────────────
+const flashcards = [
+  { d:"Domain 1", q:"What are the three technologies in the 'web development trifecta'?", a:"HTML5 (structure) + CSS3 (presentation) + JavaScript (behavior)" },
+  { d:"Domain 1", q:"What does the &lt;article&gt; element represent?", a:"Self-contained content that can stand independently — like a blog post, news story, or forum comment." },
+  { d:"Domain 1", q:"What is the purpose of the 'poster' attribute on &lt;video&gt;?", a:"Specifies an image to display before the video plays or while it's loading." },
+  { d:"Domain 2", q:"Name the CSS Box Model layers from outermost to innermost.", a:"Margin → Border → Padding → Content" },
+  { d:"Domain 2", q:"What are the three pillars of Responsive Web Design?", a:"1. Fluid grids (percentages)\n2. Flexible images (max-width: 100%)\n3. CSS Media queries" },
+  { d:"Domain 2", q:"Difference between position: absolute and position: fixed?", a:"Absolute: positioned relative to nearest non-static ancestor.\nFixed: positioned relative to the viewport; stays in place on scroll." },
+  { d:"Domain 3", q:"What CSS property enables 2D/3D transformations?", a:"The 'transform' property. E.g., transform: rotate(45deg) scale(1.5) translateX(50px)" },
+  { d:"Domain 3", q:"What makes CSS animations different from transitions?", a:"Animations use @keyframes, can loop, and run automatically. Transitions move smoothly between two states triggered by events (like :hover)." },
+  { d:"Domain 3", q:"What is SASS and why does it need to be compiled?", a:"SASS is a CSS preprocessor adding variables, nesting, mixins. Browsers can't read SASS — it must be compiled to standard CSS first." },
+  { d:"Domain 4", q:"What is the difference between == and === in JavaScript?", a:"== is loose equality (type coercion may occur)\n=== is strict equality (checks type AND value, no coercion)" },
+  { d:"Domain 4", q:"Scope difference between var, let, and const?", a:"var: function-scoped, hoisted\nlet: block-scoped, not hoisted\nconst: block-scoped, must initialize, binding can't change" },
+  { d:"Domain 4", q:"What does typeof null return?", a:"'object' — a known JavaScript bug preserved for backward compatibility." },
+  { d:"Domain 5", q:"What is a JavaScript closure?", a:"A function that retains access to variables from its outer (enclosing) scope, even after the outer function has finished executing." },
+  { d:"Domain 5", q:"What is a Promise in JavaScript?", a:"An object representing the eventual completion or failure of an async operation. States: pending → fulfilled or rejected." },
+  { d:"Domain 5", q:"What does async/await do?", a:"Syntactic sugar over Promises. 'await' pauses the async function until a Promise resolves, making async code look synchronous." },
+  { d:"Domain 6", q:"What is the DOM?", a:"Document Object Model — a tree representation of the HTML document. JavaScript uses the DOM API to read and modify page content." },
+  { d:"Domain 6", q:"What must you call before drawing a new path shape on canvas?", a:"ctx.beginPath() — starts a new path. Without it, previous path commands may carry over." },
+  { d:"Domain 6", q:"What does XHR readyState 4 mean?", a:"DONE — the request and response are complete. Check status === 200 to confirm success." },
+  { d:"Domain 7", q:"Difference between &lt;datalist&gt; and &lt;select&gt;?", a:"&lt;datalist&gt; provides suggestions for an &lt;input&gt; — user can still type anything. &lt;select&gt; restricts input to the listed options only." },
+  { d:"Domain 7", q:"What input type shows a date picker on mobile?", a:"type='date' — also triggers the appropriate native date picker UI." },
+  { d:"Domain 8", q:"Difference between 'disabled' and 'readonly' attributes?", a:"disabled: field is non-editable AND not included in form submission.\nreadonly: field is non-editable but IS included in form submission." },
+  { d:"Domain 8", q:"Which HTML5 attribute validates input against a regex?", a:"The 'pattern' attribute. E.g., pattern='[A-Za-z]{3,}' requires at least 3 letters." },
+  { d:"Domain 9", q:"What does GDPR stand for and who does it protect?", a:"General Data Protection Regulation. Protects the personal data of EU residents. Includes right to erasure and data portability." },
+  { d:"Domain 9", q:"What is XSS and how do you prevent it?", a:"Cross-Site Scripting — attacker injects malicious scripts into pages viewed by other users. Prevention: sanitize/escape all user input." },
+  { d:"Domain 9", q:"What are the four WCAG principles (POUR)?", a:"Perceivable, Operable, Understandable, Robust" },
+  { d:"Domain 10", q:"What is a Scrum sprint?", a:"A time-boxed development iteration (usually 1–4 weeks) in which a team completes a selected set of user stories from the backlog." },
+];
+
+let fcIndex = 0;
+let fcFlipped = false;
+
+function renderFC() {
+  fcFlipped = false;
+  document.getElementById('fc-inner').classList.remove('flipped');
+  const fc = flashcards[fcIndex];
+  document.getElementById('fc-domain').textContent = fc.d.toUpperCase();
+  document.getElementById('fc-q').innerHTML = fc.q;
+  document.getElementById('fc-a').innerHTML = fc.a.replace(/\n/g,'<br>');
+  document.getElementById('fc-num').textContent = fcIndex + 1;
+  document.getElementById('fc-total').textContent = flashcards.length;
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('fc-inner').classList.toggle('flipped', fcFlipped);
+}
+
+function fcNext() { fcIndex = (fcIndex + 1) % flashcards.length; renderFC(); }
+function fcPrev() { fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length; renderFC(); }
+
+renderFC();
+</script>
+
+<script>
+  // Auth guard — redirect to login if not authenticated
+  if (sessionStorage.getItem('studyhub_auth') !== '1') {
+    window.location.replace('../index.html');
+  }
+</script>
+</body>
+</html>
