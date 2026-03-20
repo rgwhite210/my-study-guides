@@ -599,6 +599,17 @@
   }
   .fc-nav { display: flex; align-items: center; justify-content: space-between; max-width: 600px; margin: 16px auto 0; }
   .fc-counter { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-muted); }
+  .fc-stats { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; max-width: 600px; margin: 0 auto 16px; font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+  .fc-stat-got    { color: var(--accent2); }
+  .fc-stat-missed { color: var(--accent3); }
+  .fc-stat-unseen { color: var(--text-dim); }
+  .fc-result-btns { display: none; justify-content: center; gap: 12px; margin: 12px auto 0; max-width: 600px; }
+  .fc-got-btn { background: rgba(63,185,80,0.12); border: 1px solid rgba(63,185,80,0.35); border-radius: 8px; color: var(--accent2); cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; padding: 10px 28px; transition: background 0.2s; }
+  .fc-got-btn:hover { background: rgba(63,185,80,0.22); }
+  .fc-missed-btn { background: rgba(247,129,102,0.12); border: 1px solid rgba(247,129,102,0.35); border-radius: 8px; color: var(--accent3); cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; padding: 10px 28px; transition: background 0.2s; }
+  .fc-missed-btn:hover { background: rgba(247,129,102,0.22); }
+  .fc-prior-got    { color: var(--accent2); font-size: 14px; font-weight: 700; }
+  .fc-prior-missed { color: var(--accent3); font-size: 14px; font-weight: 700; }
 
   /* misc */
   .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
@@ -1394,13 +1405,27 @@ input.<span class="fn">reportValidity</span>();</pre>
 <!-- ══════════════════════════ FLASHCARDS ══════════════════════════ -->
 <div id="flash-section" class="section">
   <h2 style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--heading); margin-bottom:8px;">Flashcards</h2>
-  <p class="section-intro">Click the card to reveal the answer. Use the arrows to navigate.</p>
+  <p class="section-intro">Flip the card, then mark Got it or Missed to track your progress.</p>
+
+  <div class="fc-stats">
+    <span class="fc-stat-got">✓ <span id="fc-got-count">0</span> got it</span>
+    <span class="fc-stat-missed">✗ <span id="fc-missed-count">0</span> missed</span>
+    <span class="fc-stat-unseen">○ <span id="fc-unseen-count">0</span> unseen</span>
+    <button id="fc-review-missed-btn" class="btn secondary" onclick="fcReviewMissed()" style="display:none; margin-left:auto; font-size:13px; padding:6px 14px;">Review Missed</button>
+    <button id="fc-all-btn" class="btn secondary" onclick="fcShowAll()" style="display:none; font-size:13px; padding:6px 14px;">All Cards</button>
+    <button class="btn secondary" onclick="fcReset()" style="font-size:13px; padding:6px 14px;">Reset</button>
+  </div>
+  <div id="fc-mode-label" style="text-align:center; font-size:11px; color:var(--accent); font-family:'JetBrains Mono',monospace; margin-bottom:10px; min-height:16px; letter-spacing:0.1em;"></div>
+
   <div class="fc-wrap" onclick="flipCard()">
     <div class="fc-inner" id="fc-inner">
       <div class="fc-front">
         <div class="fc-label" id="fc-domain">DOMAIN 1</div>
         <div class="fc-q" id="fc-q">Loading...</div>
-        <div style="font-size:12px; color:var(--text-dim); margin-top:8px;">Click to flip</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px;">
+          <span style="font-size:12px; color:var(--text-dim);">Click to flip</span>
+          <span id="fc-prior"></span>
+        </div>
       </div>
       <div class="fc-back">
         <div id="fc-a">Answer loading...</div>
@@ -1411,6 +1436,10 @@ input.<span class="fn">reportValidity</span>();</pre>
     <button class="btn secondary" onclick="fcPrev()">← Prev</button>
     <div class="fc-counter"><span id="fc-num">1</span> / <span id="fc-total">1</span></div>
     <button class="btn secondary" onclick="fcNext()">Next →</button>
+  </div>
+  <div class="fc-result-btns" id="fc-result-btns">
+    <button class="fc-got-btn" onclick="markCard('got')">✓ Got it</button>
+    <button class="fc-missed-btn" onclick="markCard('missed')">✗ Missed</button>
   </div>
 </div>
 
@@ -1796,28 +1825,133 @@ const flashcards = [
   { d:"Domain 10", q:"What is a Scrum sprint?", a:"A time-boxed development iteration (usually 1–4 weeks) in which a team completes a selected set of user stories from the backlog." },
 ];
 
-let fcIndex = 0;
+const FC_STORAGE_KEY = 'fc_html5_results_v1';
+let fcResults = JSON.parse(localStorage.getItem(FC_STORAGE_KEY) || '{}');
+// fcResults: { "0": "got" | "missed", ... }
+
+let fcIndex = 0;   // position within fcDeck
+let fcDeck = [];   // indices into flashcards[]
+let fcMode = 'all';
 let fcFlipped = false;
+
+function buildDeck() {
+  if (fcMode === 'missed') {
+    fcDeck = Object.keys(fcResults).filter(k => fcResults[k] === 'missed').map(Number);
+    if (fcDeck.length === 0) { fcMode = 'all'; buildDeck(); return; }
+  } else {
+    fcDeck = flashcards.map((_, i) => i);
+  }
+  fcIndex = 0;
+}
+
+function saveResults() {
+  localStorage.setItem(FC_STORAGE_KEY, JSON.stringify(fcResults));
+}
+
+function updateFCStats() {
+  const got    = Object.values(fcResults).filter(v => v === 'got').length;
+  const missed = Object.values(fcResults).filter(v => v === 'missed').length;
+  document.getElementById('fc-got-count').textContent    = got;
+  document.getElementById('fc-missed-count').textContent = missed;
+  document.getElementById('fc-unseen-count').textContent = flashcards.length - got - missed;
+  document.getElementById('fc-review-missed-btn').style.display = missed > 0 ? 'inline-block' : 'none';
+}
 
 function renderFC() {
   fcFlipped = false;
   document.getElementById('fc-inner').classList.remove('flipped');
-  const fc = flashcards[fcIndex];
+  document.getElementById('fc-result-btns').style.display = 'none';
+
+  if (fcDeck.length === 0) {
+    document.getElementById('fc-domain').textContent = '';
+    document.getElementById('fc-q').innerHTML = 'No missed cards to review.';
+    document.getElementById('fc-a').innerHTML = '';
+    document.getElementById('fc-num').textContent = '0';
+    document.getElementById('fc-total').textContent = '0';
+    document.getElementById('fc-prior').textContent = '';
+    updateFCStats();
+    return;
+  }
+
+  const cardIdx = fcDeck[fcIndex];
+  const fc = flashcards[cardIdx];
   document.getElementById('fc-domain').textContent = fc.d.toUpperCase();
   document.getElementById('fc-q').innerHTML = fc.q;
-  document.getElementById('fc-a').innerHTML = fc.a.replace(/\n/g,'<br>');
-  document.getElementById('fc-num').textContent = fcIndex + 1;
-  document.getElementById('fc-total').textContent = flashcards.length;
+  document.getElementById('fc-a').innerHTML = fc.a.replace(/\n/g, '<br>');
+  document.getElementById('fc-num').textContent  = fcIndex + 1;
+  document.getElementById('fc-total').textContent = fcDeck.length;
+
+  // Prior result indicator on front face
+  const prior = fcResults[cardIdx];
+  const priorEl = document.getElementById('fc-prior');
+  if (prior === 'got') {
+    priorEl.textContent = '✓';
+    priorEl.className = 'fc-prior-got';
+  } else if (prior === 'missed') {
+    priorEl.textContent = '✗';
+    priorEl.className = 'fc-prior-missed';
+  } else {
+    priorEl.textContent = '';
+    priorEl.className = '';
+  }
+
+  updateFCStats();
 }
 
 function flipCard() {
+  if (fcDeck.length === 0) return;
   fcFlipped = !fcFlipped;
   document.getElementById('fc-inner').classList.toggle('flipped', fcFlipped);
+  document.getElementById('fc-result-btns').style.display = fcFlipped ? 'flex' : 'none';
 }
 
-function fcNext() { fcIndex = (fcIndex + 1) % flashcards.length; renderFC(); }
-function fcPrev() { fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length; renderFC(); }
+function markCard(result) {
+  const cardIdx = fcDeck[fcIndex];
+  fcResults[cardIdx] = result;
+  saveResults();
+  fcNext();
+}
 
+function fcNext() {
+  if (fcDeck.length === 0) return;
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  renderFC();
+}
+
+function fcPrev() {
+  if (fcDeck.length === 0) return;
+  fcIndex = (fcIndex - 1 + fcDeck.length) % fcDeck.length;
+  renderFC();
+}
+
+function fcReviewMissed() {
+  fcMode = 'missed';
+  buildDeck();
+  renderFC();
+  document.getElementById('fc-mode-label').textContent = 'REVIEWING MISSED CARDS';
+  document.getElementById('fc-all-btn').style.display = 'inline-block';
+}
+
+function fcShowAll() {
+  fcMode = 'all';
+  buildDeck();
+  renderFC();
+  document.getElementById('fc-mode-label').textContent = '';
+  document.getElementById('fc-all-btn').style.display = 'none';
+}
+
+function fcReset() {
+  if (!confirm('Reset all flashcard progress?')) return;
+  fcResults = {};
+  saveResults();
+  fcMode = 'all';
+  buildDeck();
+  renderFC();
+  document.getElementById('fc-mode-label').textContent = '';
+  document.getElementById('fc-all-btn').style.display = 'none';
+}
+
+buildDeck();
 renderFC();
 </script>
 
