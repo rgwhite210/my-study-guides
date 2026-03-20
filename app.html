@@ -427,7 +427,7 @@
       <div class="lbl">Current Program</div>
     </div>
     <div class="stat-chip">
-      <div class="num">Nov<span> '25</span></div>
+      <div class="num">Nov<span> '26</span></div>
       <div class="lbl">WGU commencement goal</div>
     </div>
   </div>
@@ -438,9 +438,32 @@
 
   <div class="guide-grid" id="guide-grid">
 
-    <!-- ── GUIDE CARDS — add new ones below this line ── -->
+    <!-- ── GUIDE CARDS — add new ones below this line and update data-id ── -->
 
-    <a href="guides/CIW_HTML5_CSS3_Study_Guide.html" class="guide-card c-blue" data-id="ciw-html5">
+    <!-- CIW User Interface Designer -->
+    <a href="guides/user-interface-designer.html" class="guide-card c-blue" data-id="ciw-ui">
+      <div class="card-top">
+        <div class="guide-icon">🌐</div>
+        <div class="pill-wrap">
+          <span class="status-pill pill-active" onclick="openMenu(event, this)">In Progress</span>
+          <div class="pill-menu">
+            <button onclick="setStatus(event, 'new')"><span class="dot" style="background:var(--accent)"></span> Not Started</button>
+            <button onclick="setStatus(event, 'active')"><span class="dot" style="background:var(--green)"></span> In Progress</button>
+            <button onclick="setStatus(event, 'done')"><span class="dot" style="background:var(--muted)"></span> Complete</button>
+          </div>
+        </div>
+      </div>
+      <h4>CIW User Interface Designer</h4>
+      <p class="desc">Complete study guide covering all 9 domains. Includes 56-question practice exam and flashcards.</p>
+      <div class="card-meta">
+        <div>Exam <span>1D0-621</span></div>
+        <div>54 <span>questions</span></div>
+        <div>9 <span>domains</span></div>
+      </div>
+    </a>
+
+    <!-- CIW ADVANCED HTML/CSS GUIDE -->
+    <a href="guides/advanced-HTML-CSS-specialist.html" class="guide-card c-blue" data-id="ciw-html5">
       <div class="card-top">
         <div class="guide-icon">🌐</div>
         <div class="pill-wrap">
@@ -460,7 +483,6 @@
         <div>10 <span>domains</span></div>
       </div>
     </a>
-
     <!-- ── ADD MORE CARDS ABOVE THIS LINE ── -->
 
     <div class="add-card">
@@ -473,7 +495,7 @@
   <div class="howto">
     <h3>📋 How to add a new study guide</h3>
     <ol>
-      <li>Drop your new HTML file (e.g. <code>CIW_JavaScript_Study_Guide.html</code>) into the project root alongside <code>app.html</code></li>
+      <li>Drop your new HTML file (e.g. <code>CIW_JavaScript_Study_Guide.html</code>) into the <code>guides/</code> folder app.html</li>
       <li>Open <code>app.html</code> and find the comment <strong>"add new cards below this line"</strong></li>
       <li>Copy an existing <code>&lt;a class="guide-card"&gt;</code> block and update the <code>href</code>, title, description, and meta fields</li>
       <li>Change the color class (<code>c-blue</code>, <code>c-green</code>, <code>c-purple</code>, <code>c-amber</code>) and icon emoji to differentiate it</li>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIW 1D0-621 — Scenario-Based Practice Exam</title>
+<style>
+:root{
+  --bg:#f6f5f1;--surface:#fff;--ink:#111;--muted:#777;--border:#e4e1d9;
+  --purple:#6d28d9;--green:#15803d;--red:#b91c1c;--amber:#b45309;--blue:#1d4ed8;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:#18181b;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:#333}
+.sb-logo{padding:1.25rem 1rem 1rem;border-bottom:1px solid #2a2a2a}
+.sb-logo-title{font-size:12px;font-weight:700;color:#fff;letter-spacing:.5px}
+.sb-logo-sub{font-size:9px;color:#555;margin-top:2px;letter-spacing:.5px}
+.sb-body{flex:1;padding:.5rem 0}
+.sb-label{font-size:9px;font-weight:700;color:#444;letter-spacing:1.5px;text-transform:uppercase;padding:.6rem 1rem .2rem}
+.sb-link{display:block;font-size:11px;color:#888;padding:.3rem 1rem;text-decoration:none;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.sb-link:hover{color:#fff}
+.sb-link.active{color:#fff;border-left:2px solid #fff;background:rgba(255,255,255,.05)}
+.sb-divider{height:1px;background:#222;margin:.4rem 1rem}
+.sb-exam-btn{display:block;margin:.75rem 1rem;padding:.6rem 1rem;background:var(--purple);color:#fff;border-radius:8px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border:none;width:calc(100% - 2rem);transition:background .15s}
+.sb-exam-btn:hover{background:#5b21b6}
+.sb-progress{margin:.5rem 1rem;font-size:10px;color:#555}
+.sb-bar{height:3px;background:#333;border-radius:2px;margin-top:4px;overflow:hidden}
+.sb-bar-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s}
+
+/* MAIN */
+.main{overflow-y:auto}
+.page{display:none;padding:2.5rem 2.75rem 5rem;max-width:860px}
+.page.active{display:block}
+
+/* INTRO PAGE */
+.intro-title{font-size:30px;font-weight:800;line-height:1.1;margin-bottom:.75rem}
+.intro-desc{font-size:14px;color:#555;line-height:1.7;max-width:580px;margin-bottom:1.5rem}
+.intro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:2rem}
+.intro-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
+.intro-num{font-size:26px;font-weight:900;margin-bottom:2px}
+.intro-lbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.obj-list{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem}
+.obj-row{display:flex;align-items:flex-start;gap:10px;padding:.65rem 1rem;border-bottom:1px solid var(--border);font-size:12px}
+.obj-row:last-child{border-bottom:none}
+.obj-d{font-weight:800;min-width:28px;color:var(--muted);flex-shrink:0;padding-top:1px}
+.obj-text{color:#444;line-height:1.5}
+.start-btn{padding:12px 28px;background:var(--purple);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s}
+.start-btn:hover{background:#5b21b6}
+
+/* EXAM PAGE */
+.exam-topbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.75rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.exam-info{font-size:12px;color:var(--muted)}
+.exam-timer{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+.exam-timer.warn{color:var(--red)}
+.exam-pbar-wrap{height:3px;background:var(--border);position:sticky;top:56px;z-index:99}
+.exam-pbar-fill{height:100%;background:var(--purple);transition:width .3s}
+
+/* QUESTION BLOCKS */
+.q-wrap{padding:2.5rem 2.75rem 1rem;max-width:860px}
+.q-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.q-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;gap:10px}
+.q-num{font-size:11px;color:var(--muted);font-weight:700;flex-shrink:0}
+.q-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.q-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.q-scenario{background:#f8f7f3;border-left:3px solid #c9c7bf;border-radius:0 8px 8px 0;padding:.75rem 1rem;margin-bottom:.9rem;font-size:13px;color:#444;line-height:1.65;font-style:italic}
+.q-scenario strong{color:var(--ink);font-style:normal}
+.q-stem{font-size:14px;font-weight:600;line-height:1.65;margin-bottom:.9rem;color:var(--ink)}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border:1px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;line-height:1.5;transition:all .12s;background:var(--surface)}
+.q-opt:hover{background:#f8f7f3;border-color:#bbb}
+.q-opt.sel{background:#ede9fe;border-color:var(--purple)}
+.q-opt.correct{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.q-opt.wrong{background:#fef2f2;border-color:var(--red);color:#7f1d1d}
+.q-opt.reveal{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.opt-letter{font-weight:800;min-width:17px;flex-shrink:0;font-size:12px}
+.q-sa-input{width:100%;border:1px solid #d0cdc7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:var(--font);margin-top:4px;resize:vertical;min-height:60px;transition:border-color .15s}
+.q-sa-input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(109,40,217,.1)}
+.q-sa-input.correct{border-color:var(--green);background:#f0fdf4;color:#14532d}
+.q-sa-input.wrong{border-color:var(--red);background:#fef2f2;color:#7f1d1d}
+.q-sa-input:disabled{cursor:default}
+.q-hint{font-size:11px;color:#aaa;margin-top:5px;font-style:italic}
+.q-obj-ref{font-size:10px;color:#bbb;margin-top:.5rem;font-family:var(--mono)}
+
+/* SUBMIT BAR */
+.submit-bar{padding:1rem 2.75rem;border-top:1px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:1rem}
+.submit-btn{padding:11px 28px;background:var(--purple);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+.submit-btn:hover{background:#5b21b6}
+.submit-hint{font-size:12px;color:var(--muted)}
+
+/* RESULTS */
+.results-page{padding:2.5rem 2.75rem 5rem;max-width:860px}
+.r-score{font-size:60px;font-weight:900;line-height:1;margin:.5rem 0}
+.pass{color:var(--green)}.fail{color:var(--red)}
+.r-verdict{font-size:17px;font-weight:700}
+.r-sub{font-size:13px;color:var(--muted);margin:.25rem 0 1.5rem}
+.r-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.r-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
+.r-card-lbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.r-card-val{font-size:20px;font-weight:800}
+.section-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:1.5rem 0 .75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.d-bar-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.d-bar-row:last-child{border-bottom:none}
+.d-bar-label{flex:1;color:#555}
+.d-bar-track{flex:2;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.d-bar-fill{height:100%;border-radius:3px}
+.d-bar-val{min-width:36px;text-align:right;font-weight:700;font-size:12px}
+.review-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.review-scenario{background:#f8f7f3;border-left:3px solid #c9c7bf;border-radius:0 6px 6px 0;padding:.6rem .9rem;margin-bottom:.6rem;font-size:12px;color:#555;line-height:1.5;font-style:italic}
+.review-stem{font-size:13px;font-weight:600;margin-bottom:.5rem;line-height:1.5}
+.review-yours{font-size:12px;color:var(--red);margin-bottom:2px}
+.review-correct{font-size:12px;color:var(--green);font-weight:600;margin-bottom:4px}
+.review-exp{font-size:12px;color:#555;line-height:1.6;background:var(--bg);border-radius:7px;padding:8px 12px;margin-top:4px}
+.retake-btn{padding:11px 28px;border:2px solid var(--purple);background:transparent;color:var(--purple);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:1.5rem;transition:all .15s}
+.retake-btn:hover{background:var(--purple);color:#fff}
+
+@media(max-width:720px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .page,.q-wrap,.results-page,.submit-bar,.exam-topbar{padding-left:1.25rem;padding-right:1.25rem}
+  .r-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-title">CIW 1D0-621</div>
+    <div class="sb-logo-sub">SCENARIO PRACTICE EXAM</div>
+  </div>
+  <div class="sb-body">
+    <div class="sb-label">Navigation</div>
+    <div class="sb-link active" onclick="goTo('intro')">Overview & Objectives</div>
+    <div class="sb-divider"></div>
+    <div class="sb-label">Domains</div>
+    <div class="sb-link" onclick="scrollToD(1)">D1 — UI Design Projects</div>
+    <div class="sb-link" onclick="scrollToD(2)">D2 — UI Design Process</div>
+    <div class="sb-link" onclick="scrollToD(3)">D3 — User-Centered Design</div>
+    <div class="sb-link" onclick="scrollToD(4)">D4 — Design Principles</div>
+    <div class="sb-link" onclick="scrollToD(5)">D5 — Color, Type & Layout</div>
+    <div class="sb-link" onclick="scrollToD(6)">D6 — Basic Web Page UI</div>
+    <div class="sb-link" onclick="scrollToD(7)">D7 — Navigation</div>
+    <div class="sb-link" onclick="scrollToD(8)">D8 — Interactive UI</div>
+    <div class="sb-link" onclick="scrollToD(9)">D9 — Publishing & SEO</div>
+    <div class="sb-divider"></div>
+    <button class="sb-exam-btn" onclick="goTo('exam')">Start Exam →</button>
+    <div class="sb-progress" id="sb-progress" style="display:none">
+      <span id="sb-progress-text">0 of 54 answered</span>
+      <div class="sb-bar"><div class="sb-bar-fill" id="sb-bar-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- INTRO PAGE -->
+<div class="main" id="mainScroll">
+<div id="page-intro" class="page active">
+  <div class="intro-title">CIW UI Designer<br>Scenario Practice Exam</div>
+  <div class="intro-desc">54 scenario-based questions covering every objective from the official 1D0-621 exam guide. Each question presents a real-world situation requiring you to apply — not just recall — what you know. Mix of multiple choice and short answer.</div>
+  <div class="intro-grid">
+    <div class="intro-card"><div class="intro-num" style="color:var(--purple)">54</div><div class="intro-lbl">Questions</div></div>
+    <div class="intro-card"><div class="intro-num" style="color:var(--blue)">75</div><div class="intro-lbl">Minutes</div></div>
+    <div class="intro-card"><div class="intro-num" style="color:var(--green)">74%</div><div class="intro-lbl">To Pass</div></div>
+    <div class="intro-card"><div class="intro-num" style="color:var(--amber)">9</div><div class="intro-lbl">Domains</div></div>
+    <div class="intro-card"><div class="intro-num" style="color:var(--red)">MC+SA</div><div class="intro-lbl">Mixed Types</div></div>
+    <div class="intro-card"><div class="intro-num" style="color:#0891b2">100%</div><div class="intro-lbl">Scenario-Based</div></div>
+  </div>
+  <div class="section-title">Objectives covered</div>
+  <div class="obj-list">
+    <div class="obj-row"><span class="obj-d">1.1</span><span class="obj-text">How web UIs evolved as more devices access the Internet</span></div>
+    <div class="obj-row"><span class="obj-d">1.2</span><span class="obj-text">Current trends: mobile devices and responsive design</span></div>
+    <div class="obj-row"><span class="obj-d">1.3</span><span class="obj-text">Responsibilities and tasks of web design team members</span></div>
+    <div class="obj-row"><span class="obj-d">1.4</span><span class="obj-text">Project management phases, documentation, and communication</span></div>
+    <div class="obj-row"><span class="obj-d">1.5</span><span class="obj-text">Advantages of web design project collaboration</span></div>
+    <div class="obj-row"><span class="obj-d">1.6</span><span class="obj-text">Benefits of a personal web design portfolio</span></div>
+    <div class="obj-row"><span class="obj-d">1.7</span><span class="obj-text">Planning a fictitious web-based business — goals statement</span></div>
+    <div class="obj-row"><span class="obj-d">2.1</span><span class="obj-text">Steps in web design development: bottom-up, Agile, vision, strategy, specs, mindmap, site map, wireframe</span></div>
+    <div class="obj-row"><span class="obj-d">2.2</span><span class="obj-text">Agile approach: streamlining workflow, eliminating bottlenecks, focusing on value</span></div>
+    <div class="obj-row"><span class="obj-d">2.3–2.4</span><span class="obj-text">Project vision and the design process from vision to strategy</span></div>
+    <div class="obj-row"><span class="obj-d">2.5</span><span class="obj-text">Defining specifications for a web site</span></div>
+    <div class="obj-row"><span class="obj-d">2.6–2.7</span><span class="obj-text">Site publishing and hosting considerations</span></div>
+    <div class="obj-row"><span class="obj-d">2.8–2.9</span><span class="obj-text">Security maintenance and ethical vs. illegal design</span></div>
+    <div class="obj-row"><span class="obj-d">2.10–2.12</span><span class="obj-text">Mindmapping, metaphors, word lists, and mood boards</span></div>
+    <div class="obj-row"><span class="obj-d">2.13</span><span class="obj-text">Creating a site map</span></div>
+    <div class="obj-row"><span class="obj-d">3.1–3.3</span><span class="obj-text">UCD relationship with users, Participatory Design, Scenario-based Design</span></div>
+    <div class="obj-row"><span class="obj-d">3.4</span><span class="obj-text">Cognitive psychology in relation to web design</span></div>
+    <div class="obj-row"><span class="obj-d">3.5–3.6</span><span class="obj-text">Personas, usability, use cases, and use case scenarios</span></div>
+    <div class="obj-row"><span class="obj-d">3.7–3.9</span><span class="obj-text">Usability testing, site accessibility, mobile accessibility</span></div>
+    <div class="obj-row"><span class="obj-d">4.1–4.3</span><span class="obj-text">UI design principles: CARP and ERBU applied to web design</span></div>
+    <div class="obj-row"><span class="obj-d">4.4</span><span class="obj-text">Branding considerations in UI design</span></div>
+    <div class="obj-row"><span class="obj-d">4.5</span><span class="obj-text">Legal issues in web design</span></div>
+    <div class="obj-row"><span class="obj-d">5.1–5.2</span><span class="obj-text">Color usage and font choices in UI design</span></div>
+    <div class="obj-row"><span class="obj-d">5.3–5.5</span><span class="obj-text">Layout elements, wireframing, mobile layout techniques</span></div>
+    <div class="obj-row"><span class="obj-d">6.1–6.2</span><span class="obj-text">Creating web UIs with best practices; HTML, CSS, responsive design basics</span></div>
+    <div class="obj-row"><span class="obj-d">6.3–6.5</span><span class="obj-text">Default and custom page templates, spelling and grammar review</span></div>
+    <div class="obj-row"><span class="obj-d">7.1–7.2</span><span class="obj-text">Why navigation is critical; URL and file naming best practices</span></div>
+    <div class="obj-row"><span class="obj-d">7.3–7.5</span><span class="obj-text">Navigation conventions, primary vs secondary, guided navigation</span></div>
+    <div class="obj-row"><span class="obj-d">7.6–7.7</span><span class="obj-text">Navigation hierarchy and action plans</span></div>
+    <div class="obj-row"><span class="obj-d">8.1–8.3</span><span class="obj-text">Prototyping importance, UI patterns, look and feel optimization</span></div>
+    <div class="obj-row"><span class="obj-d">8.4–8.5</span><span class="obj-text">Forms for user input and database processing</span></div>
+    <div class="obj-row"><span class="obj-d">8.6–8.11</span><span class="obj-text">Frameworks, UI libraries, CMS, templates, publishing tools, hosting</span></div>
+    <div class="obj-row"><span class="obj-d">9.1</span><span class="obj-text">Testing a UI: HTML5 validation, QA, security, focus groups</span></div>
+    <div class="obj-row"><span class="obj-d">9.2</span><span class="obj-text">Site maintenance tasks</span></div>
+    <div class="obj-row"><span class="obj-d">9.3–9.4</span><span class="obj-text">SEO definition, Internet marketing relationship, written content and SEO</span></div>
+    <div class="obj-row"><span class="obj-d">9.5–9.6</span><span class="obj-text">Mobile SEO strategies, metadata and the meta tag</span></div>
+  </div>
+  <button class="start-btn" onclick="goTo('exam')">Start Practice Exam →</button>
+</div>
+
+<!-- EXAM CONTENT (injected dynamically) -->
+<div id="page-exam" style="display:none">
+  <div class="exam-topbar">
+    <div class="exam-info" id="exam-meta">0 of 54 answered</div>
+    <div class="exam-timer" id="exam-timer">75:00</div>
+  </div>
+  <div class="exam-pbar-wrap"><div class="exam-pbar-fill" id="exam-pbar" style="width:0%"></div></div>
+  <div class="q-wrap" id="q-wrap"></div>
+  <div class="submit-bar">
+    <button class="submit-btn" onclick="submitExam()">Submit for grading →</button>
+    <span class="submit-hint" id="submit-hint">Answer all questions before submitting</span>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="page-results" style="display:none" class="results-page">
+  <div class="r-score" id="r-score"></div>
+  <div class="r-verdict" id="r-verdict"></div>
+  <div class="r-sub" id="r-sub"></div>
+  <div class="r-grid" id="r-grid"></div>
+  <div class="section-title">Score by domain</div>
+  <div id="r-domains" style="margin-bottom:1.5rem"></div>
+  <div class="section-title">Full review — every question</div>
+  <div id="r-review"></div>
+  <button class="retake-btn" onclick="retake()">Retake exam</button>
+</div>
+</div><!-- end .main -->
+</div><!-- end .app -->
+
+<script>
+// ─── QUESTION DATA ───────────────────────────────────────────────────────────
+const RAW = [
+
+// ═══════════════════════════════ DOMAIN 1 ════════════════════════════════════
+
+{d:1,obj:'1.1',type:'mc',
+ scenario:'A company built its flagship website in 2008 as a desktop-only experience with a fixed 960px-wide layout. The CEO asks a UI designer why the site feels outdated and performs poorly for their users.',
+ stem:'Which development MOST accurately explains why fixed-width desktop-only layouts are no longer adequate for modern web UI design?',
+ correct:'The proliferation of mobile devices created a wide range of screen sizes that fixed-width layouts cannot accommodate.',
+ wrong:['The introduction of JavaScript made static layouts obsolete.','CSS3 animation features require fluid containers to render correctly.','Search engines penalize sites that use fixed-width pixel values.'],
+ exp:'The explosion of smartphones and tablets — not JavaScript or CSS3 — fundamentally changed UI design requirements. Fixed 960px layouts are inaccessible on small screens and frustrating on large ones.'},
+
+{d:1,obj:'1.2',type:'mc',
+ scenario:'A startup is designing a new e-commerce site and has asked its UI team to ensure the site works seamlessly for customers shopping on phones, tablets, and desktops.',
+ stem:'Which current UI design technique BEST addresses this requirement?',
+ correct:'Responsive design using CSS media queries and flexible grids to adapt layouts to different screen sizes.',
+ wrong:['Building three separate sites — one each for mobile, tablet, and desktop.','Using Flash for interactive elements which automatically scales to any screen.','Designing only for desktop and relying on browsers to zoom for mobile users.'],
+ exp:'Responsive design uses CSS media queries and flexible grids to create a single codebase that adapts to any viewport. Building three separate sites is expensive and hard to maintain. Flash is deprecated. Browser zoom is not a design solution.'},
+
+{d:1,obj:'1.3',type:'sa',
+ scenario:'A project kick-off meeting reveals that the client\'s marketing director is confused about team roles. She asks, "Who actually draws the wireframes and decides what the pages look like?" Meanwhile, the developer says he keeps getting design tasks that aren\'t his job.',
+ stem:'Name the web design team member who is primarily responsible for creating wireframes, mockups, and visual layout decisions. In one sentence, explain what distinguishes this role from the front-end developer.',
+ blank:'ui designer',alts:['user interface designer','ui/ux designer','ux designer'],
+ keyword:'wireframe',
+ exp:'The UI Designer owns visual deliverables — wireframes, mockups, color, typography, and UX decisions. The front-end developer\'s job is to translate that design into working HTML, CSS, and JavaScript.'},
+
+{d:1,obj:'1.4',type:'mc',
+ scenario:'A web project has stalled because the development team doesn\'t know which features are in scope, the client keeps changing requirements verbally, and no one knows the deadline. The project manager calls an emergency meeting.',
+ stem:'Which project management artifact would MOST directly address all three of these problems?',
+ correct:'A formal project documentation package including scope, timeline, communication plan, and change management process.',
+ wrong:['A mood board to re-align the team on visual direction.','A site map showing all planned pages and their hierarchy.','A usability test report from the previous version of the site.'],
+ exp:'Project documentation — covering scope, timeline, roles, and a communication plan — is the PM\'s core tool for establishing structure. A mood board, site map, and usability report are design deliverables, not project management tools.'},
+
+{d:1,obj:'1.5',type:'mc',
+ scenario:'A freelance designer working alone completes a website for a restaurant. The client later discovers the site has no SEO strategy, the copy is poorly written, and the accessibility score is failing. The designer says "I\'m a designer, not a writer or developer."',
+ stem:'Which benefit of web design project collaboration would have MOST directly prevented these gaps?',
+ correct:'Collaboration brings together diverse skills — design, development, content strategy, and accessibility expertise — producing outcomes no single specialist can achieve alone.',
+ wrong:['Collaboration eliminates the need for a project manager on small projects.','Collaboration ensures the designer can work faster by distributing tasks.','Collaboration allows the client to act as both stakeholder and content writer.'],
+ exp:'Collaboration combines complementary specializations. A solo designer covering all disciplines introduces skill gaps. A team with a content strategist, developer, and accessibility specialist would have caught all three issues.'},
+
+{d:1,obj:'1.6',type:'mc',
+ scenario:'A recent design graduate is applying for UI design positions. She has no professional client work yet, but has completed 8 substantial projects during school. A recruiter tells her that without live URLs, she has nothing to show.',
+ stem:'What is the MOST effective approach for this designer to demonstrate competency to potential employers?',
+ correct:'Build a portfolio site with case studies, process documentation, screenshots, and outcomes from her school projects — live URLs are not required.',
+ wrong:['Accept that she cannot apply until she has professional client experience.','List the software tools she knows on her resume instead.','Ask a previous client to post testimonials on LinkedIn as a substitute for work samples.'],
+ exp:'A portfolio demonstrates skills visually. Case studies with process documentation and outcomes are compelling even without live URLs. School projects count — the quality of work matters, not its source.'},
+
+{d:1,obj:'1.7',type:'sa',
+ scenario:'A team is beginning work on a fictitious web-based business for a UCD course project. The instructor says the first deliverable must be a goals statement. The team asks what a goals statement must contain.',
+ stem:'List the three required components of a web-based business goals statement as defined by the CIW course.',
+ blank:'types of customers',alts:['customer types','customers'],
+ keyword:'mission',
+ exp:'A goals statement must include: (1) Types of customers the site will serve, (2) The feel of the work — tone and personality, (3) A mission statement — why the business exists. All three are required.'},
+
+// ═══════════════════════════════ DOMAIN 2 ════════════════════════════════════
+
+{d:2,obj:'2.1',type:'mc',
+ scenario:'A junior designer asks her manager to explain the correct sequence for moving from a project idea to a deliverable web page layout. The manager wants to explain the standard UI design process order.',
+ stem:'Which sequence correctly represents the UI design process from earliest to latest?',
+ correct:'Vision → Strategy → Specifications → Site Map → Wireframe',
+ wrong:['Wireframe → Site Map → Specifications → Strategy → Vision','Specifications → Vision → Site Map → Wireframe → Strategy','Strategy → Vision → Wireframe → Site Map → Specifications'],
+ exp:'The design process flows from big picture to specific detail: Vision (the concept) → Strategy (how to achieve it) → Specifications (requirements detail) → Site Map (page structure) → Wireframe (single-page layout).'},
+
+{d:2,obj:'2.1',type:'mc',
+ scenario:'A design team is debating whether to use a bottom-up or top-down approach for a new educational platform. The lead designer advocates for bottom-up, explaining its key advantage to the team.',
+ stem:'Which statement BEST explains why the bottom-up design approach is preferred in User Centered Design?',
+ correct:'It begins by identifying user needs, desires, and behaviors — which then drive and inform the design of the site.',
+ wrong:['It starts by designing the homepage first, then builds supporting pages downward.','It begins with technical architecture and works backward to user interface decisions.','It prioritizes fast delivery by building simpler pages before complex ones.'],
+ exp:'Bottom-up = user needs at the bottom drive design at the top. This contrasts with top-down approaches that start with visual design and try to fit users to it — the opposite of UCD philosophy.'},
+
+{d:2,obj:'2.2',type:'mc',
+ scenario:'A development team is three weeks into a project when the client requests a significant change to the navigation structure. A waterfall-approach manager says this is impossible because requirements were locked at project start. An Agile advocate disagrees.',
+ stem:'Which Agile characteristic MOST directly supports the Agile advocate\'s position?',
+ correct:'Agile facilitates changes in requirements throughout the project rather than locking them at the start.',
+ wrong:['Agile eliminates the need for stakeholder approval before making changes.','Agile allows individual developers to override client requests.','Agile requires all requirements to be defined before any design begins.'],
+ exp:'One of Agile\'s four key traits is facilitating changes in requirements. The client requesting a navigation change mid-project is exactly the scenario Agile is designed to handle. Waterfall locks requirements; Agile welcomes evolution.'},
+
+{d:2,obj:'2.3',type:'mc',
+ scenario:'A product team is starting a new mobile app. Before any design work begins, the project lead says the team must first define their project vision. A developer asks what this means and why it comes before strategy.',
+ stem:'Which statement BEST defines a project vision in UI design?',
+ correct:'A high-level statement describing the purpose, goals, and target audience of the site or app — it guides all subsequent decisions.',
+ wrong:['A detailed list of every feature and interaction the site must support.','A visual mockup showing the final approved design direction.','A technical specification documenting server requirements and APIs.'],
+ exp:'Vision = the "big idea" — what the site is for, who it serves, what success looks like. It is intentionally high-level and comes first because it must guide strategy, specifications, and design decisions that follow.'},
+
+{d:2,obj:'2.5',type:'mc',
+ scenario:'A client hands a web design agency a brief saying "I want a great website." The agency project manager says they need to create a formal web site specification first. The client asks what four components must be in it.',
+ stem:'Which answer correctly identifies the four required parts of a web site specification document?',
+ correct:'Functionality, Content, Architecture, and Design',
+ wrong:['Vision, Strategy, Specifications, and Wireframes','Goals, Users, Content, and Technology','Discovery, Design, Development, and Delivery'],
+ exp:'The four parts of a web site spec: Functionality (what it does), Content (what it contains), Architecture (how pages are organized), Design (how it looks). These four components define the full scope of the web design project.'},
+
+{d:2,obj:'2.6',type:'mc',
+ scenario:'A small business owner is ready to publish her website. Her developer gives her two options: upload files via FTP or use the CMS one-click publishing tool. She asks what FTP means and when it is used.',
+ stem:'Which statement MOST accurately describes FTP in the context of site publishing?',
+ correct:'File Transfer Protocol is used to transfer website files from a local computer to a web server for publishing.',
+ wrong:['FTP delivers web pages from the server to users\' browsers when they visit the site.','FTP is a security certificate required to publish sites over HTTPS.','FTP is a type of web host that provides free storage for small business sites.'],
+ exp:'FTP (File Transfer Protocol) is a publisher\'s upload tool — it moves files from the local machine to the server. HTTP is what delivers pages from the server to visitors\' browsers. These are opposite directions of travel.'},
+
+{d:2,obj:'2.7',type:'mc',
+ scenario:'A client is choosing between shared hosting at $5/month and a VPS (Virtual Private Server) at $40/month for their new e-commerce site. They ask the designer to explain the key difference.',
+ stem:'Which factor would MOST justify recommending VPS over shared hosting for this e-commerce client?',
+ correct:'VPS provides dedicated resources and custom server configuration, ensuring consistent performance even under high traffic loads.',
+ wrong:['VPS is always faster to set up and requires no technical knowledge.','Shared hosting automatically scales to unlimited traffic for e-commerce.','VPS is required by law for any site that accepts credit card payments.'],
+ exp:'VPS = dedicated resources and full server control. Shared hosting puts multiple sites on the same server — one site\'s traffic spike affects others. For e-commerce where reliability is critical, VPS resource guarantees are essential.'},
+
+{d:2,obj:'2.8',type:'mc',
+ scenario:'A web agency launches a client site built on WordPress with 15 plugins. Six months later, the site is hacked and malware is injected. The security audit reveals several plugins had not been updated in 8 months.',
+ stem:'Which security maintenance practice would have MOST directly prevented this breach?',
+ correct:'Regularly auditing and updating all CMS plugins to patch known vulnerabilities.',
+ wrong:['Changing the site\'s domain name every 90 days to avoid being targeted.','Disabling the contact form to prevent SQL injection attacks.','Using only dark colors in the design to make the site less visible to scanners.'],
+ exp:'Unpatched CMS plugins are the #1 vector for WordPress compromises. Security maintenance includes regularly applying plugin and software updates, which patch known CVEs (Common Vulnerabilities and Exposures) that hackers actively exploit.'},
+
+{d:2,obj:'2.9',type:'mc',
+ scenario:'A designer is reviewing two client requests: (A) a competitor has asked her to "borrow" a rival\'s homepage design style and color palette, and (B) a client wants to use images scraped from a stock photo site without purchasing licenses.',
+ stem:'How should the designer correctly classify these two requests?',
+ correct:'Request A is unethical but may not be illegal. Request B is illegal — using copyrighted images without a license is copyright infringement.',
+ wrong:['Both requests are legal as long as changes are made to the original material.','Request A is illegal and request B is merely unethical.','Both are unethical but neither is technically illegal if the client bears responsibility.'],
+ exp:'Design style and color schemes are generally not protectable — copying them is unethical but not illegal. Using copyrighted images without a license is copyright infringement — clearly illegal regardless of who bears responsibility.'},
+
+{d:2,obj:'2.10',type:'mc',
+ scenario:'A content team is preparing to design a new health and wellness website. Before writing a single word or drawing a wireframe, the strategist suggests starting with a mindmapping session. The developer asks why.',
+ stem:'Which statement BEST explains the advantage of mindmapping in the early design process?',
+ correct:'Mindmapping captures and represents brainstorming ideas in the way the brain naturally conceives them — branching from a central concept.',
+ wrong:['Mindmapping automatically generates an accurate site map from the ideas entered.','Mindmapping is a computer tool that tracks time spent on each design task.','Mindmapping replaces the need for a mood board by visualizing colors and tone.'],
+ exp:'Mindmapping places a central concept in the middle and branches related ideas outward — mirroring the associative way brains generate ideas. This makes it ideal for early-stage brainstorming before content is organized or critiqued.'},
+
+{d:2,obj:'2.11',type:'mc',
+ scenario:'A UX designer is presenting her concept for an online shopping experience. She explains that users will see a "shopping cart" icon in the top right corner that fills up as they add products. A stakeholder asks why they chose a cart instead of a basket icon.',
+ stem:'The designer is applying which UI design concept by choosing a familiar real-world object to represent the purchasing function?',
+ correct:'A UI metaphor — borrowing a real-world concept to make the digital interface immediately intuitive.',
+ wrong:['A UI pattern — a documented reusable solution shown as a visual reference.','The proximity principle — grouping related purchase elements near each other.','Progressive disclosure — hiding checkout complexity until the user is ready.'],
+ exp:'A UI metaphor applies a real-world object (shopping cart, desktop, file folder) to a digital function so users understand it immediately without instruction. It leverages existing mental models rather than requiring users to learn new concepts.'},
+
+{d:2,obj:'2.12',type:'mc',
+ scenario:'A brand designer is preparing to kick off the visual design phase for a new fintech startup. She tells the team they will complete two pre-design exercises: first a word list, then a mood board.',
+ stem:'Which statement correctly distinguishes between a word list and a mood board?',
+ correct:'A word list uses a 2-step process to capture descriptive words defining tone and feel; a mood board uses an 8-step process to translate those words into a visual collage.',
+ wrong:['A mood board uses a 2-step process; a word list uses an 8-step process.','A word list and mood board are interchangeable terms for the same deliverable.','A mood board is created first to establish color, then the word list describes what was created.'],
+ exp:'Word list = 2-step process generating descriptive words (refined, trustworthy, approachable). Mood board = 8-step process creating a visual reference of colors, textures, and imagery that brings those words to life. Word list always precedes mood board.'},
+
+{d:2,obj:'2.13',type:'mc',
+ scenario:'A designer has completed her content audit and categorization for a new university website. She now needs to document the hierarchy of all pages — which pages are top-level, which are sub-pages, and how they all relate — before starting any layout work.',
+ stem:'Which design deliverable should she create at this stage?',
+ correct:'A site map — a diagram showing all pages and their hierarchical relationships.',
+ wrong:['A wireframe — a low-fidelity layout of a single page showing structure.','A prototype — an interactive simulation of the final design.','A mood board — a visual collage establishing the site\'s tone and feel.'],
+ exp:'A site map documents the hierarchy and relationships between ALL pages. It is created AFTER content categorization and BEFORE wireframing individual pages. A wireframe documents a single page\'s layout — not the whole site structure.'},
+
+// ═══════════════════════════════ DOMAIN 3 ════════════════════════════════════
+
+{d:3,obj:'3.1',type:'mc',
+ scenario:'A UX team is designing a recipe website. During discovery, they identify two distinct user groups: people who follow recipes step-by-step (customers consuming content) and food bloggers who submit their own recipes (contributors adding content).',
+ stem:'Which design principle does recognizing these two distinct user groups MOST directly support?',
+ correct:'Needs-driven design — understanding the difference between content consumers and contributors to design interfaces that serve both appropriately.',
+ wrong:['Participatory design — including both user types directly in the design process.','Scenario-based design — creating realistic stories about how each user type interacts.','The proximity principle — grouping customer and contributor features close together.'],
+ exp:'Needs-driven design means recognizing what different user types actually need and designing to serve those specific needs. Customers (consumers) and contributors have fundamentally different goals, workflows, and interface needs.'},
+
+{d:3,obj:'3.2',type:'mc',
+ scenario:'A hospital is redesigning its patient portal. Rather than having designers create the interface and test it with patients at the end, the project director insists that nurses, patients, elderly users, and IT staff all participate actively in making design decisions throughout the process.',
+ stem:'This approach is BEST described as which design methodology?',
+ correct:'Participatory Design — all stakeholders, including end users, are actively involved in making design decisions.',
+ wrong:['Scenario-based Design — realistic user stories are used to evaluate design decisions.','Usability testing — real users evaluate a completed design to find issues.','The UCD Process — a structured Analysis → Design → Testing cycle.'],
+ exp:'Participatory Design = all stakeholders (designers, users, subject matter experts) participate directly in design decisions throughout the process — not just as research subjects. This is distinct from scenario-based design where user stories guide decisions, and from usability testing which evaluates a finished design.'},
+
+{d:3,obj:'3.3',type:'mc',
+ scenario:'A design team creating an airport wayfinding app writes this description: "Maria, a 68-year-old frequent traveler, arrives at Terminal C at 6am, exhausted after a red-eye flight. She opens the app to find her connecting gate. Her hands are full with luggage and she\'s wearing reading glasses."',
+ stem:'This description is an example of which UCD technique, and what is its primary purpose?',
+ correct:'A use case scenario — it adds realistic narrative context (who, device, environment, condition) to guide design decisions for specific user situations.',
+ wrong:['A persona — a research-based archetype representing a target user type.','A usability test script — documentation for running a moderated testing session.','A mood board — a visual reference for the tone and aesthetic of the app.'],
+ exp:'A use case scenario takes a persona (Maria) and places her in a specific realistic situation with context (time, physical state, environment, task). This is distinct from a persona alone (which defines the user type) and a use case (which defines the abstract interaction goal).'},
+
+{d:3,obj:'3.4',type:'mc',
+ scenario:'A UX researcher notices that users abandon a multi-step checkout form after step 3 of 7 when all steps are displayed at once. A redesign shows only the current step, hiding future steps. Completion rates improve significantly.',
+ stem:'Which cognitive psychology principle MOST explains why showing all 7 steps at once caused users to abandon the form?',
+ correct:'Cognitive load — presenting all 7 steps simultaneously overwhelmed users\' working memory and created a sense of daunting complexity.',
+ wrong:['The proximity principle — form steps were not grouped close enough together.','Color contrast failure — the step indicators were not visually distinct enough.','Mystery meat navigation — the form controls were unlabeled and unclear.'],
+ exp:'Cognitive load theory states that humans have limited working memory capacity. Showing 7 complex steps simultaneously overloads users. Progressive disclosure (showing one step at a time) reduces cognitive load and improves task completion.'},
+
+{d:3,obj:'3.5',type:'sa',
+ scenario:'A design team lead tells a new team member: "Before we start wireframing, we need to define our personas. These will guide every design decision we make throughout the project."',
+ stem:'In one sentence, define what a persona is in the context of user-centered web design.',
+ blank:'fictional',alts:['research-based','user archetype','target user'],
+ keyword:'research',
+ exp:'A persona is a fictional but research-based representation of a target user type — complete with a name, demographics, goals, behaviors, and pain points — used to guide design decisions throughout a project.'},
+
+{d:3,obj:'3.6',type:'mc',
+ scenario:'A software team documents: "A registered user clicks \'Book Appointment,\' selects a service, chooses an available time slot, enters their contact details, and receives a confirmation email." The team calls this a use case.',
+ stem:'What distinguishes this use case from a use case scenario?',
+ correct:'A use case scenario would add specific contextual details — who the user is, what device they\'re on, what situation they\'re in — making it a narrative story rather than an abstract interaction description.',
+ wrong:['A use case scenario would remove the steps and replace them with a visual wireframe.','A use case scenario is exactly the same — the terms are interchangeable.','A use case scenario would add a competitive analysis comparing similar booking flows.'],
+ exp:'A use case describes the abstract interaction flow (what happens). A use case scenario adds narrative richness: "Sarah, a 34-year-old working mother, books her appointment from her phone while waiting to pick up her kids..." This context directly informs design decisions.'},
+
+{d:3,obj:'3.7',type:'mc',
+ scenario:'A design team has just completed a new checkout flow. The lead designer thinks it\'s excellent. The marketing manager loves the visuals. But the PM insists on running a usability test before launch, and the team questions whether it\'s worth the time.',
+ stem:'Which statement BEST justifies the PM\'s decision to run usability testing?',
+ correct:'Usability testing evaluates how real users actually navigate and accomplish tasks — revealing problems that designers and stakeholders cannot see because they know the design too well.',
+ wrong:['Usability testing is required by W3C standards before any commercial site can launch.','Usability testing generates the data needed to apply for accessibility certifications.','Usability testing measures server performance under real user traffic loads.'],
+ exp:'Designers suffer from the "curse of knowledge" — they can\'t experience the design as a new user. Usability testing with real users completing real tasks reveals genuine friction points that internal review always misses. This is its unique and irreplaceable value.'},
+
+{d:3,obj:'3.8',type:'mc',
+ scenario:'During an accessibility audit of a government website, an auditor finds that: required form fields are indicated only by red text, instructional videos have no captions, and the site navigation cannot be operated by keyboard alone.',
+ stem:'Which accessibility guideline framework directly addresses all three of these issues?',
+ correct:'WCAG POUR — Perceivable (no color-only indicators, captions required), Operable (keyboard navigation required), and Understandable (predictable interface behavior).',
+ wrong:['Universal Design — the 7 principles governing physical and digital environment design.','CARP — design principles ensuring visual contrast, alignment, repetition, and proximity.','The Five Ds — the website production lifecycle from Discover through Deliver.'],
+ exp:'WCAG\'s POUR principles directly address all three: Perceivable (color alone can\'t convey info; captions needed), Operable (keyboard accessibility required), Understandable (clear labels and instructions). Universal Design and CARP are design principles, not accessibility frameworks.'},
+
+{d:3,obj:'3.9',type:'mc',
+ scenario:'A mobile banking app is designed for users over 60. During testing, elderly users struggle to tap small account balance tiles, accidentally trigger swipe gestures they didn\'t intend, and miss navigation labels that only appear on hover.',
+ stem:'Which combination of changes would BEST improve this app\'s mobile accessibility for this audience?',
+ correct:'Increase touch target sizes to at least 44×44px, remove hover-dependent interactions, and simplify navigation with clearly visible labels.',
+ wrong:['Add more animation to draw attention to interactive elements.','Reduce the number of fonts used to improve visual clarity.','Replace all icons with text labels and increase contrast on desktop only.'],
+ exp:'Mobile accessibility for elderly users requires: large touch targets (44×44px minimum per Apple/Google guidelines), no hover-dependent interactions (touch has no hover state), and simplified navigation with always-visible labels. Animation can increase cognitive load for this audience.'},
+
+// ═══════════════════════════════ DOMAIN 4 ════════════════════════════════════
+
+{d:4,obj:'4.1',type:'mc',
+ scenario:'A UI designer is reviewing a webpage mockup where every element — headings, body text, buttons, images, and captions — appears to be the same visual weight. Nothing stands out, and a user\'s eye doesn\'t know where to start.',
+ stem:'Applying UI design principles, which principle is MOST violated, and what is the primary fix?',
+ correct:'Emphasis (ERBU) is violated. The fix is to create a clear focal point — making the most important element dominant through size, weight, or color so users know where to look first.',
+ wrong:['Alignment (CARP) is violated. The fix is to align all elements to a consistent invisible grid.','Proximity (CARP) is violated. The fix is to group related elements closer together.','Unity (ERBU) is violated. The fix is to ensure all elements share a consistent visual style.'],
+ exp:'Emphasis creates visual hierarchy — directing the user\'s eye to the most important element first. When everything is the same weight, there is no emphasis, and users experience visual chaos. This is an ERBU principle, not a CARP principle.'},
+
+{d:4,obj:'4.2',type:'mc',
+ scenario:'A designer is auditing a landing page and notices: (1) the headline font is 72px and the body text is 14px — good, (2) form labels are placed far from their input fields — bad, (3) the site uses five different button styles — bad, (4) every page section has a random width — bad.',
+ stem:'Matching each problem to a CARP principle: problems 2, 3, and 4 violate which principles respectively?',
+ correct:'Problem 2 violates Proximity (labels should be near inputs). Problem 3 violates Repetition (consistent button style). Problem 4 violates Alignment (elements should align to a grid).',
+ wrong:['Problem 2 violates Contrast. Problem 3 violates Alignment. Problem 4 violates Proximity.','Problem 2 violates Repetition. Problem 3 violates Proximity. Problem 4 violates Contrast.','Problem 2 violates Alignment. Problem 3 violates Contrast. Problem 4 violates Repetition.'],
+ exp:'CARP in action: Proximity = related elements (label + input) must be spatially close. Repetition = consistent reuse of design elements (one button style). Alignment = all elements connected to an invisible grid. These are the three most common CARP violations in real-world design.'},
+
+{d:4,obj:'4.3',type:'mc',
+ scenario:'A designer reviews two layouts: Layout A alternates between full-width image sections and text blocks, creating a predictable visual rhythm as users scroll. Layout B has all images on the left and all text on the right, creating equal visual weight on both sides.',
+ stem:'Layout A demonstrates ERBU\'s Rhythm principle. Layout B demonstrates which other ERBU principle?',
+ correct:'Balance — distributing visual weight evenly across the layout so neither side feels heavier than the other.',
+ wrong:['Unity — ensuring all design elements feel cohesive and belong to the same visual family.','Emphasis — creating a clear focal point that directs the user\'s attention.','Proximity — grouping related visual and text elements close together.'],
+ exp:'Rhythm = visual flow created by repeating patterns (alternating full-width sections). Balance = equal distribution of visual weight — symmetrical balance has mirror-image equal weight on both sides. Both are ERBU principles, applied in different ways.'},
+
+{d:4,obj:'4.4',type:'mc',
+ scenario:'A UI designer joins a large retail brand\'s in-house team. On her first project, she designs a new promotional page and uses a rounded font she personally likes and a shade of green that "looks nicer" than the official brand green. Her manager asks her to redo it.',
+ stem:'Which concept does the manager\'s correction MOST directly enforce?',
+ correct:'Branding considerations — UI design must use approved brand assets (colors, fonts, tone) consistently to maintain brand identity.',
+ wrong:['The Repetition principle (CARP) — design elements must be reused consistently.','The Unity principle (ERBU) — all elements must feel cohesive.','Copyright law — unauthorized use of fonts may violate licensing agreements.'],
+ exp:'Branding considerations govern the use of specific brand assets — logo, approved color palette, typography system, and tone of voice. This is a distinct concept from CARP\'s Repetition (which is about reusing design elements) even though they are related. The exam tests them separately.'},
+
+{d:4,obj:'4.5',type:'mc',
+ scenario:'A web designer is asked by a client to: (A) create a landing page that closely mimics a competitor\'s navigation style, (B) use a famous photographer\'s images found on Google Images without purchasing them, and (C) write copy that claims the product won awards it never received.',
+ stem:'How should the designer correctly classify requests B and C?',
+ correct:'Request B is illegal (copyright infringement). Request C is illegal (fraudulent misrepresentation) and also deeply unethical.',
+ wrong:['Both B and C are unethical but legal if the client assumes responsibility.','Request B is legal if the images are modified. Request C is unethical but not illegal.','Request B is a minor violation covered under fair use. Request C is only illegal if the awards claim is in writing.'],
+ exp:'Using copyrighted images without permission = copyright infringement = illegal. Claiming false awards = fraudulent misrepresentation = illegal and unethical. Request A (copying navigation style) is unethical but navigation patterns are generally not protectable — the exam distinguishes ethical from legal violations.'},
+
+// ═══════════════════════════════ DOMAIN 5 ════════════════════════════════════
+
+{d:5,obj:'5.1',type:'mc',
+ scenario:'A healthcare company is redesigning its patient portal. The UX lead argues that the color palette should use blue tones throughout. A stakeholder asks why color even matters — "can\'t we just pick whatever looks nice?"',
+ stem:'Which statement BEST explains the functional role of color in UI design?',
+ correct:'Color communicates mood, guides visual attention, signals meaning (red = error, green = success), and influences user perception and trust — it is a functional design tool, not decoration.',
+ wrong:['Color only matters for accessibility compliance — otherwise it is purely aesthetic.','Color choices only affect print materials; digital screens normalize all colors equally.','Color has no measurable effect on user behavior or conversion rates.'],
+ exp:'Color psychology is a core UI design discipline. Blue communicates trust and calm — appropriate for healthcare. Color guides attention, establishes hierarchy, communicates status (error/success states), and shapes brand perception. It is explicitly functional, not decorative.'},
+
+{d:5,obj:'5.2',type:'mc',
+ scenario:'A design team specifies a custom web font — "Playfair Display" — for all headings. The developer reports that on Windows machines in Firefox, the headings look significantly different from the macOS Chrome design. The designer didn\'t anticipate this.',
+ stem:'Which font challenge in web UI design MOST directly caused this problem?',
+ correct:'Fonts may not render consistently across different browsers and operating systems due to differences in rendering engines and font smoothing algorithms.',
+ wrong:['Playfair Display is not licensed for web use and is being blocked by Firefox.','The developer failed to import the font — it is displaying the browser default instead.','Windows machines automatically downscale all font sizes by 20% in Firefox.'],
+ exp:'Cross-platform font rendering inconsistency is the primary font challenge in web UI. macOS uses sub-pixel rendering; Windows uses ClearType; Firefox and Chrome use different rendering engines. The same font can look meaningfully different across these combinations.'},
+
+{d:5,obj:'5.3',type:'mc',
+ scenario:'A designer presents three homepage layouts to the client. Layout A is densely packed with content and no breathing room. Layout B has clear content sections, intuitive menus, and generous whitespace between elements. Layout C has beautiful imagery but no visible navigation.',
+ stem:'Which layout correctly applies all three core web page layout elements, and which element does Layout C most obviously lack?',
+ correct:'Layout B correctly applies all three elements (content, navigation, and white space). Layout C lacks navigation.',
+ wrong:['Layout A correctly applies all three. Layout C lacks white space.','Layout B is correct. Layout C lacks white space.','Layout C is correct. Layout A lacks navigation.'],
+ exp:'The three core layout elements are content (what users came for), navigation (how they move through the site), and white space (breathing room). Layout B has all three. Layout C has content and white space but no navigation — a critical usability failure.'},
+
+{d:5,obj:'5.4',type:'mc',
+ scenario:'A new designer asks his lead what a wireframe is and why it uses gray boxes and Lorem Ipsum text instead of real images and content.',
+ stem:'Which statement BEST explains the purpose of placeholder content in wireframes?',
+ correct:'Placeholders keep stakeholder focus on layout structure and hierarchy — real images and content distract reviewers into discussing visual style before structure is approved.',
+ wrong:['Placeholders are used because real content is legally protected and cannot appear in documents.','Wireframes always use gray boxes because they are printed in black and white.','Lorem Ipsum is required by W3C standards for all wireframe documentation.'],
+ exp:'Wireframes deliberately use placeholders to prevent premature visual discussions. When real images appear, stakeholders comment on photography quality instead of layout. The goal of wireframe review is to approve structure — visual design comes later.'},
+
+{d:5,obj:'5.5',type:'mc',
+ scenario:'A designer is creating a mobile UI for a grocery shopping app. She is deciding between a two-column product grid and a single-column layout for the product listing page on phones.',
+ stem:'Which layout choice BEST follows mobile UI design best practices, and why?',
+ correct:'Single-column layout — it fits narrow mobile viewports without horizontal scrolling, accommodates touch targets, and is easier to scroll and scan on a small screen.',
+ wrong:['Two-column layout — it displays more products per screen, reducing scrolling time.','Two-column layout — mobile screens have enough pixels to display multiple columns comfortably.','Single-column layout — mobile browsers cannot render CSS grid properties.'],
+ exp:'Single-column layouts are the mobile standard because they: fit narrow viewports without horizontal scrolling, allow larger touch targets, and create a natural scroll pattern. Two-column product grids on phones make touch targets too small and images too small to evaluate products effectively.'},
+
+// ═══════════════════════════════ DOMAIN 6 ════════════════════════════════════
+
+{d:6,obj:'6.1',type:'mc',
+ scenario:'A client receives a newly launched website and notices that clicking one headline takes users to the correct page, but clicking a nearly identical headline on another page does nothing. The developer says it\'s because headings were styled to look like links using CSS but were never coded as actual links.',
+ stem:'Which web UI best practice was violated in this design?',
+ correct:'Semantic HTML best practices — interactive elements should use the correct HTML element (an anchor tag for links) rather than styling non-interactive elements to look interactive.',
+ wrong:['The CARP repetition principle — both headlines should use identical styling throughout.','CSS specificity rules — conflicting stylesheets caused one link to override the other.','The mood board was not followed — the color chosen for the headline violated brand guidelines.'],
+ exp:'Using CSS to make a heading look like a link without actual anchor tag functionality violates semantic HTML best practices. It also fails accessibility — screen readers announce links differently from headings, and keyboard users can\'t Tab to a styled-but-non-semantic element.'},
+
+{d:6,obj:'6.2',type:'mc',
+ scenario:'A developer shows a designer the following CSS: @media (max-width: 768px) { .sidebar { display: none; } }. The designer asks what philosophy this represents and how it differs from writing @media (min-width: 768px) instead.',
+ stem:'The max-width media query represents which design philosophy, and what does min-width represent instead?',
+ correct:'max-width = desktop-first (start with a full desktop layout and hide/remove elements at smaller screens). min-width = mobile-first (start with a mobile layout and progressively enhance for larger screens).',
+ wrong:['max-width targets tablet screens only. min-width targets desktop screens only.','max-width = mobile-first. min-width = desktop-first. They are frequently confused.','Both produce identical results — the difference is only stylistic preference.'],
+ exp:'max-width media queries apply when the screen is AT OR BELOW the breakpoint — they\'re used in desktop-first design to scale DOWN. min-width media queries apply when the screen is AT OR ABOVE the breakpoint — used in mobile-first design to progressively ENHANCE. Mobile-first is the modern best practice.'},
+
+{d:6,obj:'6.3',type:'mc',
+ scenario:'A web designer builds a site where every page shares the same header, footer, and sidebar navigation. The blog section needs a full-width layout without a sidebar. The developer suggests building the full-width layout as a variation rather than modifying the base structure.',
+ stem:'What is the correct technical approach to apply the blog\'s full-width layout while keeping the base structure intact?',
+ correct:'Create a custom page template for blog posts that overrides the sidebar region while inheriting the header and footer from the default template.',
+ wrong:['Delete the default template and rebuild every page layout individually from scratch.','Use JavaScript to hide the sidebar on blog pages after the default template loads.','Apply inline CSS to every blog post to set the sidebar width to zero.'],
+ exp:'Default templates provide the universal base structure (header, footer, nav). Custom templates extend the default for specific content types — blog posts, product pages, landing pages — overriding only what differs. This is the correct template architecture in any CMS.'},
+
+{d:6,obj:'6.4',type:'mc',
+ scenario:'A content manager logs into the CMS and creates three new page types: a product page with a comparison table, a team member bio page with a photo and social links, and a legal page with full-width text only. Each needs a different layout.',
+ stem:'Which approach BEST addresses the need for three distinct layouts while maintaining consistency across the site?',
+ correct:'Create three custom page templates — product, bio, and legal — each with unique layouts that still inherit shared elements from the default template.',
+ wrong:['Apply the same default template to all three and use inline styles to make each look different.','Build each page as a standalone HTML file with no shared template structure.','Use JavaScript to detect the page type and dynamically reformat the default template.'],
+ exp:'Custom templates are created for specific content types that need unique layouts. Each template extends the default (inheriting header, footer, navigation) but defines its own content area layout. This maintains consistency while accommodating different content requirements.'},
+
+{d:6,obj:'6.5',type:'mc',
+ scenario:'A project manager receives the final website files from the developer and is about to hand them directly to the client for approval. A quality assurance team member stops her and says they need to run a review first. The PM asks what specifically they need to check beyond visual design.',
+ stem:'Which pre-launch quality check is specifically related to Objective 6.5 of the CIW exam guide?',
+ correct:'Using spelling and grammar tools to review all site text — errors undermine credibility and professional trust.',
+ wrong:['Running the site through a performance speed test to measure load times.','Checking all external links to ensure they open correctly in new tabs.','Validating all image files to ensure they are in the correct format.'],
+ exp:'Objective 6.5 specifically addresses spelling and grammar review as a pre-publication quality step. Text errors damage perceived professionalism and user trust. CIW treats this as a design quality assurance step, not just editorial housekeeping.'},
+
+// ═══════════════════════════════ DOMAIN 7 ════════════════════════════════════
+
+{d:7,obj:'7.1',type:'mc',
+ scenario:'A user visits a software company\'s website for the first time. The navigation consists entirely of custom icons with no text labels. The user can\'t tell which icon goes to pricing, which goes to documentation, and which goes to support — until she hovers over each one.',
+ stem:'This navigation design is an example of which anti-pattern, and why is it especially problematic on mobile?',
+ correct:'Mystery meat navigation — unlabeled icon-only navigation where purpose is only revealed on hover. It is especially problematic on mobile because touch devices have no hover state.',
+ wrong:['Guided navigation — step-by-step flows are confusing without clear labels.','Secondary navigation — footer-level nav should not use icons.','Progressive disclosure — too much information is hidden in the navigation icons.'],
+ exp:'Mystery meat navigation (named after unidentifiable cafeteria food) is a major usability anti-pattern. On desktop it requires hover exploration. On mobile — where there is no hover state — icon-only navigation completely hides its purpose until tapped, forcing blind trial-and-error navigation.'},
+
+{d:7,obj:'7.2',type:'mc',
+ scenario:'A developer transfers a website from a Windows development server (where file names are not case-sensitive) to a Linux production server (where they are case-sensitive). Suddenly, dozens of links are broken, even though nothing was changed in the code.',
+ stem:'Which URL and file naming error MOST likely caused this problem?',
+ correct:'Inconsistent capitalization in file names — Windows treated MyPage.html and mypage.html as the same file, but Linux treats them as two different files.',
+ wrong:['The file names contained spaces, which broke the URL encoding on the Linux server.','The Linux server does not support HTML files — only PHP files can be served.','The URLs used hyphens instead of underscores, which Linux does not support.'],
+ exp:'Linux file systems are case-sensitive; Windows is not. Files named MyPage.html and mypage.html are identical on Windows but different files on Linux. Best practice: always use lowercase file names to avoid this cross-platform issue when moving between development and production servers.'},
+
+{d:7,obj:'7.3',type:'mc',
+ scenario:'A user is browsing a large e-commerce catalog site. She has navigated to: Home > Electronics > Laptops > Gaming Laptops > ASUS ROG Models. She wants to go back to the Electronics section without clicking the back button multiple times.',
+ stem:'Which familiar navigation convention is specifically designed for this exact use case?',
+ correct:'A breadcrumb trail — it displays the full hierarchical path and allows users to navigate upward to any ancestor page with a single click.',
+ wrong:['A site map — a full list of all pages on the site for comprehensive navigation.','Primary navigation — the main menu provides direct access to top-level sections.','Guided navigation — a step-by-step flow that directs users through a process.'],
+ exp:'Breadcrumb trails show the full path (Home > Electronics > Laptops > Gaming Laptops > ASUS ROG) and make each ancestor clickable. They are specifically designed for upward navigation in deep hierarchies — one of the most important secondary navigation conventions.'},
+
+{d:7,obj:'7.4',type:'mc',
+ scenario:'A designer is auditing a news site and identifies two types of navigation elements: (1) the main menu with sections like News, Sports, Business, and Culture, and (2) breadcrumb trails, article tags, and a "Related Articles" sidebar.',
+ stem:'How should the designer correctly classify these two navigation types?',
+ correct:'The main menu is primary navigation (access to main sections). Breadcrumbs, tags, and related articles are secondary navigation (supporting elements that aid navigation).',
+ wrong:['The main menu is secondary navigation. Breadcrumbs and tags are primary navigation.','Both are primary navigation — all navigation serves the same purpose.','The main menu is guided navigation. Breadcrumbs are tertiary navigation.'],
+ exp:'Primary navigation = access to the site\'s main sections (top-level menu). Secondary navigation = supporting elements that help users navigate within and between sections — breadcrumbs, filters, tags, related content links. The exam tests this distinction with scenario identification.'},
+
+{d:7,obj:'7.5',type:'mc',
+ scenario:'An e-commerce site\'s analytics show that 65% of users who begin the checkout process abandon it before completing payment. The UX team proposes redesigning the checkout as a clear 4-step process with a progress indicator showing Step 1 of 4: Cart → 2: Shipping → 3: Payment → 4: Confirm.',
+ stem:'This redesigned checkout applies which navigation concept?',
+ correct:'Guided site navigation — it walks users step-by-step through a defined process with clear progress indicators, showing where they are and what comes next.',
+ wrong:['A breadcrumb trail — it shows users their current location in the site hierarchy.','Primary navigation — it provides access to the main sections of the checkout system.','Progressive disclosure — it hides checkout complexity until users are ready to proceed.'],
+ exp:'Guided navigation (also called guided site navigation) leads users through a sequential process with clear steps, progress indicators, and forward/back controls. Checkout wizards, registration flows, and onboarding sequences are classic guided navigation implementations.'},
+
+{d:7,obj:'7.6',type:'mc',
+ scenario:'A UX team is designing a hospital website with these main sections: Patients (with subpages for appointments, records, and billing), Doctors (with subpages for each specialty), Research (with publications and clinical trials), and About (with leadership and history).',
+ stem:'When creating a navigation hierarchy for this site, which approach BEST reflects good IA (Information Architecture) principles?',
+ correct:'Organize top-level navigation around user goals (Patients, Doctors, Research, About) and nest related subpages under the most relevant parent — keeping navigation shallow and predictable.',
+ wrong:['List all pages alphabetically at the top level to ensure nothing is buried.','Organize by department rather than user type — Finance, HR, IT, Clinical.','Create a single mega-menu showing all pages simultaneously to prevent any nesting.'],
+ exp:'Good navigation hierarchy is organized around user mental models and goals — not organizational structure or alphabetical order. Shallow hierarchies (2-3 levels) are preferable to deep ones. Users should be able to predict where to find content based on top-level category labels.'},
+
+{d:7,obj:'7.7',type:'mc',
+ scenario:'Before building a new navigation system for a regional magazine, the UX lead says the team must document a "navigation action plan" covering how users will move through the site, what labels will be used, and how different devices will be handled.',
+ stem:'Which elements should the navigation action plan include?',
+ correct:'Navigation hierarchy, labeling conventions, interaction states (hover, active, visited), and responsive/mobile navigation patterns.',
+ wrong:['Color palette, font choices, and illustration style for navigation elements only.','Server-side routing configuration and URL parameter structures.','User research recruiting criteria and screener questions for usability testing.'],
+ exp:'A navigation action plan is comprehensive — it documents the hierarchy of navigation, labels for each section, interaction states (how links look when hovered, active, and visited), and how navigation adapts for mobile (hamburger menu, bottom navigation bar, etc.).'},
+
+// ═══════════════════════════════ DOMAIN 8 ════════════════════════════════════
+
+{d:8,obj:'8.1',type:'mc',
+ scenario:'A startup is about to spend $150,000 developing a complex fintech app based solely on a detailed specification document. A UX consultant recommends building a clickable prototype first. The CEO says prototyping will slow them down.',
+ stem:'Which argument MOST effectively justifies the consultant\'s recommendation?',
+ correct:'Catching a design problem in a prototype costs hours to fix. Finding the same problem after $150,000 of development could cost weeks of rework — prototyping has a dramatically higher ROI when discovered early.',
+ wrong:['Prototyping is required by financial regulators before any fintech app can launch.','Prototypes automatically generate production-ready HTML that speeds up development.','A prototype eliminates the need for usability testing after launch.'],
+ exp:'The ROI of prototyping is highest early in a project. A design flaw discovered in a wireframe or clickable prototype costs hours to fix. The same flaw discovered after months of development can cost weeks of rework. This is the core argument for prototyping investment.'},
+
+{d:8,obj:'8.2',type:'mc',
+ scenario:'A product designer notices that the settings page for a complex SaaS application has over 80 configuration options. All 80 options are visible simultaneously. Users report feeling overwhelmed and unable to find basic settings.',
+ stem:'Which UI pattern should the designer apply to address this problem?',
+ correct:'Progressive disclosure — show only the most commonly used settings by default and reveal advanced options through expandable sections or secondary screens.',
+ wrong:['A breadcrumb trail — show users which settings category they are currently in.','Guided navigation — walk users through all 80 settings in a sequential wizard.','A pattern library — document all 80 settings as reusable UI components.'],
+ exp:'Progressive disclosure is specifically designed to manage complexity by showing essential information first and hiding advanced detail until requested. 80 simultaneous options create severe cognitive overload; progressive disclosure organizes them into manageable layers revealed on demand.'},
+
+{d:8,obj:'8.3',type:'mc',
+ scenario:'A company redesigns its website and receives feedback that it "feels like a completely different company" from their existing marketing materials. The old site had warm earth tones and a friendly tone. The new site uses cold blues and formal corporate language.',
+ stem:'Which concept should the designer have followed to prevent this disconnect?',
+ correct:'Brand consistency in look and feel — UI design must align with the company\'s established visual identity (colors, tone, typography) across all touchpoints.',
+ wrong:['The Unity principle (ERBU) — all elements within the new site must feel cohesive internally.','The Repetition principle (CARP) — the same design elements must be reused across all pages.','Progressive enhancement — the site should have started with basic styles before adding visual polish.'],
+ exp:'Optimizing "look and feel" means ensuring the site\'s visual language — colors, typography, imagery style, and tone of voice — aligns with the brand\'s established identity across all marketing materials and touchpoints. Internal UI consistency (Unity, Repetition) is different from cross-channel brand consistency.'},
+
+{d:8,obj:'8.4',type:'mc',
+ scenario:'A designer is creating a user registration form. She needs to decide between displaying all fields at once (name, email, password, address, phone, preferences) versus splitting it into steps. She also needs to ensure the form is accessible.',
+ stem:'Which form design approach best follows UI best practices for user input?',
+ correct:'Split into logical steps with a progress indicator, use visible labels (not placeholder-only), validate inline, and group related fields with clear section headings.',
+ wrong:['Display all fields at once so users can see the full scope before starting.','Use placeholder text inside fields instead of labels to save vertical space.','Remove all validation until final submission to avoid interrupting the user\'s flow.'],
+ exp:'Form best practices: chunked steps reduce cognitive load, visible labels (not placeholder-only — placeholders disappear on focus) are required for accessibility, inline validation helps users fix errors as they go, and grouping related fields with headings creates clear visual structure.'},
+
+{d:8,obj:'8.5',type:'mc',
+ scenario:'A developer explains to a design intern: "When a user submits the contact form, the data doesn\'t just appear in my inbox by magic." The intern asks what actually happens between the user clicking Submit and the data appearing in the database.',
+ stem:'Which sequence correctly describes how form data flows from submission to storage?',
+ correct:'User submits → HTTP POST sends data to server → server-side script validates and sanitizes input → data written to database → confirmation displayed to user.',
+ wrong:['User submits → JavaScript stores data locally → server retrieves it from the browser → database is updated.','User submits → CSS validation checks the data → HTML writes it to the server → confirmation shown.','User submits → data appears immediately in the database → server generates a confirmation page.'],
+ exp:'Form processing requires server-side involvement: POST (not GET for sensitive data) sends data to the server, a server-side script validates and sanitizes (preventing SQL injection), the validated data is written to the database, and a confirmation response is returned to the browser.'},
+
+{d:8,obj:'8.6',type:'mc',
+ scenario:'A development team is evaluating two JavaScript options: Option A (Bootstrap) provides a pre-built responsive grid, UI components, and CSS utilities. Option B (React) provides a component-based architecture for building dynamic user interfaces. The team asks a designer to explain the difference.',
+ stem:'How should the designer correctly classify Bootstrap and React in web development terms?',
+ correct:'Bootstrap is a front-end CSS/UI framework providing pre-built responsive grids and components. React is a JavaScript library for building component-based user interfaces.',
+ wrong:['Both are CMS platforms that allow non-technical users to manage web content.','Bootstrap is a back-end framework for server logic. React handles front-end styling only.','Both are identical — the terms framework and library are interchangeable in web development.'],
+ exp:'Bootstrap = front-end framework (CSS + JS) providing responsive grid, pre-built components, and utility classes — runs in the browser. React = JavaScript library for building component-based UIs with state management. Both are front-end tools but serve different architectural purposes.'},
+
+{d:8,obj:'8.7',type:'mc',
+ scenario:'A design system team creates a document showing screenshots of every button variation, form state, modal pattern, and notification style used across their product — complete with usage guidelines and annotations. The document is 120 pages long.',
+ stem:'What type of design artifact is this team creating, and what is a critical limitation that product managers must understand about it?',
+ correct:'A UI pattern library (or design system documentation) — it is a visual reference document, NOT deployable code. Developers must implement the patterns themselves.',
+ wrong:['A component library — developers can import it directly as production-ready code.','A style guide — it automatically generates CSS from the design specifications.','A wireframe kit — designers use it to rapidly prototype new screens.'],
+ exp:'A UI pattern library documents patterns visually — what they look like, when to use them, and how they behave. It is explicitly NOT code. CIW\'s exam specifically tests this distinction: a pattern library is a picture/reference, not an importable component.'},
+
+{d:8,obj:'8.8',type:'mc',
+ scenario:'A nonprofit organization wants to update their website weekly with event announcements, blog posts, and volunteer opportunities. They have no technical staff — the team is all communications and program workers who know Word but not HTML.',
+ stem:'Which solution MOST appropriately meets this organization\'s content management needs?',
+ correct:'A Content Management System (CMS) — it provides a non-technical admin dashboard allowing staff to create and publish content without writing any code.',
+ wrong:['A static site generator — the team can learn its template syntax within a few weeks.','A custom-coded site — a developer can train the team on HTML editing over time.','A shared Google Doc — staff can write content there and the developer publishes it weekly.'],
+ exp:'A CMS (like WordPress or Drupal) is specifically designed for non-technical content management. Its visual admin dashboard lets communications staff create, edit, and publish content independently — exactly matching this organization\'s needs.'},
+
+{d:8,obj:'8.9',type:'mc',
+ scenario:'A client asks her web developer: "We bought a premium WordPress theme — does that mean we have a template and a theme? Are those the same thing?"',
+ stem:'How should the developer correctly explain the relationship between a theme and a template?',
+ correct:'A theme is the overall visual design package (colors, fonts, layout style). Templates are individual page layout structures within the theme for specific content types (homepage, blog, product).',
+ wrong:['A theme and template are interchangeable — they both refer to the same thing.','A template is the parent design package; a theme is a single-page variation within it.','A theme only affects colors; a template controls fonts and layout structure separately.'],
+ exp:'Themes provide the overall visual identity (design language, color system, typography). Templates are page-level layout structures within that theme — homepage template, single post template, archive template. Multiple templates exist within one theme.'},
+
+{d:8,obj:'8.10',type:'mc',
+ scenario:'A developer has completed a website and needs to publish it. She has three options: (A) use an FTP client to manually upload files, (B) use the CMS built-in publish button, (C) use a git-based deployment pipeline. Her manager asks her to explain the difference between options A and B.',
+ stem:'What is the key technical difference between FTP publishing and CMS publishing tools?',
+ correct:'FTP manually transfers file-by-file from local to server at the filesystem level. CMS publishing tools manage content through a database and application layer, often with version control and scheduling.',
+ wrong:['FTP is more secure than CMS publishing because it encrypts all files before transfer.','CMS publishing requires HTTPS while FTP can only work over unsecured connections.','FTP is only available for PHP sites; CMS tools work with all programming languages.'],
+ exp:'FTP is a raw file transfer protocol — it copies files from local disk to server disk. CMS publishing works at the application layer — it writes to a database, manages content versions, handles scheduled publishing, and may trigger cache clearing or CDN updates. Both accomplish publishing but at different system layers.'},
+
+{d:8,obj:'8.11',type:'mc',
+ scenario:'A client is starting an online bakery. She asks her designer to help choose a domain name and web host. She wants something memorable, brandable, and affordable. She\'s considering "sweetbakeryandcafegoodiesshop.com" for $3/month shared hosting.',
+ stem:'Which guidance best addresses BOTH the domain name and hosting choice?',
+ correct:'Choose a shorter, memorable domain (sweetbakery.com or similar) — length hurts recall and typing. Evaluate hosting based on expected traffic, uptime reliability, security, and cost — not just lowest price.',
+ wrong:['Accept the long domain — more words improve SEO ranking significantly.','Always choose the cheapest hosting — all shared hosting providers offer identical uptime.','Use a .net extension since .com domains are all taken and search engines prefer alternatives.'],
+ exp:'Domain name best practices: short, memorable, easy to spell, brand-relevant. Hosting selection criteria: uptime reliability (99.9%+), security features, customer support, scalability, and cost — not lowest price alone. Uptime directly affects business revenue.'},
+
+// ═══════════════════════════════ DOMAIN 9 ════════════════════════════════════
+
+{d:9,obj:'9.1',type:'mc',
+ scenario:'A web developer runs his new site through the W3C Markup Validation Service before launch. The tool returns this error: "Element div not allowed as child of element ul in this context." He\'s unsure why this matters since the page renders fine in Chrome.',
+ stem:'Why should the developer fix this validation error even though the page renders correctly in Chrome?',
+ correct:'HTML validation errors indicate violations of web standards that may cause rendering failures in other browsers, break assistive technology, and indicate structural problems that affect accessibility and SEO.',
+ wrong:['Google penalizes sites with W3C validation errors in search rankings.','Chrome is the only browser that matters for modern web design.','The error only affects printed versions of the page.'],
+ exp:'Browsers are forgiving — Chrome may render invalid HTML correctly by making assumptions. But other browsers, screen readers, and search engine crawlers may not make the same assumptions. Valid HTML ensures predictable cross-browser rendering and accessibility compliance.'},
+
+{d:9,obj:'9.1',type:'mc',
+ scenario:'A QA team is about to launch a new e-commerce site. They have validated the HTML, checked spelling, and tested on Chrome on a MacBook. The project manager asks if they\'re ready to launch.',
+ stem:'What critical QA step has the team MOST obviously omitted?',
+ correct:'Cross-browser and cross-device testing — the site has only been tested on one browser on one device type, leaving iOS, Android, Firefox, Safari, Windows, and tablet viewports untested.',
+ wrong:['Running a usability test with 100 participants before any commercial site can launch.','Registering the site with all major search engines before publishing.','Obtaining a security certificate from W3C before processing any transactions.'],
+ exp:'Quality assurance requires cross-browser testing (Chrome, Firefox, Safari, Edge), cross-device testing (mobile phones, tablets, desktops), and cross-OS testing (macOS, Windows, iOS, Android). Testing only Chrome on a Mac leaves massive rendering blind spots.'},
+
+{d:9,obj:'9.2',type:'mc',
+ scenario:'Six months after launching a nonprofit\'s website, a donor calls to say the "Donate Now" button leads to a 404 error, the events page still shows events from last year, and the site was defaced by a hacker last week.',
+ stem:'Which site maintenance tasks should have been performed regularly to prevent all three of these problems?',
+ correct:'Monitoring and fixing broken links, updating content regularly, and applying security patches and CMS updates.',
+ wrong:['Running a new usability test, creating a new mood board, and redesigning the homepage.','Resubmitting the site map to Google, changing the domain name, and upgrading the server.','Revalidating all HTML with W3C, re-running accessibility audits, and rebuilding the site from scratch.'],
+ exp:'All three problems are preventable through routine maintenance: broken links require regular link checking tools, outdated events content requires a content update schedule, and hacking exploits unpatched software — requiring regular CMS and plugin updates.'},
+
+{d:9,obj:'9.3',type:'mc',
+ scenario:'A small business owner asks her web designer: "I keep hearing about SEO. My competitor pays Google every month for their ads and always appears at the top. Is that what I need to do too?"',
+ stem:'How should the designer correctly explain the difference between SEO and paid search advertising?',
+ correct:'Paid ads (PPC) buy placement at the top of results. SEO improves organic (unpaid) visibility through content quality, site structure, and relevance — it cannot be bought directly.',
+ wrong:['SEO and paid ads accomplish the same thing through different technical approaches.','SEO is only relevant for e-commerce sites. Service businesses should always use paid ads.','Google penalizes sites that use SEO techniques instead of paying for ads.'],
+ exp:'SEO = Search Engine Optimization = improving organic (unpaid, earned) search visibility through content relevance, technical structure, and authority. Paid search (PPC/Google Ads) buys position. They are complementary strategies, not the same thing.'},
+
+{d:9,obj:'9.4',type:'mc',
+ scenario:'A blog editor asks her developer why her beautifully written article about "sustainable kitchen design" doesn\'t appear in Google search results when someone searches for "eco-friendly kitchen remodel ideas." The developer suspects an SEO content problem.',
+ stem:'Which written content strategy would MOST improve this article\'s search visibility for the target query?',
+ correct:'Incorporate the language actual users search for ("eco-friendly kitchen remodel") in the article title, H1 heading, and body copy — not just synonyms the writer prefers.',
+ wrong:['Submit the article manually to Google through a paid indexing service.','Add more images to the article since Google prioritizes image-heavy content.','Shorten the article to under 300 words since Google prefers concise content.'],
+ exp:'On-page SEO requires matching the language users actually search. "Sustainable kitchen design" and "eco-friendly kitchen remodel ideas" mean similar things but users search with different terms. Keyword research reveals what language to use in titles, headings, and body copy.'},
+
+{d:9,obj:'9.5',type:'mc',
+ scenario:'A mobile app developer wants her new fitness tracking app to appear at the top of App Store searches for "calorie tracker" and "workout logger." She asks a digital marketer what she should optimize.',
+ stem:'Which mobile SEO / App Store Optimization strategy would MOST directly improve her app\'s discoverability?',
+ correct:'Incorporate target keywords ("calorie tracker," "workout logger") in the app title, subtitle, and description — the primary ranking factors in App Store algorithms.',
+ wrong:['Build inbound links from external websites pointing to the App Store listing.','Add meta keywords tags to the app\'s HTML documentation pages.','Submit an XML sitemap of the app\'s screens to Google Search Console.'],
+ exp:'App Store Optimization (ASO) is the mobile equivalent of SEO. The app title and description are the highest-weight ranking factors in App Store algorithms. Inbound links, meta tags, and XML sitemaps are web SEO techniques — they don\'t apply to app store ranking.'},
+
+{d:9,obj:'9.6',type:'mc',
+ scenario:'A developer adds the following to a page\'s &lt;head&gt; section: &lt;meta name="description" content="Fresh artisan bread baked daily in downtown Portland. Order online for same-day pickup."&gt;. A marketing manager asks what this actually does.',
+ stem:'Which statement MOST accurately describes the function of this meta description tag?',
+ correct:'It provides the text snippet that search engines typically display below the page title in search results — influencing click-through rate from search pages.',
+ wrong:['It adds a visible description heading at the top of the page for all users.','It tells Google which keywords to rank this page for in search results.','It automatically posts this description to the business\'s social media profiles.'],
+ exp:'The meta description tag provides text that search engines display as the snippet under the page title in results. It is NOT a direct ranking factor (Google may rewrite it) but significantly influences click-through rate. It is invisible to page visitors — machine-readable only.'},
+
+{d:9,obj:'9.6',type:'mc',
+ scenario:'A developer accidentally sets &lt;meta name="robots" content="noindex, nofollow"&gt; on the homepage of a client\'s site before launch. The site launches and three weeks later the client calls furious — the site is nowhere in Google.',
+ stem:'Which of the two directives in this meta tag caused the site to disappear from Google, and what does the second directive do?',
+ correct:'noindex caused the disappearance — it instructs crawlers not to add the page to search results. nofollow is separate — it instructs crawlers not to follow links on the page or pass link equity to linked pages.',
+ wrong:['Both directives together removed the site. They must always be used as a pair.','nofollow caused the disappearance. noindex only affects paid ads, not organic results.','noindex blocks users from seeing the page. nofollow blocks the page from loading.'],
+ exp:'noindex and nofollow are independent directives. noindex = don\'t include this page in the search index (caused the disappearance). nofollow = don\'t follow outbound links or pass PageRank. A page can be indexed but have nofollow, or have noindex with links still followed. They work independently.'},
+
+]; // end RAW
+
+// ─── QUESTION SETUP ──────────────────────────────────────────────────────────
+const D_COLORS = {1:'#2563eb',2:'#dc2626',3:'#16a34a',4:'#7c3aed',5:'#d97706',6:'#0891b2',7:'#be185d',8:'#374151',9:'#065f46'};
+const D_NAMES = {1:'UI Design Projects',2:'UI Design Process',3:'User-Centered Design',4:'Design Principles',5:'Color, Type & Layout',6:'Basic Web Page UI',7:'Navigation',8:'Interactive UI',9:'Publishing & SEO'};
+
+let QUESTIONS = [];
+let mcSel = {};
+let timerRef = null;
+let tLeft = 75 * 60;
+let submitted = false;
+let answered = 0;
+
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function norm(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();}
+function checkSA(user,blank,alts,keyword){
+  const u=norm(user);
+  if(!u) return false;
+  if(u.includes(norm(blank))) return true;
+  if(alts) for(let a of alts) if(u.includes(norm(a))) return true;
+  if(keyword && u.includes(norm(keyword))) return true;
+  return false;
+}
+
+function buildQs(){
+  return RAW.map(q=>{
+    if(q.type==='mc'){
+      const opts=shuf([{t:q.correct,ok:true},...q.wrong.map(w=>({t:w,ok:false}))]);
+      return{...q,opts:opts.map(o=>o.t),ans:opts.findIndex(o=>o.ok)};
+    }
+    return {...q};
+  });
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function goTo(id){
+  document.querySelectorAll('[id^="page-"]').forEach(p=>{p.style.display='none';p.classList.remove('active');});
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  const pg = document.getElementById('page-'+id);
+  if(pg){pg.style.display='block';pg.classList.add('active');}
+  document.querySelectorAll('.sb-link').forEach(l=>{
+    if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes("'"+id+"'"))l.classList.add('active');
+  });
+  document.getElementById('mainScroll').scrollTop=0;
+  if(id==='exam') initExam();
+}
+
+function scrollToD(d){
+  goTo('exam');
+  setTimeout(()=>{
+    const el=document.getElementById('d-header-'+d);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+// ─── EXAM INIT ───────────────────────────────────────────────────────────────
+function initExam(){
+  if(submitted) return;
+  if(QUESTIONS.length===0){
+    QUESTIONS=buildQs();
+    renderQs();
+    startTimer();
+    document.getElementById('sb-progress').style.display='block';
+  }
+}
+
+function startTimer(){
+  timerRef=setInterval(()=>{
+    tLeft--;
+    const m=Math.floor(tLeft/60),s=tLeft%60;
+    const el=document.getElementById('exam-timer');
+    if(el){el.textContent=m+':'+(s<10?'0':'')+s;if(tLeft<=300)el.classList.add('warn');}
+    if(tLeft<=0){clearInterval(timerRef);submitExam();}
+  },1000);
+}
+
+function updateProg(){
+  let done=0;
+  QUESTIONS.forEach((q,i)=>{
+    if(q.type==='mc'&&mcSel[i]!==undefined)done++;
+    else if(q.type==='sa'){
+      const inp=document.querySelector('.q-sa-input[data-qi="'+i+'"]');
+      if(inp&&inp.value.trim().length>0)done++;
+    }
+  });
+  answered=done;
+  const pct=Math.round(done/QUESTIONS.length*100);
+  const el1=document.getElementById('exam-meta');
+  const el2=document.getElementById('exam-pbar');
+  const el3=document.getElementById('sb-progress-text');
+  const el4=document.getElementById('sb-bar-fill');
+  const el5=document.getElementById('submit-hint');
+  if(el1)el1.textContent=done+' of '+QUESTIONS.length+' answered';
+  if(el2)el2.style.width=pct+'%';
+  if(el3)el3.textContent=done+' of '+QUESTIONS.length+' answered';
+  if(el4)el4.style.width=pct+'%';
+  if(el5)el5.textContent=done===QUESTIONS.length?'All answered — ready to submit!':(QUESTIONS.length-done)+' question(s) remaining';
+}
+
+function pickOpt(qi,oi){
+  if(submitted)return;
+  document.querySelectorAll('.q-opt[data-qi="'+qi+'"]').forEach(o=>o.classList.remove('sel'));
+  const el=document.querySelector('.q-opt[data-qi="'+qi+'"][data-oi="'+oi+'"]');
+  if(el)el.classList.add('sel');
+  mcSel[qi]=oi;
+  updateProg();
+}
+
+// ─── RENDER QUESTIONS ─────────────────────────────────────────────────────────
+function renderQs(){
+  const wrap=document.getElementById('q-wrap');
+  if(!wrap)return;
+  const groups={};
+  QUESTIONS.forEach((q,i)=>{if(!groups[q.d])groups[q.d]=[];groups[q.d].push({q,i});});
+  let html='';
+  Object.keys(groups).sort((a,b)=>+a-+b).forEach(d=>{
+    const dc=D_COLORS[d];
+    html+=`<div id="d-header-${d}" style="margin:2rem 0 1rem;padding-top:1rem;border-top:2px solid ${dc}20">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span style="font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;background:${dc}15;color:${dc}">DOMAIN ${d}</span>
+        <span style="font-size:16px;font-weight:800">${D_NAMES[d]}</span>
+      </div>
+    </div>`;
+    groups[d].forEach(({q,i})=>{
+      const dc=D_COLORS[q.d];
+      const typeTxt=q.type==='mc'?'Multiple Choice':'Short Answer';
+      let body='';
+      if(q.type==='mc'){
+        body=`<div class="q-opts">${q.opts.map((o,oi)=>`
+          <div class="q-opt" data-qi="${i}" data-oi="${oi}" onclick="pickOpt(${i},${oi})">
+            <span class="opt-letter">${['A','B','C','D'][oi]}</span>
+            <span>${o}</span>
+          </div>`).join('')}</div>`;
+      } else {
+        body=`<textarea class="q-sa-input" data-qi="${i}" placeholder="Type your answer here..." oninput="updateProg()" rows="3"></textarea>
+              <div class="q-hint">💡 Write a concise answer — key terms matter. You will see the model answer after submission.</div>`;
+      }
+      html+=`<div class="q-block" id="qb${i}">
+        <div class="q-meta">
+          <span class="q-num">Q${i+1} of ${QUESTIONS.length}</span>
+          <div class="q-tags">
+            <span class="q-tag" style="background:${dc}15;color:${dc}">D${q.d}: ${D_NAMES[q.d]}</span>
+            <span class="q-tag" style="background:#f1f0ec;color:#777">Obj ${q.obj}</span>
+            <span class="q-tag" style="background:#f1f0ec;color:#777">${typeTxt}</span>
+          </div>
+        </div>
+        <div class="q-scenario">${q.scenario}</div>
+        <div class="q-stem">${q.stem}</div>
+        ${body}
+      </div>`;
+    });
+  });
+  wrap.innerHTML=html;
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────────────
+function submitExam(){
+  if(submitted)return;
+  const un=QUESTIONS.length-answered;
+  if(un>0&&!confirm(un+' question(s) unanswered. Submit anyway?'))return;
+  submitted=true;clearInterval(timerRef);
+
+  let correct=0;
+  const missed=[];
+  const dd={};
+  for(let d=1;d<=9;d++)dd[d]={c:0,t:0};
+
+  QUESTIONS.forEach((q,i)=>{
+    dd[q.d].t++;
+    let ok=false,userAns='',correctAns='';
+    if(q.type==='mc'){
+      const s=mcSel[i];
+      ok=(s===q.ans);
+      userAns=s!==undefined?['A','B','C','D'][s]+') '+q.opts[s]:'(not answered)';
+      correctAns=['A','B','C','D'][q.ans]+') '+q.opts[q.ans];
+      document.querySelectorAll('.q-opt[data-qi="'+i+'"]').forEach((o,oi)=>{
+        if(oi===q.ans)o.classList.add('reveal');
+        else if(oi===s&&!ok)o.classList.add('wrong');
+      });
+    } else {
+      const inp=document.querySelector('.q-sa-input[data-qi="'+i+'"]');
+      const val=inp?inp.value:'';
+      ok=checkSA(val,q.blank,q.alts,q.keyword);
+      userAns=val||'(blank)';
+      correctAns=q.blank;
+      if(inp){inp.classList.add(ok?'correct':'wrong');inp.disabled=true;}
+    }
+    if(ok){correct++;dd[q.d].c++;}
+    else missed.push({i,q,userAns,correctAns});
+  });
+
+  const pct=Math.round(correct/QUESTIONS.length*100);
+  const pass=pct>=74;
+
+  // hide exam page elements
+  document.getElementById('page-exam').style.display='none';
+
+  // show results
+  const rp=document.getElementById('page-results');
+  rp.style.display='block';
+  document.getElementById('mainScroll').scrollTop=0;
+
+  document.getElementById('r-score').textContent=pct+'%';
+  document.getElementById('r-score').className='r-score '+(pass?'pass':'fail');
+  document.getElementById('r-verdict').textContent=pass?'PASS — You are ready for the real exam.':'Not quite — review the misses and drill again.';
+  document.getElementById('r-verdict').style.color=pass?'var(--green)':'var(--red)';
+  document.getElementById('r-sub').textContent=correct+' of '+QUESTIONS.length+' correct — real exam needs 74% (40/54)';
+
+  document.getElementById('r-grid').innerHTML=`
+    <div class="r-card"><div class="r-card-lbl">Score</div><div class="r-card-val">${pct}%</div></div>
+    <div class="r-card"><div class="r-card-lbl">Correct</div><div class="r-card-val">${correct}/${QUESTIONS.length}</div></div>
+    <div class="r-card"><div class="r-card-lbl">Missed</div><div class="r-card-val">${missed.length}</div></div>
+    <div class="r-card"><div class="r-card-lbl">Result</div><div class="r-card-val" style="color:${pass?'var(--green)':'var(--red)'}">${pass?'PASS':'FAIL'}</div></div>`;
+
+  document.getElementById('r-domains').innerHTML=Object.entries(dd).filter(([,v])=>v.t>0).map(([d,v])=>{
+    const dp=Math.round(v.c/v.t*100);
+    const col=dp>=80?'var(--green)':dp>=60?'var(--amber)':'var(--red)';
+    return `<div class="d-bar-row">
+      <div class="d-bar-label">D${d}: ${D_NAMES[d]}</div>
+      <div class="d-bar-track"><div class="d-bar-fill" style="width:${dp}%;background:${col}"></div></div>
+      <div class="d-bar-val" style="color:${col}">${v.c}/${v.t}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('r-review').innerHTML=QUESTIONS.map((q,i)=>{
+    const m=missed.find(x=>x.i===i);
+    const dc=D_COLORS[q.d];
+    const ca=q.type==='mc'?(['A','B','C','D'][q.ans]+') '+q.opts[q.ans]):q.blank;
+    return `<div class="review-block">
+      <div style="display:flex;gap:6px;margin-bottom:.6rem;flex-wrap:wrap">
+        <span class="q-tag" style="background:${dc}15;color:${dc}">D${q.d}: ${D_NAMES[q.d]}</span>
+        <span class="q-tag" style="background:#f1f0ec;color:#777">Obj ${q.obj}</span>
+        <span class="q-tag" style="background:${m?'#fef2f2':'#f0fdf4'};color:${m?'var(--red)':'var(--green)'}">${m?'Missed':'Correct'}</span>
+      </div>
+      <div class="review-scenario">${q.scenario}</div>
+      <div class="review-stem">Q${i+1}: ${q.stem}</div>
+      ${m?`<div class="review-yours">✗ Your answer: ${m.userAns}</div>`:'<div style="font-size:12px;color:var(--green);margin-bottom:2px;font-weight:600">✓ Correct!</div>'}
+      <div class="review-correct">✓ Answer: ${ca}</div>
+      <div class="review-exp">${q.exp}</div>
+    </div>`;
+  }).join('');
+}
+
+function retake(){
+  submitted=false;mcSel={};answered=0;tLeft=75*60;QUESTIONS=[];
+  clearInterval(timerRef);
+  document.getElementById('page-results').style.display='none';
+  document.getElementById('exam-timer').textContent='75:00';
+  document.getElementById('exam-timer').classList.remove('warn');
+  const ep=document.getElementById('page-exam');
+  ep.style.display='block';
+  document.getElementById('mainScroll').scrollTop=0;
+  initExam();
+}
+</script>
+</body>
+</html>
