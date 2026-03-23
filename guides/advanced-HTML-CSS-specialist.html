@@ -797,21 +797,21 @@
 
       <div class="study-h3">CSS Selectors Cheatsheet</div>
       <table class="study-table">
-        <tr><th>Selector</th><th>Targets</th></tr>
-        <tr><td><code>*</code></td><td>All elements (universal)</td></tr>
-        <tr><td><code>element</code></td><td>All of that element type</td></tr>
-        <tr><td><code>.class</code></td><td>Elements with that class</td></tr>
-        <tr><td><code>#id</code></td><td>Single element with that ID</td></tr>
-        <tr><td><code>A B</code></td><td>B that is a descendant of A</td></tr>
-        <tr><td><code>A > B</code></td><td>B that is a direct child of A</td></tr>
-        <tr><td><code>A + B</code></td><td>B immediately after A (adjacent sibling)</td></tr>
-        <tr><td><code>A ~ B</code></td><td>All B siblings after A</td></tr>
-        <tr><td><code>[attr]</code></td><td>Elements with that attribute</td></tr>
-        <tr><td><code>[attr="val"]</code></td><td>Exact attribute value match</td></tr>
-        <tr><td><code>:hover</code></td><td>Element being hovered</td></tr>
-        <tr><td><code>:first-child</code></td><td>First child of its parent</td></tr>
-        <tr><td><code>:nth-child(n)</code></td><td>nth child (use <code>odd</code>, <code>even</code>, or formula)</td></tr>
-        <tr><td><code>::before / ::after</code></td><td>Pseudo-elements (CSS3)</td></tr>
+        <tr><th>Selector</th><th>Targets</th><th>Example Syntax</th></tr>
+        <tr><td><code>*</code></td><td>All elements (universal)</td><td><code>* { margin: 0; }</code></td></tr>
+        <tr><td><code>element</code></td><td>All of that element type</td><td><code>p { color: gray; }</code></td></tr>
+        <tr><td><code>.class</code></td><td>Elements with that class</td><td><code>.card { padding: 1rem; }</code></td></tr>
+        <tr><td><code>#id</code></td><td>Single element with that ID</td><td><code>#header { background: blue; }</code></td></tr>
+        <tr><td><code>A B</code></td><td>B that is a descendant of A</td><td><code>nav a { color: white; }</code></td></tr>
+        <tr><td><code>A > B</code></td><td>B that is a direct child of A</td><td><code>ul > li { list-style: none; }</code></td></tr>
+        <tr><td><code>A + B</code></td><td>B immediately after A (adjacent sibling)</td><td><code>h2 + p { margin-top: 0; }</code></td></tr>
+        <tr><td><code>A ~ B</code></td><td>All B siblings after A</td><td><code>h2 ~ p { color: gray; }</code></td></tr>
+        <tr><td><code>[attr]</code></td><td>Elements with that attribute</td><td><code>[disabled] { opacity: 0.5; }</code></td></tr>
+        <tr><td><code>[attr="val"]</code></td><td>Exact attribute value match</td><td><code>[type="submit"] { background: green; }</code></td></tr>
+        <tr><td><code>:hover</code></td><td>Element being hovered</td><td><code>a:hover { text-decoration: underline; }</code></td></tr>
+        <tr><td><code>:first-child</code></td><td>First child of its parent</td><td><code>li:first-child { font-weight: bold; }</code></td></tr>
+        <tr><td><code>:nth-child(n)</code></td><td>nth child (use <code>odd</code>, <code>even</code>, or formula)</td><td><code>tr:nth-child(even) { background: #f5f5f5; }</code></td></tr>
+        <tr><td><code>::before / ::after</code></td><td>Pseudo-elements (CSS3)</td><td><code>p::before { content: "→ "; }</code></td></tr>
       </table>
 
       <div class="study-h3">CSS Positioning</div>
