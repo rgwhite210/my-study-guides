@@ -636,7 +636,8 @@
 
 <div id="nav">
   <button class="nav-btn active" onclick="showSection('study')">📚 Study Guide</button>
-  <button class="nav-btn" onclick="showSection('exam')">🎯 Practice Exam</button>
+  <button class="nav-btn" onclick="showSection('exam')">🎯 Practice Exam 1</button>
+  <button class="nav-btn" onclick="showSection('exam2')">📝 Practice Exam 2</button>
   <button class="nav-btn" onclick="showSection('flash')">🃏 Flashcards</button>
   <button class="nav-btn" onclick="showSection('ref')">⚡ Quick Reference</button>
 </div>
@@ -1354,13 +1355,13 @@ input.<span class="fn">reportValidity</span>();</pre>
 <div id="exam-section" class="section">
   <div id="exam-start">
     <div style="max-width:560px">
-      <h2 style="font-family:'DM Serif Display',serif; font-size:28px; color:var(--heading); margin-bottom:12px;">Practice Exam</h2>
+      <h2 style="font-family:'DM Serif Display',serif; font-size:28px; color:var(--heading); margin-bottom:12px;">Practice Exam 1</h2>
       <p style="color:var(--text-muted); margin-bottom:24px; line-height:1.7;">
-        This 56-question practice exam mirrors the structure of the CIW 1D0-720 certification exam. You'll have <strong style="color:var(--text)">75 minutes</strong>. A score of <strong style="color:var(--text)">75% (42/56)</strong> is required to pass.
+        This 48-question exam covers the CIW 1D0-720 question bank (complementary set to Exam 2 — together the two exams cover all PDF questions). You'll have <strong style="color:var(--text)">75 minutes</strong>. A score of <strong style="color:var(--text)">75% (36/48)</strong> is required to pass.
       </p>
       <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <button class="btn" onclick="startExam()">Start Exam ↗</button>
-        <button class="btn secondary" onclick="startExamUntimed()">Untimed Practice</button>
+        <button class="btn" onclick="startBankedExam(questions)">Start Exam ↗</button>
+        <button class="btn secondary" onclick="startBankedExam(questions, false)">Untimed Practice</button>
       </div>
     </div>
   </div>
@@ -1368,7 +1369,7 @@ input.<span class="fn">reportValidity</span>();</pre>
   <div id="exam-active" style="display:none">
     <div class="exam-controls">
       <div>
-        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">Question <span id="q-current-num">1</span> of 56</div>
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">Question <span id="q-current-num">1</span> of <span id="q-total-num">56</span></div>
         <div class="q-status-row" id="q-dots"></div>
       </div>
       <div id="timer-display" class="timer-bar">75:00</div>
@@ -1398,6 +1399,20 @@ input.<span class="fn">reportValidity</span>();</pre>
     <div style="margin-top:24px; display:flex; gap:12px;">
       <button class="btn" onclick="resetExam()">Try Again</button>
       <button class="btn secondary" onclick="showSection('study')">Back to Study Guide</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ EXAM 2 SECTION ══════════════════════════ -->
+<div id="exam2-section" class="section">
+  <div style="max-width:560px">
+    <h2 style="font-family:'DM Serif Display',serif; font-size:28px; color:var(--heading); margin-bottom:12px;">Practice Exam 2</h2>
+    <p style="color:var(--text-muted); margin-bottom:24px; line-height:1.7;">
+      A fresh 56-question set drawn from the official CIW 1D0-720 V12.35 question bank. Same domains, new questions. You'll have <strong style="color:var(--text)">75 minutes</strong>. A score of <strong style="color:var(--text)">75% (42/56)</strong> is required to pass.
+    </p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <button class="btn" onclick="startBankedExam(questions2)">Start Exam ↗</button>
+      <button class="btn secondary" onclick="startBankedExam(questions2, false)">Untimed Practice</button>
     </div>
   </div>
 </div>
@@ -1517,7 +1532,7 @@ function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id + '-section').classList.add('active');
-  const idx = ['study','exam','flash','ref'].indexOf(id);
+  const idx = ['study','exam','exam2','flash','ref'].indexOf(id);
   document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
 }
 
@@ -1533,123 +1548,210 @@ function togglePanel(id) {
 }
 
 // ──────────────────────────────────────────────
-// QUESTION BANK (56 questions)
+// QUESTION BANK 1 (48 questions — from 1D0-720 V12.35, complementing Exam 2)
 // ──────────────────────────────────────────────
 const questions = [
-  // Domain 1 - HTML5 Essentials (8 questions)
-  { d:1, q:"What does the web development 'trifecta' refer to?", opts:["HTML, CSS, JavaScript","HTML, PHP, MySQL","CSS, JavaScript, jQuery","HTML, XML, XSL"], a:0, e:"The web development trifecta (or 'HTML5 Family') refers to HTML5 (structure), CSS3 (presentation), and JavaScript (behavior) working together." },
-  { d:1, q:"Which HTML5 element is best suited for a self-contained piece of content such as a blog post or news story?", opts:["&lt;section&gt;","&lt;article&gt;","&lt;aside&gt;","&lt;div&gt;"], a:1, e:"&lt;article&gt; is for self-contained content that can stand alone (blog post, comment, news story). &lt;section&gt; groups thematic content with a heading." },
-  { d:1, q:"Which attribute on the &lt;video&gt; element displays a browser image before the video plays?", opts:["src","thumbnail","poster","preload"], a:2, e:"The 'poster' attribute specifies an image to display while the video is loading or until the user plays it." },
-  { d:1, q:"What is the primary purpose of the HTML5 &lt;canvas&gt; element?", opts:["Embed external content via a plugin","Display a static image","Provide a scriptable drawing surface via JavaScript","Create multi-column text layout"], a:2, e:"&lt;canvas&gt; is a container for graphics drawn via JavaScript using the Canvas 2D API or WebGL." },
-  { d:1, q:"When validating an HTML5 document, which DOCTYPE declaration is required?", opts:["&lt;!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN'&gt;","&lt;!DOCTYPE html&gt;","&lt;?xml version='1.0'?&gt;","No DOCTYPE is needed in HTML5"], a:1, e:"HTML5 uses the simple &lt;!DOCTYPE html&gt; declaration to trigger standards mode." },
-  { d:1, q:"What is the main difference between a mobile website and a mobile app?", opts:["Mobile apps are built with HTML; websites use native code","Mobile websites run in a browser; apps are installed on the device","Mobile websites work offline; apps require internet","Both are identical — the terms are interchangeable"], a:1, e:"Mobile websites are accessed through browsers (URL-based). Mobile apps are downloaded/installed and can access device hardware." },
-  { d:1, q:"Which HTML5 element marks content that is tangentially related to the main content, like a sidebar?", opts:["&lt;section&gt;","&lt;nav&gt;","&lt;aside&gt;","&lt;footer&gt;"], a:2, e:"&lt;aside&gt; represents content that is related to, but separate from, the main content — typically rendered as a sidebar." },
-  { d:1, q:"What is the benefit of using the 'preload=metadata' attribute on a &lt;video&gt; element?", opts:["The video plays automatically","Only metadata (dimensions, duration) is loaded, saving bandwidth","The full video is downloaded before playback","It prevents the video from displaying controls"], a:1, e:"preload='metadata' tells the browser to only fetch the video metadata (dimensions, duration), not the full video file." },
+  // Domain 1 - HTML5 Essentials (9 questions)
+  { d:1, q:"What are the components of the web development trifecta?", opts:["HTML, PHP, JavaScript","HTML, CSS, JavaScript","HTML, Java, Python","HTML, C++, CSS"], a:1, e:"The web development trifecta is HTML5 (structure), CSS3 (presentation), and JavaScript (behavior). Together they are everything a browser needs to render a complete web page." },
+  { d:1, q:"Which of the following are all common HTML5 APIs?", opts:["Canvas API","Geolocation API","Drag-and-Drop API","All of the above"], a:3, e:"HTML5 introduced a suite of browser APIs: the Canvas API (2D/3D drawing), the Geolocation API (user location), and the Drag-and-Drop API (native drag interactions), along with many others." },
+  { d:1, q:"Why is universal markup creation important in HTML5?", opts:["It ensures faster page loading times","It helps create more visually appealing designs","It ensures web content is accessible across various devices and browsers","It simplifies search engine optimization"], a:2, e:"Writing valid, semantic HTML5 markup ensures content renders correctly across different browsers, screen sizes, and assistive technologies — making the web accessible to all users." },
+  { d:1, q:"What is the primary purpose of validating an HTML5 document?", opts:["To check for syntax errors and standard compliance","To ensure cross-browser compatibility","To optimize the website for search engines","To improve website security"], a:0, e:"HTML validation (e.g., via the W3C Validator) checks that the document conforms to the HTML5 specification — catching syntax errors, missing tags, and incorrect nesting." },
+  { d:1, q:"Which of the following is a key difference between mobile websites and mobile apps?", opts:["Mobile apps require an internet connection to function","Mobile websites can access device-specific features like camera and GPS","Mobile apps are typically written in HTML, CSS, and JavaScript","Mobile websites are accessed via browsers and don't need to be downloaded"], a:3, e:"Mobile websites are URL-based and accessed through a browser with no installation required. Mobile apps are installed on the device and can access native hardware (camera, GPS, accelerometer) more directly." },
+  { d:1, q:"Which HTML5 input type is new (not present in HTML4)?", opts:["text","email","password","submit"], a:1, e:"type='email', along with date, range, url, tel, number, color, and others, were introduced in HTML5. Types like text, password, and submit existed in HTML4." },
+  { d:1, q:"What is a common step in troubleshooting a website's conformance to web standards?", opts:["Checking compliance with HTML5 and CSS3 specifications","Ignoring browser compatibility issues","Avoiding all forms of user testing","Focusing solely on the website's visual appearance"], a:0, e:"Conformance troubleshooting starts with running the site through a standards validator (W3C HTML/CSS Validator) to identify spec violations, then testing across browsers for rendering differences." },
+  { d:1, q:"Which statement best describes the evolution of HTML in modern web design?", opts:["HTML has remained largely unchanged since its inception","HTML5 introduced multimedia elements that reduced dependency on third-party plugins","The evolution of HTML has made it less relevant","HTML is primarily used for backend development today"], a:1, e:"HTML5 natively supports audio (&lt;audio&gt;), video (&lt;video&gt;), and drawing (&lt;canvas&gt;), eliminating the need for Flash, Silverlight, and other plugins that were required in earlier HTML versions." },
+  { d:1, q:"Which HTML5 element is best suited for creating a navigation bar on a web page?", opts:["&lt;nav&gt;","&lt;header&gt;","&lt;footer&gt;","&lt;div&gt;"], a:0, e:"&lt;nav&gt; is the semantic HTML5 element that wraps a block of major navigation links. Using &lt;nav&gt; instead of &lt;div&gt; aids screen readers and search engines in identifying navigation regions." },
 
-  // Domain 2 - CSS (8 questions)
-  { d:2, q:"In the CSS Box Model, what is the correct order from outermost to innermost?", opts:["Margin → Border → Padding → Content","Content → Padding → Border → Margin","Border → Margin → Content → Padding","Padding → Content → Margin → Border"], a:0, e:"The CSS Box Model layers from outside in: Margin → Border → Padding → Content." },
-  { d:2, q:"Which CSS value for 'box-sizing' causes width and height to include padding and border?", opts:["content-box","border-box","padding-box","margin-box"], a:1, e:"border-box includes padding and border in the element's specified width and height. content-box (default) does not." },
-  { d:2, q:"Which CSS selector targets the first child of its parent?", opts:[":first-type","first-child","element:first-child",":first-child"], a:3, e:":first-child is the correct pseudo-class selector. It must be preceded by a colon and no space." },
-  { d:2, q:"What are the three pillars of Responsive Web Design as defined by Ethan Marcotte?", opts:["Breakpoints, Viewport, Flexbox","Fluid grids, Flexible images, Media queries","Min-width, Max-width, Percentages","HTML5, CSS3, JavaScript"], a:1, e:"Marcotte defined RWD as: (1) Fluid grids using relative units, (2) Flexible images with max-width:100%, (3) CSS Media queries." },
-  { d:2, q:"Which meta tag is required for responsive web pages to render correctly on mobile devices?", opts:['&lt;meta name="mobile" content="true"&gt;','&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;','&lt;meta name="responsive" content="yes"&gt;','&lt;meta http-equiv="mobile-optimize"&gt;'], a:1, e:"The viewport meta tag instructs the browser to set the viewport width equal to the device width and set the initial zoom to 1." },
-  { d:2, q:"A CSS rule that uses 'position: absolute' does which of the following?", opts:["Positions relative to its nearest non-static ancestor; removed from normal flow","Positions relative to itself; remains in normal flow","Stays fixed when the page scrolls","Flows with other elements normally"], a:0, e:"Absolute positioning removes the element from the document flow and positions it relative to its nearest ancestor with non-static positioning." },
-  { d:2, q:"What does the CSS adjacent sibling combinator (+) select?", opts:["All siblings of an element","The element immediately following a specified element","All descendants of an element","Direct children only"], a:1, e:"The + combinator selects the element that immediately follows the first element and shares the same parent." },
-  { d:2, q:"Which CSS property controls the stacking order of positioned elements?", opts:["stack-order","layer","z-index","depth"], a:2, e:"z-index controls stacking order. Higher values appear on top. Only works on positioned elements (not static)." },
+  // Domain 2 - CSS Technology (10 questions)
+  { d:2, q:"What is a fundamental principle of Responsive Web Design (RWD)?", opts:["Design for the largest screen size first","Design should adapt to the user's behavior and environment","Use only CSS3 for all styling","Focus exclusively on desktop browsers"], a:1, e:"Responsive Web Design adapts layout and content to the user's device, screen size, and orientation. Ethan Marcotte's three pillars: fluid grids, flexible images, and CSS media queries." },
+  { d:2, q:"Which feature was newly introduced in CSS3 (not available in CSS2)?", opts:["Pseudo-classes","Media Queries","The Box Model","Inline styles"], a:1, e:"CSS Media Queries were introduced in CSS3, enabling styles to apply based on device characteristics (screen width, orientation, resolution). Pseudo-classes and the box model existed in CSS2." },
+  { d:2, q:"What is a key consideration when developing CSS for mobile devices?", opts:["Using only high-resolution images","Ensuring responsiveness to different screen sizes","Using external stylesheets exclusively","Avoiding JavaScript entirely"], a:1, e:"Mobile CSS must respond to varying screen widths, pixel densities, and orientations. This requires fluid units (%, em, rem, vw), the viewport meta tag, and media queries." },
+  { d:2, q:"How is CSS Flexbox beneficial in web design?", opts:["It allows elements to align horizontally only","It simplifies the creation of flexible, single-axis layouts","It is only used for fixed-width layouts","It is incompatible with responsive design"], a:1, e:"Flexbox (Flexible Box Layout) simplifies 1D layouts — aligning and distributing items along a single row or column. It handles spacing, alignment, and order with minimal code. For 2D layouts, CSS Grid is used." },
+  { d:2, q:"What is an important consideration when using images on mobile web pages?", opts:["Always use high-resolution images for best clarity","Ensure images are responsive and fit different screen sizes","Always use images in BMP format for compatibility","Limit all image use to reduce page size"], a:1, e:"Responsive images (using max-width: 100%, the &lt;picture&gt; element, or srcset attribute) ensure images scale correctly across screen sizes and don't load unnecessarily large files on mobile." },
+  { d:2, q:"In CSS, what is the best practice for creating layouts on mobile devices?", opts:["Using fixed-width layouts only","Employing a fluid layout with relative units","Avoiding media queries entirely","Using only pixel units for all sizing"], a:1, e:"Fluid layouts use relative units (%, em, rem, vw/vh) so elements resize proportionally with the viewport. Combined with media queries, fluid layouts form the basis of responsive design." },
+  { d:2, q:"Which CSS feature is essential in Responsive Web Design?", opts:["Media Queries","Absolute Positioning","Fixed units like pixels","Flash animations"], a:0, e:"Media Queries (@media) apply CSS rules conditionally based on device characteristics like screen width (min-width, max-width), orientation, and resolution — the cornerstone of RWD." },
+  { d:2, q:"Why are CSS style guides important in web design?", opts:["They ensure consistent layout and styling across all pages","They are mandatory for HTML validation","They automatically reduce the size of CSS files","They optimize images for faster loading"], a:0, e:"Style guides document CSS naming conventions, design tokens (colors, spacing, typography), and component patterns. They ensure visual consistency across a site and across team members." },
+  { d:2, q:"Which CSS property positions an element relative to its own normal position while keeping it in the document flow?", opts:["position: absolute","position: fixed","position: relative","position: static"], a:2, e:"position: relative offsets the element from where it would normally appear, using top/right/bottom/left values, while still occupying its original space in the document flow. It also establishes a positioning context for absolute children." },
+  { d:2, q:"What is crucial for ensuring cross-browser compatibility in CSS?", opts:["Using only the latest CSS features without fallbacks","Consistent testing across multiple different browsers","Using inline styles exclusively","Avoiding all external stylesheets"], a:1, e:"Different browsers and browser versions render CSS differently. Consistent cross-browser testing (Chrome, Firefox, Safari, Edge) combined with vendor prefixes and progressive enhancement ensures a reliable experience." },
 
   // Domain 3 - Advanced CSS3 (6 questions)
-  { d:3, q:"Which CSS3 property is used to rotate an element 45 degrees?", opts:["rotate: 45deg","transform: rotate(45deg)","transition: rotate 45deg","animation: spin 45deg"], a:1, e:"2D and 3D transformations use the 'transform' property. rotate() is one of the transform functions." },
-  { d:3, q:"What is the difference between CSS transitions and CSS animations?", opts:["Transitions use @keyframes; animations use property changes","Transitions move between two states triggered by events; animations use @keyframes and can loop","They are identical, just different syntax","Transitions use JavaScript; animations are pure CSS"], a:1, e:"Transitions smoothly change from one CSS state to another (triggered by events like :hover). Animations use @keyframes, can loop, and run automatically." },
-  { d:3, q:"Which value for animation-iteration-count makes an animation play indefinitely?", opts:["loop","repeat","always","infinite"], a:3, e:"animation-iteration-count: infinite causes the animation to repeat indefinitely." },
-  { d:3, q:"What is SASS and what must be done before using it in a browser?", opts:["SASS is a JavaScript library; it must be imported with &lt;script&gt;","SASS is a CSS preprocessor; it must be compiled to CSS before use","SASS is a subset of CSS3; it works natively in all browsers","SASS is a server-side language that replaces CSS"], a:1, e:"SASS is a CSS preprocessor that adds features like variables, nesting, and mixins. It must be compiled to standard CSS because browsers do not understand SASS syntax." },
-  { d:3, q:"Which CSS3 property adds a shadow behind an element's entire box?", opts:["text-shadow","drop-shadow","box-shadow","element-shadow"], a:2, e:"box-shadow adds a shadow effect around the element's frame. text-shadow adds shadow to text only." },
-  { d:3, q:"To create a 3D transform effect, which property must be set on the parent container?", opts:["transform-style: preserve-3d","display: 3d","z-index: 3d","perspective-origin: center"], a:0, e:"transform-style: preserve-3d tells the browser that children of this element should be positioned in 3D space." },
+  { d:3, q:"What is SASS primarily used for in web development?", opts:["To create complex animations directly in the browser","To write more maintainable and modular CSS code","To automatically optimize and compress images","To enhance the runtime performance of JavaScript"], a:1, e:"SASS (Syntactically Awesome Style Sheets) is a CSS preprocessor that adds variables, nesting, mixins, functions, and inheritance to CSS. It must be compiled to standard CSS before browsers can use it." },
+  { d:3, q:"How can CSS3 contribute to creating a more accessible user interface?", opts:["By enabling JavaScript interactions","By using :focus and :hover states to provide clear visual feedback","By optimizing images for faster loading","By using fixed pixel units for all font sizes"], a:1, e:":focus provides visual feedback to keyboard users navigating with Tab, and :hover indicates interactive elements to mouse users. Both are essential for accessible, WCAG-compliant UI design." },
+  { d:3, q:"Which CSS property is used to transform elements in 3D space, controlling depth perspective for child elements?", opts:["transform-style","3d-transform","transform-3d","perspective"], a:3, e:"The 'perspective' property sets the distance between the viewer and the z=0 plane, creating the illusion of depth for 3D-transformed children. Without perspective, 3D transforms appear flat." },
+  { d:3, q:"What feature does SASS provide that standard CSS does not have natively?", opts:["Variables","Selectors","Named color values","Pseudo-classes"], a:0, e:"SASS introduced variables ($primary-color: #333) long before CSS custom properties (--primary-color: #333) existed. SASS also adds nesting, mixins, @extend, and functions not available in standard CSS." },
+  { d:3, q:"Which CSS property sets the layout of an element as a flexible box container?", opts:["display: flex","position: absolute","display: block","layout: flexible"], a:0, e:"display: flex turns an element into a flex container, making its direct children flex items. The container then controls their alignment, direction, wrapping, and spacing using flex properties." },
+  { d:3, q:"Which CSS3 property is necessary to create a transition effect (without it the change is instantaneous)?", opts:["transition-duration","animation-name","transition-timing-function","animation-duration"], a:0, e:"transition-duration specifies how long the transition takes (e.g., 0.3s). Without it the default is 0s — no visible transition. transition-property, transition-timing-function, and transition-delay are optional additions." },
 
-  // Domain 4 - JavaScript Intro (6 questions)
-  { d:4, q:"Which keyword creates a block-scoped variable that cannot be redeclared in the same scope?", opts:["var","let","const","define"], a:1, e:"'let' creates a block-scoped variable that cannot be redeclared in the same scope. 'const' also creates block-scoped variables but cannot be reassigned." },
-  { d:4, q:"What does 'typeof null' return in JavaScript?", opts:['"null"','"undefined"','"object"','"boolean"'], a:2, e:"typeof null returns 'object' — this is a well-known bug in JavaScript that has been preserved for backward compatibility." },
-  { d:4, q:"Which comparison operator checks both value AND type (strict equality)?", opts:["==","===","!=","="], a:1, e:"=== is the strict equality operator. It checks both value and type without type coercion. == is loose and performs type coercion." },
-  { d:4, q:"What is the correct way to declare a constant in JavaScript (ES6)?", opts:["constant PI = 3.14","var PI = 3.14","let PI = 3.14","const PI = 3.14"], a:3, e:"'const' declares a constant. The binding cannot be reassigned, though objects/arrays declared with const are still mutable." },
-  { d:4, q:"Which loop iterates over the values of an iterable (array, string, etc.)?", opts:["for...in","for...of","for...each","while...of"], a:1, e:"for...of iterates over iterable values (arrays, strings, maps). for...in iterates over enumerable property keys of an object." },
-  { d:4, q:"Which method adds an element to the END of an array?", opts:["array.add()","array.push()","array.append()","array.insert()"], a:1, e:"push() adds one or more elements to the end of an array and returns the new length." },
+  // Domain 4 - Introduction to JavaScript (6 questions)
+  { d:4, q:"What is the primary function of scripting languages like JavaScript in web development?", opts:["To create the structural content of web pages","To control the behavior and interactivity of web pages","To style and visually lay out web pages","To store and retrieve data on the server side"], a:1, e:"JavaScript controls behavior — responding to user events, manipulating the DOM, validating forms, and communicating with servers via AJAX/Fetch. HTML provides structure; CSS provides presentation." },
+  { d:4, q:"What are JavaScript expressions and operators primarily used for?", opts:["Creating and styling HTML elements","Performing operations and evaluating conditions","Storing data on a remote server","Linking to external JavaScript library files"], a:1, e:"Expressions produce values (e.g., 2 + 3, x > 5, typeof value). Operators (arithmetic, comparison, logical, assignment, bitwise) are the building blocks of expressions used for calculations and decision-making." },
+  { d:4, q:"Which syntax correctly defines a named function in JavaScript?", opts:["function myFunction() { ... }","var myFunction() { ... }","myFunction[] = { ... }","function:myFunction() { ... }"], a:0, e:"A function declaration uses the 'function' keyword followed by the name and parentheses: function myFunction() {}. Options B, C, and D are all syntax errors in JavaScript." },
+  { d:4, q:"How does JavaScript differ from Python in the context of web development?", opts:["JavaScript can directly manipulate the browser DOM","JavaScript is mainly used for server-side scripting","Python is primarily used for client-side scripting","Python can be embedded directly inside HTML pages"], a:0, e:"JavaScript runs natively in browsers and can manipulate the DOM (document.getElementById, querySelector, etc.). Python is primarily a server-side language and cannot run directly in browsers without tools like Transcrypt or Brython." },
+  { d:4, q:"What is the role of methods in JavaScript objects?", opts:["To store static data values","To perform actions or operations on the object","To create links to other web pages","To define the HTML structure of the page"], a:1, e:"Methods are functions defined as object properties that perform operations, often using 'this' to reference the object. Example: array.push(), string.toUpperCase(), date.getFullYear()." },
+  { d:4, q:"Where is JavaScript code typically placed when embedded in an HTML document?", opts:["Within the &lt;link&gt; tag in the &lt;head&gt; section","Inside the &lt;script&gt; tag, placed in either the &lt;head&gt; or &lt;body&gt;","Directly inside HTML element tags as an inline attribute","Inside the &lt;style&gt; tag within the &lt;body&gt;"], a:1, e:"JavaScript is placed in &lt;script&gt; tags, either in &lt;head&gt; (with defer/async) or just before &lt;/body&gt; for performance. External scripts use &lt;script src='file.js'&gt;&lt;/script&gt;." },
 
-  // Domain 5 - Events, Functions (6 questions)
-  { d:5, q:"Which method is the recommended way to attach an event listener in modern JavaScript?", opts:["element.onclick = fn","&lt;button onclick='fn()'&gt;","element.addEventListener('click', fn)","document.attachEvent('click', fn)"], a:2, e:"addEventListener() is preferred because it allows multiple listeners on one element and does not overwrite existing handlers." },
-  { d:5, q:"What is a JavaScript closure?", opts:["A method that closes the browser window","A function that retains access to variables from its outer scope even after the outer function returns","A CSS class that hides elements","A way to end a loop early"], a:1, e:"A closure is a function that remembers and has access to variables from its lexical scope even when executing outside that scope." },
-  { d:5, q:"What does async/await do in JavaScript?", opts:["Converts asynchronous code to synchronous execution","Provides syntactic sugar for working with Promises, making async code look synchronous","Creates multiple threads for parallel execution","Prevents any delays in code execution"], a:1, e:"async/await is syntactic sugar built on Promises. 'await' pauses execution of the async function until the Promise resolves, but doesn't block the main thread." },
-  { d:5, q:"What is the difference between a function declaration and a function expression?", opts:["They are identical","Function declarations are hoisted; expressions are not","Function expressions are hoisted; declarations are not","Declarations cannot return values"], a:1, e:"Function declarations are hoisted to the top of their scope (can be called before they're defined). Function expressions are not hoisted." },
-  { d:5, q:"What is a JavaScript Promise?", opts:["A guarantee that code will run without errors","An object representing the eventual completion or failure of an asynchronous operation","A method to synchronize multiple functions","A way to declare variables"], a:1, e:"A Promise is an object that represents an async operation. It can be in one of three states: pending, fulfilled, or rejected." },
-  { d:5, q:"Which built-in JavaScript method allows a function to use a different object as its 'this'?", opts:["switch()","apply()","bind() / call() / apply()","context()"], a:2, e:"bind(), call(), and apply() all allow you to set the 'this' context. call() and apply() invoke immediately; bind() returns a new function." },
+  // Domain 5 - JavaScript Events & Functions (2 questions)
+  { d:5, q:"Which of the following are all common JavaScript event handlers?", opts:["onclick","onmouseover","onchange","All of the above"], a:3, e:"onclick (click events), onmouseover (hover), and onchange (value changes on inputs) are all common event handlers. Modern best practice uses addEventListener() instead of inline handlers." },
+  { d:5, q:"What is the primary role of functions in JavaScript?", opts:["To apply visual styles to web page elements","To store static data values","To perform a specific, reusable task","To create hyperlinks between web pages"], a:2, e:"Functions encapsulate reusable blocks of code that perform a specific task when called. They accept parameters, can return values, and are fundamental to organizing and structuring JavaScript code." },
+
+  // Domain 6 - HTML5 APIs (3 questions)
+  { d:6, q:"What is jQuery primarily used for in conjunction with HTML5?", opts:["Simplifying client-side HTML and JavaScript scripting","Server-side database management","Automatic translation of web pages","3D graphics rendering in the browser"], a:0, e:"jQuery is a lightweight JavaScript library that simplifies DOM traversal, event handling, AJAX requests, and animation. Its concise syntax ($(selector).method()) reduces cross-browser boilerplate code." },
+  { d:6, q:"What functionality does the HTML5 Drag-and-Drop API provide?", opts:["Faster page loading by preloading assets","Enabling users to drag and drop elements within and between web pages","Encrypting user data before transmission","Automatically translating page content"], a:1, e:"The HTML5 Drag-and-Drop API provides native drag-and-drop through the 'draggable' attribute and events: dragstart, dragover, drop, and dragend. No JavaScript library is required." },
+  { d:6, q:"Which HTML5 API is specifically designed for drawing complex graphics and animations programmatically?", opts:["Geolocation API","History API","Canvas API","File API"], a:2, e:"The Canvas API uses a &lt;canvas&gt; element and a JavaScript 2D context (getContext('2d')) to draw shapes, images, and animations pixel-by-pixel. For animated graphics, requestAnimationFrame is used with Canvas." },
+
+  // Domain 7 - HTML5 Forms (2 questions)
+  { d:7, q:"What is important when developing cross-browser compatible HTML5 forms?", opts:["Using only CSS for all form styling","Ensuring forms are responsive and function correctly in various browsers","Avoiding all JavaScript-based validation","Using only older HTML4 form elements for maximum compatibility"], a:1, e:"Cross-browser form development requires testing input types (some degrade gracefully), validation behavior, and layout across Chrome, Firefox, Safari, and Edge to ensure consistent functionality." },
+  { d:7, q:"Which HTML5 input type is used for entering a URL?", opts:["text","url","web","link"], a:1, e:"type='url' validates that the entered value is a properly formatted URL. It provides a URL-optimized keyboard on mobile devices. type='text' accepts any string without URL validation." },
+
+  // Domain 8 - Form Validation (1 question)
+  { d:8, q:"Which HTML5 attribute specifies that a field must be filled before the form can be submitted?", opts:["required","mandatory","validate","must"], a:0, e:"The 'required' attribute triggers built-in HTML5 validation that prevents form submission if the field is empty. It works on input, textarea, and select. Browser displays a native error message without any JavaScript." },
+
+  // Domain 9 - Ethics & Legal (6 questions)
+  { d:9, q:"Why is understanding international privacy laws, like GDPR, important in web development?", opts:["To ensure faster website loading speed","To focus on the aesthetic design of the website","To use a wider variety of programming languages","To meet legal requirements for protecting user data"], a:3, e:"GDPR requires explicit consent for data collection, the right to access and deletion of personal data, and proper breach notification. Non-compliance can result in fines of up to €20 million or 4% of global annual turnover." },
+  { d:9, q:"Which practice is essential for ensuring a website is accessible?", opts:["Using only high-resolution images throughout","Providing descriptive alternative text for all images","Implementing complex multi-level navigation","Using a wide variety of different colors and fonts"], a:1, e:"Alt text (the alt attribute on &lt;img&gt;) is read by screen readers for visually impaired users. It also displays when images fail to load. WCAG 2.1 requires meaningful alt text for all informative images." },
+  { d:9, q:"In the context of web development, what does ADA compliance primarily focus on?", opts:["Search engine optimization of the website","Website security and user data protection","Making websites accessible to people with disabilities","Achieving fast page loading speeds"], a:2, e:"The Americans with Disabilities Act (ADA) Title III requires that websites serving the public be accessible to people with disabilities — covering visual, auditory, motor, and cognitive impairments." },
+  { d:9, q:"How should netiquette and cultural references be handled in website design?", opts:["Include as many varied cultural references as possible","Ensure all content is culturally sensitive and contextually appropriate","Avoid using any text content whatsoever","Focus entirely on a single cultural perspective"], a:1, e:"Global websites must consider cultural sensitivity — colors, symbols, humor, and imagery can have different meanings across cultures. Offensive or exclusionary content can harm user trust and brand reputation." },
+  { d:9, q:"What is a key ethical consideration when developing new technology or coding practices?", opts:["Maximizing profit margins above all other considerations","Ensuring technological advancements do not cause harm to society","Focusing solely on user interface aesthetics","Prioritizing development speed over code quality"], a:1, e:"Technology ethics requires developers to consider societal impacts: privacy, fairness, accessibility, misinformation potential, and security. Ethical responsibility extends beyond legal compliance." },
+  { d:9, q:"Which management style encourages team autonomy and self-directed decision-making?", opts:["Autocratic","Transformational","Laissez-faire","Transactional"], a:2, e:"Laissez-faire management gives team members high autonomy to make decisions with minimal leader intervention. It works well with experienced, self-motivated teams but can lack structure for less experienced teams." },
+
+  // Domain 10 - Project Management (4 questions)
+  { d:10, q:"Which quality is most essential for effective leadership in a web development team?", opts:["Strict adherence to one's own ideas at all times","Flexibility and adaptability to changing requirements","Avoiding feedback from all team members","Focusing exclusively on short-term deliverables"], a:1, e:"Effective technical leaders adapt to change — shifting priorities, new technologies, and team dynamics. Flexibility, communication, and openness to feedback create high-performing development teams." },
+  { d:10, q:"What is the benefit of a work-based learning experience in a professional environment?", opts:["It eliminates the need for formal education","It provides real-world experience and practical application of skills","It focuses solely on theoretical knowledge","It avoids exposure to current industry practices"], a:1, e:"Work-based learning (internships, apprenticeships, co-ops) bridges classroom theory and real-world practice — exposing learners to actual project workflows, team collaboration, and industry tools." },
+  { d:10, q:"Which factor is crucial for maintaining good customer service relationships in web development?", opts:["Limiting communication with the client","Understanding and actively meeting client needs","Focusing only on technical implementation","Prioritizing delivery speed over final quality"], a:1, e:"Strong client relationships are built on clear communication, setting realistic expectations, delivering on commitments, and responding to feedback. Poor communication is one of the top causes of project failure." }
+];
+
+// ──────────────────────────────────────────────
+// QUESTION BANK 2 (56 questions — from 1D0-720 V12.35)
+// ──────────────────────────────────────────────
+const questions2 = [
+  // Domain 1 - HTML5 Essentials (8 questions)
+  { d:1, q:"What is the purpose of the HTML5 &lt;output&gt; element?", opts:["To store data locally on the user's browser","To create an interactive slider control","To display the result of a calculation or user action","To produce a 3D graphics output"], a:2, e:"&lt;output&gt; represents the result of a calculation or user action (e.g., a computed form value). It is typically connected to form inputs using the 'for' attribute." },
+  { d:1, q:"Which HTML5 global attribute associates a form control with a specific &lt;form&gt; element by ID?", opts:["contenteditable","style","form","spellcheck"], a:2, e:"The 'form' attribute lets a control that lives outside a &lt;form&gt; tag be linked to that form by its ID. This allows flexible form layouts without nesting constraints." },
+  { d:1, q:"Which HTML5 feature enables users to drag elements and drop them elsewhere on a page without a JavaScript library?", opts:["The Web Storage API","Native drag-and-drop via the Drag-and-Drop API","The WebSocket API","The CSS transform property"], a:1, e:"HTML5 introduced native drag-and-drop through the Drag-and-Drop API and the 'draggable' attribute, removing the need for third-party libraries like jQuery UI." },
+  { d:1, q:"What does the &lt;!DOCTYPE html&gt; declaration instruct the browser to do?", opts:["Link the HTML page to a CSS stylesheet","Render the page in HTML5 standards mode","Include JavaScript files in the page","Define the character encoding of the page"], a:1, e:"&lt;!DOCTYPE html&gt; is not an HTML tag — it is a document type declaration that triggers standards-mode rendering in the browser, preventing legacy quirks-mode behavior." },
+  { d:1, q:"What does the HTML5 History API allow web applications to do?", opts:["Change the URL without reloading the page","Create CSS keyframe animations","Use SQL databases in the browser","Send email programmatically"], a:0, e:"history.pushState() and history.replaceState() let single-page applications (SPAs) update the browser URL and manage the history stack without triggering a full page reload." },
+  { d:1, q:"Which HTML5 element is specifically designed to represent self-contained content that could stand on its own?", opts:["&lt;article&gt;","&lt;section&gt;","&lt;aside&gt;","&lt;header&gt;"], a:0, e:"&lt;article&gt; represents self-contained content that can be independently distributed or reused — such as a news story, blog post, forum post, or widget. &lt;section&gt; groups thematically related content." },
+  { d:1, q:"Which of the following is a semantic HTML5 structural element?", opts:["&lt;div&gt;","&lt;footer&gt;","&lt;span&gt;","&lt;b&gt;"], a:1, e:"&lt;footer&gt; is a semantic HTML5 element representing the footer of its nearest section ancestor or the page body. &lt;div&gt; and &lt;span&gt; are generic non-semantic containers." },
+  { d:1, q:"Which HTML5 tag is used to embed video content directly in a web page?", opts:["&lt;video&gt;","&lt;media&gt;","&lt;audio&gt;","&lt;embed&gt;"], a:0, e:"&lt;video&gt; is the HTML5 element for embedding video. It supports multiple source formats via nested &lt;source&gt; elements and attributes like controls, autoplay, poster, and preload." },
+
+  // Domain 2 - CSS Technology (8 questions)
+  { d:2, q:"Which CSS3 property creates a smooth visual transition between two element states (e.g., on hover)?", opts:["animation","transition","transform","translate"], a:1, e:"'transition' smoothly interpolates CSS property values when they change state (e.g., :hover). 'animation' requires @keyframes and can loop without a user trigger." },
+  { d:2, q:"Which CSS3 selector targets elements based on their order among siblings of the same element type?", opts:["ID selector","Class selector",":nth-of-type selector","Tag selector"], a:2, e:":nth-of-type(n) is a CSS3 pseudo-class that selects elements based on their position among siblings of the same type. ID, class, and tag selectors existed in CSS1/CSS2." },
+  { d:2, q:"Which CSS property applies a shadow effect specifically to text characters?", opts:["text-shadow","box-shadow","border-shadow","shadow"], a:0, e:"text-shadow applies a shadow to text: text-shadow: offsetX offsetY blur color. box-shadow applies a shadow to the entire element box. 'border-shadow' and 'shadow' are not valid CSS properties." },
+  { d:2, q:"In CSS, the term 'selector' refers to which of the following?", opts:["A JavaScript function embedded in CSS","The HTML element or pattern targeted by a CSS rule","The server that hosts CSS files","The protocol used to transfer CSS files"], a:1, e:"A CSS selector identifies which HTML elements a rule applies to. Selectors include element names (p), class (.card), ID (#header), combinators (A > B), and pseudo-classes (:hover)." },
+  { d:2, q:"Which answer correctly lists all four components of the CSS Box Model?", opts:["Content, Padding, Border, Margin","Margin, Color, Padding, Border","Padding, Border, Transparency, Content","Border, Margin, Shadow, Content"], a:0, e:"The CSS Box Model has four layers from inside out: Content (text/image area), Padding (inner space), Border (edge), and Margin (outer space separating elements from neighbors)." },
+  { d:2, q:"Which CSS property sets the foreground text color of an element?", opts:["color","text-style","font-color","text-color"], a:0, e:"The 'color' property sets the text color. 'background-color' sets the element background. 'font-color' and 'text-color' do not exist in CSS." },
+  { d:2, q:"In a CSS declaration, a 'property' refers to which of the following?", opts:["The specific HTML element being styled","The aspect of the element to be styled (e.g., color, font-size)","The document type definition","The link mechanism between CSS and HTML"], a:1, e:"A CSS declaration consists of a property (what to style) and a value. For example, in 'color: red', 'color' is the property. The selector determines which element is targeted." },
+  { d:2, q:"What is the primary purpose of CSS in web development?", opts:["To create web page content and structure","To control the visual layout and appearance of web pages","To manage server-side functionality","To enhance page loading speed"], a:1, e:"CSS (Cascading Style Sheets) handles presentation — colors, fonts, spacing, and layout. HTML provides structure; JavaScript provides behavior. This is the web development 'trifecta.'" },
+
+  // Domain 3 - Advanced CSS3 (6 questions)
+  { d:3, q:"Which CSS3 value applies a 2D rotation to an element?", opts:["transform: rotate(45deg)","transform: translate(50px, 50px)","transform: scale(2)","transform: skewX(30deg)"], a:0, e:"transform: rotate() rotates an element by a specified angle around its transform-origin. Positive values rotate clockwise. All options are valid transform functions but only rotate() performs rotation." },
+  { d:3, q:"Which CSS3 property is most effective for changing a menu item's visual state on hover?", opts:["color","background-color","text-decoration","border-radius"], a:1, e:"background-color is the most commonly used property for creating clear hover feedback on menu items — it produces a highly visible change in appearance when triggered by :hover." },
+  { d:3, q:"How is transparency achieved in CSS3? Select the most complete answer.", opts:["Using the opacity property only","Using the transparent keyword only","Using the rgba() function only","Both opacity and rgba() create transparency"], a:3, e:"Both work: opacity (0–1) affects the entire element and its children; rgba(r,g,b,a) targets only the specific color property and doesn't affect child elements. Both are valid approaches." },
+  { d:3, q:"Which CSS3 property allows an element to display multiple background images?", opts:["background-image","background-repeat","multiple-background","background-composite"], a:0, e:"background-image accepts a comma-separated list: background-image: url('top.png'), url('bottom.png'). The first image is layered on top. 'multiple-background' and 'background-composite' are not real CSS properties." },
+  { d:3, q:"What is the purpose of the CSS3 @keyframes rule?", opts:["To define styles for different screen sizes","To specify the animation sequence (intermediate steps)","To create responsive web designs","To implement media queries"], a:1, e:"@keyframes defines the animation's intermediate steps from 0% (from) to 100% (to) or at specific percentages. Combined with animation-name, animation-duration, and animation-iteration-count to control the animation." },
+  { d:3, q:"Which CSS3 property creates rounded corners on an element's border box?", opts:["border-radius","border-style","border-curve","border-edge"], a:0, e:"border-radius rounds element corners. It accepts 1–4 values: border-radius: 8px (uniform) or border-radius: 4px 8px 4px 8px (top-left, top-right, bottom-right, bottom-left). Only border-radius is a real CSS property here." },
+
+  // Domain 4 - Introduction to JavaScript (6 questions)
+  { d:4, q:"Which of the following correctly defines an anonymous function in JavaScript?", opts:["var x = function() { ... }","function x() { ... }","function: x() { ... }","var x = new Function() { ... }"], a:0, e:"An anonymous function expression has no name and is assigned to a variable: var x = function() {}. A named function declaration uses 'function x() {}'. Anonymous functions are commonly used as callbacks." },
+  { d:4, q:"Which statement about JavaScript arrays is true?", opts:["Arrays can only store elements of the same data type","Arrays store multiple values in a single variable","Arrays are fixed in size once declared","JavaScript has no push() or pop() array methods"], a:1, e:"JavaScript arrays are dynamic, zero-indexed collections that can hold any mix of data types. They resize automatically and have many built-in methods: push(), pop(), map(), filter(), reduce(), etc." },
+  { d:4, q:"Which statement accurately describes methods in JavaScript?", opts:["Methods are functions stored as object properties","Methods cannot be called on objects","Methods are identical to JavaScript loops","Methods are used to link JavaScript files to HTML"], a:0, e:"A method is a function assigned as a property of an object: obj.greet = function() {}. Built-in examples: Array.prototype.push(), String.prototype.toUpperCase(), document.getElementById()." },
+  { d:4, q:"What does 'scope' mean in JavaScript?", opts:["The lifetime and accessibility of a variable","The overall execution speed of the application","The visual layout of the web page","The number of users who can access a function"], a:0, e:"Scope governs where variables are accessible. Global scope is anywhere; function scope is within a function; block scope (let/const) is within {}. Accessing a variable outside its scope throws ReferenceError." },
+  { d:4, q:"What is the correct syntax to invoke a function named myFunction in JavaScript?", opts:["call myFunction()","myFunction[]","myFunction()","function myFunction()"], a:2, e:"Functions are called with their name followed by parentheses: myFunction(). 'function myFunction()' is a declaration (not a call). Brackets ([]) are for array indexing or property access, not function calls." },
+  { d:4, q:"What is the primary purpose of variables in JavaScript?", opts:["To store and manipulate data values","To define the visual layout of a page","To link JavaScript to HTML documents","To create graphical elements on the page"], a:0, e:"Variables are named containers for data. They can store numbers, strings, booleans, objects, arrays, and functions. Declared with var (function-scoped), let (block-scoped), or const (block-scoped, immutable binding)." },
+
+  // Domain 5 - JavaScript Events & Functions (6 questions)
+  { d:5, q:"How is JavaScript primarily used for form validation?", opts:["By changing the CSS styling of the form","By automatically submitting the form","By checking form element values before submission","By linking the form to a server database"], a:2, e:"JavaScript form validation checks input values (required fields, formats, length limits) when the form is submitted. Use the 'submit' event with event.preventDefault() to halt submission when validation fails." },
+  { d:5, q:"In JavaScript, what are Promises primarily used for?", opts:["To iterate over arrays","To handle the eventual result of an asynchronous operation","To apply CSS styles to elements","To create new HTML elements"], a:1, e:"A Promise represents a value that will be available in the future. States: pending → fulfilled (resolved) or rejected. Chained with .then() / .catch() / .finally(), or used with async/await syntax." },
+  { d:5, q:"What are conditional statements in JavaScript used for?", opts:["To create loops that run a fixed number of times","To apply styles to HTML elements","To perform different actions based on different conditions","To store data in variables"], a:2, e:"Conditional statements (if/else if/else, switch, ternary ? :) allow programs to make decisions — executing different code blocks depending on whether conditions evaluate to true or false." },
+  { d:5, q:"Which JavaScript feature allows asynchronous functions to be written using synchronous-looking syntax?", opts:["try...catch","for...in","async/await","the 'this' keyword"], a:2, e:"async/await (ES2017) is syntactic sugar over Promises. 'async' declares a function that returns a Promise. 'await' pauses execution inside that function until the awaited Promise settles — without blocking the main thread." },
+  { d:5, q:"Which of the following are common types of JavaScript errors?", opts:["Syntax error","Logic error","Runtime error","All of the above"], a:3, e:"JavaScript has three main error types: Syntax (code cannot be parsed), Runtime (valid code fails during execution, e.g., calling a method on null), and Logic (code runs but produces wrong results)." },
+  { d:5, q:"What is a closure in JavaScript?", opts:["A type of event handler for button clicks","A function that retains access to its outer scope's variables even after the outer function has returned","A method used to close a browser window or tab","An error thrown when code tries to close a function"], a:1, e:"A closure forms when an inner function references variables from an outer function's lexical scope. The inner function 'closes over' those variables, keeping them alive even after the outer function has finished executing." },
 
   // Domain 6 - HTML5 APIs (6 questions)
-  { d:6, q:"What is the Document Object Model (DOM)?", opts:["The HTML source code of a web page","A tree structure representing the HTML document that JavaScript can manipulate","A CSS styling system","A server-side scripting framework"], a:1, e:"The DOM is a programming interface that represents the HTML document as a tree of nodes. JavaScript uses the DOM to read and manipulate page content." },
-  { d:6, q:"Which Canvas API method is required before drawing shapes using paths?", opts:["ctx.start()","ctx.beginPath()","ctx.openPath()","ctx.initDraw()"], a:1, e:"beginPath() must be called to begin a new path. Without it, previously drawn path segments may interfere with new ones." },
-  { d:6, q:"What does the Geolocation API's getCurrentPosition() method return?", opts:["The user's IP address","The GPS coordinates (latitude, longitude) of the user's device","The city and country of the user","The user's timezone"], a:1, e:"getCurrentPosition() asynchronously calls a callback with a Position object containing coords.latitude, coords.longitude, and other data." },
-  { d:6, q:"What does XHR readyState 4 indicate?", opts:["Request has not started","Request is being sent","Headers have been received","Request is complete"], a:3, e:"readyState 4 (DONE) means the operation is complete. Combined with status 200, this means a successful response was received." },
-  { d:6, q:"What is AJAX?", opts:["A JavaScript library","A server-side language","A technique for making asynchronous HTTP requests without reloading the page","A CSS animation framework"], a:2, e:"AJAX (Asynchronous JavaScript and XML) is a technique that allows web pages to request data from a server asynchronously, updating content without full page reloads." },
-  { d:6, q:"Which jQuery method retrieves data from a server using an HTTP GET request?", opts:["$.post()","$.get()","$.ajax()","$.fetch()"], a:1, e:"$.get() is a shorthand jQuery method for making GET requests. $.post() is for POST requests. $.ajax() is the full-featured method." },
+  { d:6, q:"What is the Document Object Model (DOM)?", opts:["A programming interface that represents an HTML document as a tree of nodes","A database system for storing website data","A server-side scripting language","A visual tool for designing website layouts"], a:0, e:"The DOM is a platform-neutral interface where every HTML element, attribute, and text node is an object in a tree. JavaScript uses DOM methods (getElementById, querySelector, appendChild) to read and modify page content." },
+  { d:6, q:"How is XMLHttpRequest (XHR) used in HTML5 web development?", opts:["To play audio and video files inline","To interact with server scripts and retrieve data asynchronously","To encrypt user data in transit","To create offline-first web applications"], a:1, e:"XHR is the foundation of AJAX — it sends HTTP requests to a server in the background and processes the response, allowing page content to update without a full page reload." },
+  { d:6, q:"What is the primary use of the HTML5 Canvas API?", opts:["To build interactive web forms","To read and write browser cookies","To draw graphics on a web page programmatically via JavaScript","To create external hyperlinks"], a:2, e:"The Canvas API provides a &lt;canvas&gt; element and a 2D drawing context (getContext('2d')) with methods like fillRect(), arc(), and drawImage() to render graphics, charts, and animations dynamically." },
+  { d:6, q:"Which of the following is a feature introduced by HTML5 APIs not available in older HTML?", opts:["Offline storage capability","Server-side scripting","Automatic website translation","Native 3D rendering"], a:0, e:"HTML5 introduced the Web Storage API (localStorage / sessionStorage) for persistent offline data storage in the browser. This was not available in HTML4, which had only cookies for client-side storage." },
+  { d:6, q:"What does the HTML5 File API enable web applications to do?", opts:["Read the contents of files the user has selected","Increase the server's storage capacity","Track the user's full browsing history","Stream live audio and video from a webcam"], a:0, e:"The File API lets JavaScript read files the user selects via &lt;input type='file'&gt;. FileReader reads file contents asynchronously as text, ArrayBuffer, or data URL — entirely in the browser without uploading." },
+  { d:6, q:"What does the HTML5 Geolocation API provide?", opts:["The user's current geographic location (latitude and longitude)","Data encryption for secure data transmission","A connection interface to external databases","An API for audio and video playback"], a:0, e:"getCurrentPosition() asynchronously returns a Position object with coords.latitude, coords.longitude, and coords.accuracy. Requires explicit user permission before the browser shares location data." },
 
-  // Domain 7 - Forms (5 questions)
-  { d:7, q:"Which HTML5 input type provides a date picker UI in supporting browsers?", opts:['type="datetime"','type="calendar"','type="date"','type="datepicker"'], a:2, e:"type='date' provides a date-picker control in supporting browsers and validates that input is a valid date." },
-  { d:7, q:"What is the purpose of the HTML5 &lt;datalist&gt; element?", opts:["It creates a dropdown selection list (like &lt;select&gt;)","It provides a list of suggested options for a text input","It displays tabular data","It creates a bulleted list"], a:1, e:"&lt;datalist&gt; provides a list of predefined options (hints/suggestions) for an &lt;input&gt; element. Users can still type anything — it's not restrictive like &lt;select&gt;." },
-  { d:7, q:"What is the function of the HTML5 &lt;output&gt; element?", opts:["It displays server output like PHP results","It represents the result of a calculation or user action","It creates a text area for user input","It shows debug information"], a:1, e:"&lt;output&gt; represents the result of a calculation or user interaction, typically connected to form inputs via the 'for' attribute." },
-  { d:7, q:"What is the purpose of the &lt;fieldset&gt; and &lt;legend&gt; elements in HTML5?", opts:["fieldset styles form fields; legend adds a caption","fieldset groups related form controls; legend provides a caption for the group","Both are deprecated in HTML5","fieldset creates a table of inputs; legend labels rows"], a:1, e:"&lt;fieldset&gt; groups related form fields together visually (with a box). &lt;legend&gt; provides a caption/title for the fieldset group." },
-  { d:7, q:"Which HTML5 input type is most appropriate for collecting a phone number?", opts:['type="number"','type="phone"','type="tel"','type="text" pattern="[0-9]+"'], a:2, e:"type='tel' is specifically for telephone numbers. It triggers a numeric keypad on mobile devices and doesn't validate format (use pattern for that)." },
+  // Domain 7 - HTML5 Forms (5 questions)
+  { d:7, q:"What is the primary purpose of HTML5 forms in web development?", opts:["To display large amounts of structured data","To facilitate user interaction and data submission to a server","To enhance the graphical appearance of a website","To create animated page elements"], a:1, e:"HTML5 forms collect user input (text, numbers, dates, file uploads, selections) and submit it to a server for processing. HTML5 added new input types, validation attributes, and accessibility features." },
+  { d:7, q:"How does the &lt;fieldset&gt; element function in an HTML5 form?", opts:["It runs a client-side validation script","It groups related form controls together visually and semantically","It sends form data directly to a server","It creates a dropdown selection list"], a:1, e:"&lt;fieldset&gt; draws a box around related form controls and &lt;legend&gt; provides its caption. This grouping improves both visual organization and accessibility (screen readers announce the group name)." },
+  { d:7, q:"What is the primary function of the HTML5 &lt;datalist&gt; element?", opts:["To provide predefined autocomplete suggestions for a text input","To create a file upload mechanism","To generate a group of radio buttons","To apply CSS styling to form fields"], a:0, e:"&lt;datalist&gt; provides an autocomplete suggestion list for an &lt;input&gt; element (linked via the 'list' attribute). Unlike &lt;select&gt;, users can still type any value — the suggestions are advisory, not restrictive." },
+  { d:7, q:"What is the role of the 'placeholder' attribute in HTML5 form elements?", opts:["To create a tooltip for the form element","To display hint text inside the field that disappears when the user starts typing","To define a CSS class for the input","To specify a visible label for the field"], a:1, e:"placeholder shows descriptive hint text inside an empty input field. It disappears as soon as the user starts typing and is not submitted with the form. It should not replace a proper &lt;label&gt; element." },
+  { d:7, q:"Which HTML5 input type renders a slider control for selecting a numeric value within a range?", opts:["&lt;input type='number'&gt;","&lt;input type='range'&gt;","&lt;input type='slider'&gt;","&lt;input type='scroll'&gt;"], a:1, e:"type='range' renders a draggable slider. Use min, max, and step attributes to control the valid range. type='number' renders a numeric text box with stepper buttons. 'slider' and 'scroll' are not valid input types." },
 
   // Domain 8 - Form Validation (4 questions)
-  { d:8, q:"Which HTML5 attribute prevents a form field from being submitted while also making it non-editable?", opts:["readonly","disabled","required","hidden"], a:1, e:"'disabled' fields are non-editable AND excluded from form submission. 'readonly' fields are non-editable but ARE submitted." },
-  { d:8, q:"Which HTML5 validation attribute uses a regular expression to constrain input?", opts:["regex","validate","pattern","match"], a:2, e:"The 'pattern' attribute accepts a regular expression. Input must match the pattern for the form to be valid." },
-  { d:8, q:"Which JavaScript event should you listen to in order to intercept form submission and validate before sending?", opts:["click","change","submit","input"], a:2, e:"The 'submit' event fires when the user submits the form. Call event.preventDefault() to stop submission and show validation errors." },
-  { d:8, q:"According to security best practices, client-side validation should:", opts:["Replace server-side validation entirely since it is faster","Never be used because it can be bypassed","Supplement server-side validation, not replace it","Only be used for cosmetic feedback, never security"], a:2, e:"Client-side validation improves UX but can always be bypassed (JS can be disabled, requests can be forged). Server-side validation must always be the authoritative check." },
+  { d:8, q:"Which HTML5 form attribute specifies the URL where the form data is sent upon submission?", opts:["method","action","type","enctype"], a:1, e:"'action' specifies the server endpoint that processes form data (e.g., action='/submit'). 'method' sets GET or POST. 'enctype' specifies the encoding type, required for file uploads (multipart/form-data)." },
+  { d:8, q:"Which HTML5 attribute ensures a form field cannot be submitted empty?", opts:["required","pattern","maxlength","placeholder"], a:0, e:"The 'required' attribute triggers built-in browser validation that prevents form submission if the field is empty, displaying a native error message. Works with input, select, and textarea." },
+  { d:8, q:"What is the primary purpose of validating user input in HTML5 web forms?", opts:["To enhance the visual appearance of the form","To ensure data sent to the server is in the correct format","To speed up page loading time","To alter the layout of the form dynamically"], a:1, e:"Validation ensures data integrity before submission — checking required fields, format constraints (email pattern, numeric ranges), and length limits. It prevents malformed data from reaching and potentially breaking the server." },
+  { d:8, q:"What does the HTML5 'pattern' attribute do in a form input?", opts:["Specifies a regular expression the input value must match to pass validation","Defines a visual color pattern for the input border","Sets a default pre-filled value for the input","Fetches input data from a database pattern"], a:0, e:"pattern accepts a JavaScript regular expression. The field fails HTML5 validation if the user's value doesn't match. Example: pattern='[A-Za-z]{3}' requires exactly 3 letters. Use 'title' to describe the requirement." },
 
-  // Domain 9 - Ethics/Legal (5 questions)
-  { d:9, q:"Which US law requires federal government websites to be accessible to people with disabilities?", opts:["ADA (Americans with Disabilities Act)","HIPAA","Section 508 of the Rehabilitation Act","WCAG"], a:2, e:"Section 508 of the Rehabilitation Act specifically requires US federal agencies to make their electronic and IT accessible. ADA applies more broadly to public accommodations." },
-  { d:9, q:"Which privacy regulation gives EU residents the right to request deletion of their personal data?", opts:["HIPAA","COPPA","CCPA","GDPR"], a:3, e:"GDPR (General Data Protection Regulation) applies to EU residents and includes the 'right to erasure' (right to be forgotten), among other rights." },
-  { d:9, q:"WCAG accessibility guidelines are organized around four principles. Which acronym describes them?", opts:["ARIA","POUR","CORP","WAVE"], a:1, e:"POUR: Perceivable (users can perceive all information), Operable (UI components are operable), Understandable, Robust (works with assistive technologies)." },
-  { d:9, q:"Which type of web attack involves injecting malicious scripts into a website that are then executed by other users?", opts:["SQL Injection","CSRF","XSS (Cross-Site Scripting)","Man-in-the-Middle"], a:2, e:"XSS (Cross-Site Scripting) involves injecting malicious scripts into web content that is then rendered by victims' browsers. Defense: sanitize and escape all user input." },
-  { d:9, q:"What is the purpose of HTTPS on websites collecting user information?", opts:["It makes pages load faster","It encrypts data in transit between browser and server","It validates HTML code","It prevents CSS errors"], a:1, e:"HTTPS uses TLS/SSL to encrypt the connection, protecting data from interception. Required for any site handling logins, payments, or personal data." },
+  // Domain 9 - Ethics & Legal (5 questions)
+  { d:9, q:"Why is respecting copyright important in web development and coding?", opts:["To enhance overall website performance","To avoid legal liability and respect creators' intellectual property","To improve cross-browser compatibility","To improve search engine ranking"], a:1, e:"Copyright protects original works including code, images, text, and multimedia. Unauthorized use can result in lawsuits, takedowns, and financial penalties. Always use licensed content, open-source assets, or obtain explicit permission." },
+  { d:9, q:"When formulating ethical standards for technology, what should be the key guiding consideration?", opts:["Prioritizing the most advanced technology regardless of societal impact","Balancing technological innovation with societal and moral values","Focusing exclusively on revenue and profit growth","Emphasizing visual design above all else"], a:1, e:"Technology ethics requires weighing innovation against potential harms — privacy violations, bias, exclusion, environmental impact. Ethical guidelines go beyond compliance to consider fairness and human well-being." },
+  { d:9, q:"What is the purpose of ADA and Section 508 compliance in web development?", opts:["To protect websites against cyber attacks","To ensure websites are accessible to individuals with disabilities","To optimize websites specifically for mobile devices","To maximize website loading speed"], a:1, e:"The Americans with Disabilities Act (ADA) and Section 508 of the Rehabilitation Act require digital content to accommodate users with visual, auditory, motor, and cognitive disabilities — through features like alt text, captions, and keyboard navigation." },
+  { d:9, q:"How do ethical responsibilities in web development differ from legal responsibilities?", opts:["Ethical ones are enforced by law; legal ones are voluntary","Legal responsibilities are mandatory by law; ethical ones are based on moral principles","Ethical responsibilities are technical; legal ones are about graphic design","Legal responsibilities are optional; ethical ones are mandatory for certification"], a:1, e:"Laws set enforceable minimum standards (copyright, GDPR, ADA). Ethics go beyond laws — guiding developers to do what is right even when not legally required, such as protecting user privacy beyond what regulations demand." },
+  { d:9, q:"Why is understanding international privacy laws such as GDPR critical for web developers?", opts:["To meet legal requirements for protecting personal user data","To improve website speed and performance metrics","To use a wider variety of programming languages","To focus on visual aesthetic design choices"], a:0, e:"GDPR mandates lawful data collection, explicit consent, data minimization, and the right to deletion for EU residents. Web developers must implement compliant cookie banners, privacy policies, and data handling practices — or face significant fines." },
 
   // Domain 10 - Project Management (2 questions)
-  { d:10, q:"In Agile/Scrum methodology, what is a 'sprint'?", opts:["A code review meeting","A time-boxed iteration (typically 1–4 weeks) for completing a set of work","A sprint is when developers rush to finish a deadline","The final testing phase before deployment"], a:1, e:"A sprint is a fixed-length development cycle in Scrum, usually 1–4 weeks, during which a team completes a specific set of user stories from the backlog." },
-  { d:10, q:"Which type of website issue would you troubleshoot first if a mobile site has incorrect layout but works fine on desktop?", opts:["JavaScript errors","Server configuration","Missing viewport meta tag or unresponsive CSS","Database connection"], a:2, e:"Mobile layout issues most commonly stem from a missing viewport meta tag or CSS that does not include media queries for smaller screens." }
+  { d:10, q:"What is a key project management strategy in website development?", opts:["Prioritizing aesthetic design over core functionality","Following a well-defined project timeline with milestones","Ignoring user feedback until after launch","Proceeding without a predetermined budget"], a:1, e:"A clear project timeline — whether using Waterfall milestones, Agile sprints, or Kanban boards — keeps the team aligned on scope, deadlines, and deliverables, reducing scope creep and missed deadlines." },
+  { d:10, q:"In project management, what is a Gantt chart primarily used for?", opts:["Outlining the visual design of a website","Mapping out project tasks, durations, and timelines","Calculating the total project budget","Writing and reviewing backend code"], a:1, e:"A Gantt chart is a horizontal bar chart that visualizes project tasks against a timeline, showing start/end dates, task duration, and dependencies. It is a standard tool for scheduling and tracking project progress." }
 ];
 
 // ──────────────────────────────────────────────
 // EXAM LOGIC
 // ──────────────────────────────────────────────
+let activeBank = questions;
+let activeStartSection = 'exam';
 let currentQ = 0;
-let userAnswers = new Array(questions.length).fill(null);
+let userAnswers = [];
 let examSubmitted = false;
 let timedMode = true;
 let timerInterval = null;
 let timeLeft = 75 * 60;
 
+function startBankedExam(bank, timed = true) {
+  activeBank = bank;
+  activeStartSection = (bank === questions) ? 'exam' : 'exam2';
+  // Switch to exam-section (where exam-active and results live) and update nav
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('exam-section').classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const navIdx = activeStartSection === 'exam2' ? 2 : 1;
+  document.querySelectorAll('.nav-btn')[navIdx]?.classList.add('active');
+  document.getElementById('exam-start').style.display = 'none';
+  startExam(timed);
+}
+
 function startExam(timed = true) {
   timedMode = timed;
   timeLeft = 75 * 60;
-  userAnswers = new Array(questions.length).fill(null);
+  userAnswers = new Array(activeBank.length).fill(null);
   examSubmitted = false;
   currentQ = 0;
-  document.getElementById('exam-start').style.display = 'none';
   document.getElementById('exam-active').style.display = 'block';
   document.getElementById('results').classList.remove('show');
+  const tn = document.getElementById('q-total-num');
+  if (tn) tn.textContent = activeBank.length;
   buildQuestions();
   buildDots();
   if (timedMode) startTimer();
   showQ(0);
 }
 
-function startExamUntimed() { startExam(false); }
-
 function buildQuestions() {
   const c = document.getElementById('questions-container');
   c.innerHTML = '';
-  questions.forEach((q, i) => {
+  activeBank.forEach((q, i) => {
     const card = document.createElement('div');
     card.className = 'question-card';
     card.id = 'qcard-' + i;
     const dColors = ['','#58a6ff','#3fb950','#d2a8ff','#ffa657','#f78166','#79c0ff','#56d364','#ffa657','#ff7b72','#d2a8ff'];
     card.innerHTML = `
-      <div class="q-num">Question ${i+1} of ${questions.length}</div>
+      <div class="q-num">Question ${i+1} of ${activeBank.length}</div>
       <span class="q-domain-tag" style="background:${dColors[q.d]}22;color:${dColors[q.d]};border:1px solid ${dColors[q.d]}44">Domain ${q.d}</span>
       <div class="q-text">${q.q}</div>
       <div class="options" id="opts-${i}">
@@ -1659,14 +1761,14 @@ function buildQuestions() {
       </div>
       <div class="explanation" id="exp-${i}"><strong>Explanation:</strong> ${q.e}</div>
     `;
-    c.appendChild(card);
+    c.appenthedChild(card);
   });
 }
 
 function buildDots() {
   const d = document.getElementById('q-dots');
   d.innerHTML = '';
-  questions.forEach((_, i) => {
+  activeBank.forEach((_, i) => {
     const dot = document.createElement('div');
     dot.className = 'q-dot';
     dot.id = 'dot-' + i;
@@ -1681,9 +1783,9 @@ function showQ(i) {
   document.getElementById('qcard-' + i)?.classList.add('active');
   currentQ = i;
   document.getElementById('q-current-num').textContent = i + 1;
-  document.getElementById('progress-fill').style.width = ((i + 1) / questions.length * 100) + '%';
+  document.getElementById('progress-fill').style.width = ((i + 1) / activeBank.length * 100) + '%';
   document.getElementById('btn-prev').disabled = i === 0;
-  document.getElementById('btn-next').textContent = i === questions.length - 1 ? 'Submit ✓' : 'Next →';
+  document.getElementById('btn-next').textContent = i === activeBank.length - 1 ? 'Submit ✓' : 'Next →';
   // Update dot active
   document.querySelectorAll('.q-dot').forEach((d, di) => {
     d.classList.remove('current');
@@ -1709,7 +1811,7 @@ function selectAnswer(qIndex, optIndex) {
 }
 
 function nextQ() {
-  if (currentQ === questions.length - 1) { submitExam(); return; }
+  if (currentQ === activeBank.length - 1) { submitExam(); return; }
   showQ(currentQ + 1);
 }
 function prevQ() { if (currentQ > 0) showQ(currentQ - 1); }
@@ -1737,7 +1839,7 @@ function submitExam() {
   const domainStats = {};
   for (let d = 1; d <= 10; d++) domainStats[d] = { correct: 0, total: 0, name: getDomainName(d) };
 
-  questions.forEach((q, i) => {
+  activeBank.forEach((q, i) => {
     domainStats[q.d].total++;
     const isCorrect = userAnswers[i] === q.a;
     if (isCorrect) { correct++; domainStats[q.d].correct++; }
@@ -1760,8 +1862,8 @@ function submitExam() {
     dot?.classList.add(isCorrect ? 'correct-dot' : 'wrong-dot');
   });
 
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById('score-display').innerHTML = `${correct}<span>/${questions.length}</span>`;
+  const pct = Math.round(correct / activeBank.length * 100);
+  document.getElementById('score-display').innerHTML = `${correct}<span>/${activeBank.length}</span>`;
   document.getElementById('pct-display').textContent = `${pct}%`;
   const badge = document.getElementById('pass-badge');
   badge.textContent = pct >= 75 ? 'PASS' : 'FAIL';
@@ -1789,8 +1891,12 @@ function getDomainName(d) {
 
 function resetExam() {
   document.getElementById('results').classList.remove('show');
-  document.getElementById('exam-start').style.display = 'block';
   document.getElementById('exam-active').style.display = 'none';
+  if (activeStartSection === 'exam2') {
+    showSection('exam2');
+  } else {
+    document.getElementById('exam-start').style.display = 'block';
+  }
 }
 
 // ──────────────────────────────────────────────
