@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════
+   Rachel's Study Hub — Shared Design System
+   Included by all pages. Do not add page-specific styles here.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── FONTS ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ── DESIGN TOKENS ── */
+:root {
+  /* Backgrounds */
+  --bg:           #0a0d12;
+  --surface:      #111520;
+  --surface2:     #161c2a;
+
+  /* Borders */
+  --border:       #1e2535;
+  --border2:      #263047;
+
+  /* Accent colors */
+  --accent:       #4f8ef7;
+  --accent-glow:  rgba(79, 142, 247, 0.12);
+  --green:        #3ecf8e;
+  --amber:        #f5a623;
+  --red:          #f76f6f;
+  --purple:       #a78bfa;
+
+  /* Text */
+  --text:         #dce8f5;
+  --heading:      #f0f8ff;
+  --muted:        #6b7a99;
+  --dim:          #3a4460;
+
+  /* Typography */
+  --font-sans:    'Outfit', system-ui, sans-serif;
+  --font-serif:   'DM Serif Display', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Backward-compat aliases (used by existing guide CSS) ── */
+  --error:        var(--red);
+  --text-muted:   var(--muted);
+  --text-dim:     var(--dim);
+  --accent2:      var(--green);
+  --accent3:      var(--red);
+  --accent4:      var(--purple);
+  --accent5:      var(--amber);
+  /* UI designer guide aliases */
+  --ink:          var(--text);
+  --font:         var(--font-sans);
+  --mono:         var(--font-mono);
+  --blue:         var(--accent);
+}
+
+/* ── BASE ── */
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── GRID BACKGROUND (applies to all pages) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 142, 247, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 142, 247, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
