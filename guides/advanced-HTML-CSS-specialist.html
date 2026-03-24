@@ -167,6 +167,57 @@
         <li>Use semantic elements for screen readers and SEO</li>
         <li>Design progressively: basic functionality works without CSS/JS</li>
       </ul>
+
+      <div class="study-h3">History API</div>
+      <div class="key-concept">
+        The <strong>History API</strong> lets JavaScript manipulate the browser's session history — changing the URL in the address bar <em>without</em> reloading the page.
+      </div>
+      <pre><span class="cm">// pushState — add new entry to history stack, update URL</span>
+history.<span class="fn">pushState</span>({ page: <span class="num">2</span> }, <span class="str">"Title"</span>, <span class="str">"/page2"</span>);
+
+<span class="cm">// replaceState — replace current entry (no new history entry)</span>
+history.<span class="fn">replaceState</span>({ page: <span class="num">2</span> }, <span class="str">"Title"</span>, <span class="str">"/page2"</span>);
+
+<span class="cm">// Navigate back/forward in history</span>
+history.<span class="fn">back</span>();
+history.<span class="fn">forward</span>();
+history.<span class="fn">go</span>(<span class="num">-2</span>);   <span class="cm">// go back 2 entries</span>
+
+<span class="cm">// Listen for back/forward navigation</span>
+window.<span class="fn">addEventListener</span>(<span class="str">"popstate"</span>, <span class="kw">function</span>(event) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"navigated:"</span>, event.state);
+});</pre>
+      <div class="warning-box">pushState/replaceState do NOT trigger a page reload — they only change the URL and history stack. Used heavily in Single Page Applications (SPAs).</div>
+
+      <div class="study-h3">Drag-and-Drop API</div>
+      <div class="key-concept">
+        HTML5 native drag-and-drop uses the <code>draggable</code> attribute and a set of events to move elements without a plugin.
+      </div>
+      <pre><span class="cm">&lt;!-- Make an element draggable --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">draggable</span>=<span class="val">"true"</span> <span class="attr">id</span>=<span class="val">"item"</span><span class="tag">&gt;</span>Drag me<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"dropzone"</span><span class="tag">&gt;</span>Drop here<span class="tag">&lt;/div&gt;</span></pre>
+      <table class="study-table">
+        <tr><th>Event</th><th>Fires on</th><th>Description</th></tr>
+        <tr><td><code>dragstart</code></td><td>Dragged element</td><td>User starts dragging</td></tr>
+        <tr><td><code>drag</code></td><td>Dragged element</td><td>Fires continuously while dragging</td></tr>
+        <tr><td><code>dragend</code></td><td>Dragged element</td><td>Drag operation ends</td></tr>
+        <tr><td><code>dragenter</code></td><td>Drop target</td><td>Dragged item enters target</td></tr>
+        <tr><td><code>dragleave</code></td><td>Drop target</td><td>Dragged item leaves target</td></tr>
+        <tr><td><code>dragover</code></td><td>Drop target</td><td>Must call <code>preventDefault()</code> to allow drop</td></tr>
+        <tr><td><code>drop</code></td><td>Drop target</td><td>Item dropped on target</td></tr>
+      </table>
+
+      <div class="study-h3">Form Attribute — Associating Controls Outside &lt;form&gt;</div>
+      <div class="key-concept">
+        The <code>form</code> attribute on an input associates it with a <code>&lt;form&gt;</code> element by its <code>id</code>, even if the input is <em>outside</em> the form tags.
+      </div>
+      <pre><span class="tag">&lt;form</span> <span class="attr">id</span>=<span class="val">"myForm"</span> <span class="attr">action</span>=<span class="val">"/submit"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">name</span>=<span class="val">"username"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="cm">&lt;!-- This input is outside the form but still belongs to it --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">form</span>=<span class="val">"myForm"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">form</span>=<span class="val">"myForm"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span></pre>
     </div>
   </div>
 
@@ -177,6 +228,16 @@
       <button class="panel-close">✕</button>
     </div>
     <div class="panel-body">
+      <div class="study-h3">CSS Terminology</div>
+      <div class="key-concept">
+        A CSS <strong>rule</strong> has two parts:<br>
+        <code>.card <span style="color:var(--accent3)">{ color: red; }</span></code><br><br>
+        — <strong>Selector</strong>: The pattern that identifies which HTML element(s) to style (<code>.card</code>)<br>
+        — <strong>Declaration block</strong>: Everything in the curly braces <code>{ }</code><br>
+        — <strong>Property</strong>: The aspect of the element being styled (<code>color</code>)<br>
+        — <strong>Value</strong>: What to set the property to (<code>red</code>)
+      </div>
+
       <div class="study-h3">CSS Box Model</div>
       <div class="key-concept">
         <strong>Content → Padding → Border → Margin</strong> (inside to outside)<br>
@@ -201,7 +262,14 @@
         <tr><td><code>:first-child</code></td><td>First child of its parent</td><td><code>li:first-child { font-weight: bold; }</code></td></tr>
         <tr><td><code>:nth-child(n)</code></td><td>nth child (use <code>odd</code>, <code>even</code>, or formula)</td><td><code>tr:nth-child(even) { background: #f5f5f5; }</code></td></tr>
         <tr><td><code>::before / ::after</code></td><td>Pseudo-elements (CSS3)</td><td><code>p::before { content: "→ "; }</code></td></tr>
+        <tr><td><code>:nth-of-type(n)</code></td><td>nth element of that type (1-based)</td><td><code>p:nth-of-type(2) { color: blue; }</code></td></tr>
+        <tr><td><code>:not(selector)</code></td><td>Elements that do NOT match selector</td><td><code>li:not(.active) { opacity: 0.5; }</code></td></tr>
       </table>
+      <div class="key-concept">
+        <strong>:nth-child vs :nth-of-type:</strong><br>
+        <code>p:nth-child(2)</code> — selects a <code>&lt;p&gt;</code> only if it is the 2nd child of its parent<br>
+        <code>p:nth-of-type(2)</code> — selects the 2nd <code>&lt;p&gt;</code> element among its siblings (regardless of position)
+      </div>
 
       <div class="study-h3">CSS Positioning</div>
       <div class="two-col">
@@ -214,14 +282,18 @@
       </div>
 
       <div class="study-h3">CSS3 New Features</div>
-      <pre><span class="cm">/* Rounded corners */</span>
-<span class="prop">border-radius</span>: <span class="num">10px</span>;
+      <pre><span class="cm">/* Rounded corners — 1 to 4 values */</span>
+<span class="prop">border-radius</span>: <span class="num">10px</span>;                        <span class="cm">/* all corners */</span>
+<span class="prop">border-radius</span>: <span class="num">10px 20px</span>;                  <span class="cm">/* top-left/bottom-right  top-right/bottom-left */</span>
+<span class="prop">border-radius</span>: <span class="num">10px 20px 15px</span>;            <span class="cm">/* top-left  top-right/bottom-left  bottom-right */</span>
+<span class="prop">border-radius</span>: <span class="num">10px 20px 15px 5px</span>;       <span class="cm">/* TL  TR  BR  BL (clockwise) */</span>
 
-<span class="cm">/* Box shadow */</span>
-<span class="prop">box-shadow</span>: <span class="num">2px 4px 8px</span> rgba(<span class="num">0,0,0,0.3</span>);
+<span class="cm">/* Box shadow — adds shadow to the element box */</span>
+<span class="prop">box-shadow</span>: <span class="num">2px 4px 8px</span> rgba(<span class="num">0,0,0,0.3</span>);   <span class="cm">/* h-offset v-offset blur color */</span>
+<span class="prop">box-shadow</span>: <span class="kw">inset</span> <span class="num">0 2px 4px</span> rgba(<span class="num">0,0,0,0.2</span>); <span class="cm">/* inset shadow */</span>
 
-<span class="cm">/* Text shadow */</span>
-<span class="prop">text-shadow</span>: <span class="num">1px 1px 2px</span> #<span class="num">000</span>;
+<span class="cm">/* Text shadow — adds shadow to text characters */</span>
+<span class="prop">text-shadow</span>: <span class="num">1px 1px 2px</span> #<span class="num">000</span>;             <span class="cm">/* h-offset v-offset blur color */</span>
 
 <span class="cm">/* Linear gradient background */</span>
 <span class="prop">background</span>: <span class="fn">linear-gradient</span>(to right, #ff0000, #0000ff);
@@ -235,8 +307,14 @@
   <span class="prop">src</span>: <span class="fn">url</span>(<span class="str">'myfont.woff2'</span>) <span class="fn">format</span>(<span class="str">'woff2'</span>);
 }
 
-<span class="cm">/* Multiple backgrounds */</span>
-<span class="prop">background-image</span>: <span class="fn">url</span>(<span class="str">'top.png'</span>), <span class="fn">url</span>(<span class="str">'bottom.png'</span>);</pre>
+<span class="cm">/* Multiple backgrounds — CSS3 feature, comma-separated */</span>
+<span class="prop">background-image</span>: <span class="fn">url</span>(<span class="str">'top.png'</span>), <span class="fn">url</span>(<span class="str">'bottom.png'</span>);
+<span class="cm">/* First listed = topmost layer; last listed = bottommost */</span></pre>
+      <div class="key-concept">
+        <strong>box-shadow vs. text-shadow:</strong><br>
+        <code>box-shadow</code> — shadow behind the element's <em>box/rectangle</em><br>
+        <code>text-shadow</code> — shadow behind individual <em>text characters</em>
+      </div>
 
       <div class="study-h3">Responsive Web Design (RWD)</div>
       <div class="key-concept">
@@ -304,6 +382,11 @@
   <span class="prop">perspective</span>: <span class="num">1000px</span>;
   <span class="prop">transform-style</span>: preserve-3d;
 }</pre>
+      <div class="key-concept">
+        <strong>perspective property:</strong> Sets the <em>viewing distance</em> from the viewer to the z=0 plane, creating a depth illusion for 3D child elements. Applied to the <strong>parent</strong> container. Smaller values = more dramatic 3D effect; larger values = subtler.<br><br>
+        <code>transform: perspective()</code> (as a transform function) applies to the element itself.<br>
+        <code>perspective: </code> (as a CSS property) applies to all 3D-transformed children.
+      </div>
 
       <div class="study-h3">CSS3 Transitions</div>
       <pre><span class="cm">/* Shorthand: property duration timing-function delay */</span>
@@ -322,6 +405,9 @@
       </div>
 
       <div class="study-h3">CSS3 Animations</div>
+      <div class="key-concept">
+        <strong>@keyframes</strong> defines the <em>intermediate steps (waypoints)</em> of an animation sequence — what the element looks like at specific points (0%, 50%, 100%, or named <code>from</code>/<code>to</code>). The browser interpolates between them.
+      </div>
       <pre><span class="cm">/* Define keyframes */</span>
 <span class="kw">@keyframes</span> <span class="fn">slideIn</span> {
   <span class="num">0%</span>   { <span class="prop">transform</span>: <span class="fn">translateX</span>(<span class="num">-100px</span>); <span class="prop">opacity</span>: <span class="num">0</span>; }
@@ -370,6 +456,14 @@
 <span class="cm">&lt;!-- External file (preferred — place before &lt;/body&gt; or use defer) --&gt;</span>
 <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"app.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span></pre>
 
+      <div class="study-h3">Key JavaScript Concepts</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>Scope</strong>The <em>lifetime and accessibility</em> of a variable. <code>var</code> = function scope; <code>let</code>/<code>const</code> = block scope. Variables are only accessible within their scope.</div>
+        <div class="mini-card"><strong>Methods</strong>Functions stored as <em>object properties</em>. e.g., <code>array.push()</code> — <code>push</code> is a method of Array objects. Called with dot notation: <code>object.method()</code></div>
+        <div class="mini-card"><strong>Anonymous function</strong>A function with no name, assigned to a variable or passed as an argument: <code>var greet = function() { ... }</code></div>
+        <div class="mini-card"><strong>Function invocation</strong>Calling/executing a function by appending <code>()</code>: <code>myFunction()</code>. Without <code>()</code>, you're referencing the function object itself, not calling it.</div>
+      </div>
+
       <div class="study-h3">Variables & Data Types</div>
       <pre><span class="kw">var</span>   name = <span class="str">"Rachel"</span>;  <span class="cm">// function-scoped, hoisted, can redeclare</span>
 <span class="kw">let</span>   age  = <span class="num">30</span>;        <span class="cm">// block-scoped, NOT hoisted, no redeclare</span>
@@ -412,6 +506,10 @@
 <span class="kw">for</span> (<span class="kw">let</span> key <span class="kw">in</span> object) { ... }   <span class="cm">// iterates keys</span></pre>
 
       <div class="study-h3">Arrays</div>
+      <div class="key-concept">
+        Arrays can hold <strong>mixed data types</strong> — strings, numbers, booleans, objects, even other arrays — in a single array.<br>
+        <code>const mixed = [42, "hello", true, { key: "val" }, [1,2]];</code>
+      </div>
       <pre><span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
 arr.<span class="fn">push</span>(<span class="num">4</span>);         <span class="cm">// add to end</span>
 arr.<span class="fn">pop</span>();           <span class="cm">// remove from end</span>
@@ -433,6 +531,18 @@ arr.<span class="fn">indexOf</span>(val);    <span class="cm">// find index</spa
       <button class="panel-close">✕</button>
     </div>
     <div class="panel-body">
+      <div class="study-h3">JavaScript Error Types</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>Syntax Error</strong>Code violates the language grammar rules — caught by the parser before execution. e.g., missing closing bracket, typo in keyword.</div>
+        <div class="mini-card"><strong>Runtime Error</strong>Code is syntactically valid but fails during execution. e.g., calling a method on <code>null</code>, referencing an undefined variable.</div>
+        <div class="mini-card"><strong>Logic Error</strong>Code runs without errors but produces <em>wrong results</em>. Hardest to find — requires testing and debugging. e.g., using <code>+</code> instead of <code>-</code>.</div>
+      </div>
+
+      <div class="study-h3">Conditional Statements</div>
+      <div class="key-concept">
+        Conditional statements (<code>if</code>, <code>else if</code>, <code>else</code>, <code>switch</code>) allow a program to <strong>perform different actions based on different conditions</strong>. They control program flow by branching execution.
+      </div>
+
       <div class="study-h3">Event Handlers</div>
       <pre><span class="cm">// Method 1: HTML attribute (avoid)</span>
 <span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="val">"handleClick()"</span><span class="tag">&gt;</span>Click<span class="tag">&lt;/button&gt;</span>
@@ -469,6 +579,13 @@ focus | blur | change | submit | input</pre>
 }</pre>
 
       <div class="study-h3">Promises & Async/Await</div>
+      <div class="key-concept">
+        <strong>Promise states:</strong><br>
+        <code>pending</code> → initial state, operation not yet complete<br>
+        <code>fulfilled</code> (resolved) → operation succeeded, <code>.then()</code> callback runs<br>
+        <code>rejected</code> → operation failed, <code>.catch()</code> callback runs<br><br>
+        <strong>async/await</strong> is <em>syntactic sugar over Promises</em> — it makes async code look synchronous. An <code>async</code> function always returns a Promise. <code>await</code> pauses execution until the Promise resolves.
+      </div>
       <pre><span class="cm">// Promise</span>
 <span class="kw">const</span> p = <span class="kw">new</span> <span class="fn">Promise</span>((resolve, reject) => {
   <span class="cm">// async work...</span>
@@ -564,6 +681,10 @@ xhr.<span class="fn">send</span>();
 $.<span class="fn">ajax</span>({ url: <span class="str">"data.json"</span>, success: (data) => <span class="fn">console</span>.<span class="fn">log</span>(data) });
 $.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <span class="fn">console</span>.<span class="fn">log</span>(data));</pre>
 
+      <div class="key-concept">
+        <strong>jQuery</strong> is a JavaScript library that simplifies DOM manipulation, event handling, AJAX calls, and animations. It provides a concise, cross-browser API — tasks that require many lines of vanilla JS can be done in one jQuery call.
+      </div>
+
       <div class="study-h4">XHR readyState values</div>
       <table class="study-table">
         <tr><th>Value</th><th>Meaning</th></tr>
@@ -573,6 +694,41 @@ $.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <s
         <tr><td>3</td><td>LOADING — response being received</td></tr>
         <tr><td>4</td><td>DONE — operation complete</td></tr>
       </table>
+
+      <div class="study-h3">File API</div>
+      <div class="key-concept">
+        The <strong>File API</strong> enables JavaScript to read the <em>contents of files selected by the user</em> via <code>&lt;input type="file"&gt;</code> — without uploading to a server. Uses <code>FileReader</code> to read file data as text, data URL, or binary.
+      </div>
+      <pre><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"file"</span> <span class="attr">id</span>=<span class="val">"fileInput"</span><span class="tag">&gt;</span>
+
+<span class="kw">const</span> input = document.<span class="fn">getElementById</span>(<span class="str">"fileInput"</span>);
+input.<span class="fn">addEventListener</span>(<span class="str">"change"</span>, <span class="kw">function</span>() {
+  <span class="kw">const</span> file = input.files[<span class="num">0</span>];            <span class="cm">// File object</span>
+  <span class="kw">const</span> reader = <span class="kw">new</span> <span class="fn">FileReader</span>();
+  reader.<span class="fn">onload</span> = <span class="kw">function</span>(e) {
+    <span class="fn">console</span>.<span class="fn">log</span>(e.target.result);          <span class="cm">// file contents</span>
+  };
+  reader.<span class="fn">readAsText</span>(file);                 <span class="cm">// read as text</span>
+});</pre>
+
+      <div class="study-h3">Web Storage API (localStorage & sessionStorage)</div>
+      <div class="key-concept">
+        HTML5 introduced <strong>Web Storage</strong> as an alternative to cookies for offline/client-side data storage.
+      </div>
+      <table class="study-table">
+        <tr><th>Feature</th><th>localStorage</th><th>sessionStorage</th></tr>
+        <tr><td>Persistence</td><td>Until explicitly cleared</td><td>Clears when tab/window closes</td></tr>
+        <tr><td>Scope</td><td>All tabs on same origin</td><td>Single tab only</td></tr>
+        <tr><td>Capacity</td><td>~5–10 MB</td><td>~5–10 MB</td></tr>
+      </table>
+      <pre><span class="cm">// localStorage</span>
+localStorage.<span class="fn">setItem</span>(<span class="str">"key"</span>, <span class="str">"value"</span>);
+localStorage.<span class="fn">getItem</span>(<span class="str">"key"</span>);
+localStorage.<span class="fn">removeItem</span>(<span class="str">"key"</span>);
+localStorage.<span class="fn">clear</span>();
+
+<span class="cm">// sessionStorage — same API</span>
+sessionStorage.<span class="fn">setItem</span>(<span class="str">"token"</span>, <span class="str">"abc123"</span>);</pre>
     </div>
   </div>
 
@@ -597,19 +753,25 @@ $.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <s
         </div>
         <div class="mini-card"><strong>Benefits of HTML5 input types</strong>Mobile browsers show the appropriate keyboard. Built-in validation. Better UX without JavaScript.</div>
       </div>
+      <div class="key-concept">
+        <strong>type="range"</strong> — renders as a <em>slider control</em>. Key attributes: <code>min</code>, <code>max</code>, <code>step</code>, <code>value</code> (initial position).<br>
+        <code>&lt;input type="range" min="0" max="100" step="5" value="50"&gt;</code>
+      </div>
 
       <div class="study-h3">New HTML5 Form Elements</div>
-      <pre><span class="cm">&lt;!-- datalist: suggested options for text input --&gt;</span>
+      <pre><span class="cm">&lt;!-- datalist: provides ADVISORY autocomplete suggestions (user can still type anything) --&gt;</span>
 <span class="tag">&lt;input</span> <span class="attr">list</span>=<span class="val">"browsers"</span> <span class="attr">name</span>=<span class="val">"browser"</span><span class="tag">&gt;</span>
 <span class="tag">&lt;datalist</span> <span class="attr">id</span>=<span class="val">"browsers"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Chrome"</span><span class="tag">&gt;</span>
   <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Firefox"</span><span class="tag">&gt;</span>
 <span class="tag">&lt;/datalist&gt;</span>
+<span class="cm">&lt;!-- vs &lt;select&gt; which RESTRICTS to listed options only --&gt;</span>
 
-<span class="cm">&lt;!-- output: result of a calculation --&gt;</span>
+<span class="cm">&lt;!-- output: displays result of a calculation; "for" links it to input(s) --&gt;</span>
 <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"range"</span> <span class="attr">id</span>=<span class="val">"a"</span> <span class="attr">value</span>=<span class="val">"50"</span>
        <span class="attr">oninput</span>=<span class="val">"x.value=a.value"</span><span class="tag">&gt;</span>
 <span class="tag">&lt;output</span> <span class="attr">name</span>=<span class="val">"x"</span> <span class="attr">for</span>=<span class="val">"a"</span><span class="tag">&gt;</span>50<span class="tag">&lt;/output&gt;</span>
+<span class="cm">&lt;!-- "for" attribute = space-separated IDs of inputs that feed into this output --&gt;</span>
 
 <span class="cm">&lt;!-- fieldset and legend --&gt;</span>
 <span class="tag">&lt;fieldset&gt;</span>
@@ -627,6 +789,19 @@ $.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <s
       <button class="panel-close">✕</button>
     </div>
     <div class="panel-body">
+      <div class="study-h3">Form Element Attributes</div>
+      <table class="study-table">
+        <tr><th>Attribute</th><th>On</th><th>Purpose</th></tr>
+        <tr><td><code>action</code></td><td><code>&lt;form&gt;</code></td><td>URL where form data is <strong>sent on submission</strong> (server endpoint)</td></tr>
+        <tr><td><code>method</code></td><td><code>&lt;form&gt;</code></td><td>HTTP method: <code>GET</code> (appends to URL) or <code>POST</code> (sends in body)</td></tr>
+        <tr><td><code>enctype</code></td><td><code>&lt;form&gt;</code></td><td>Encoding type for POST data; use <code>multipart/form-data</code> for file uploads</td></tr>
+        <tr><td><code>novalidate</code></td><td><code>&lt;form&gt;</code></td><td>Disables HTML5 built-in validation for the entire form</td></tr>
+      </table>
+      <pre><span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">"/upload"</span> <span class="attr">method</span>=<span class="val">"post"</span> <span class="attr">enctype</span>=<span class="val">"multipart/form-data"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"file"</span> <span class="attr">name</span>=<span class="val">"photo"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>Upload<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre>
+
       <div class="study-h3">HTML5 Validation Attributes</div>
       <table class="study-table">
         <tr><th>Attribute</th><th>Purpose</th><th>Example</th></tr>
@@ -637,7 +812,7 @@ $.<span class="fn">get</span>(<span class="str">"data.json"</span>, (data) => <s
         <tr><td><code>type</code></td><td>Built-in format validation</td><td><code>type="email"</code></td></tr>
         <tr><td><code>novalidate</code></td><td>Disable form-level validation</td><td>On <code>&lt;form&gt;</code></td></tr>
         <tr><td><code>autocomplete</code></td><td>on | off — browser autofill</td><td><code>autocomplete="off"</code></td></tr>
-        <tr><td><code>placeholder</code></td><td>Hint text</td><td><code>placeholder="Enter email"</code></td></tr>
+        <tr><td><code>placeholder</code></td><td>Hint text shown inside field — disappears when user types. Should NOT replace a <code>&lt;label&gt;</code>.</td><td><code>placeholder="Enter email"</code></td></tr>
         <tr><td><code>autofocus</code></td><td>Auto-focus on page load</td><td><code>&lt;input autofocus&gt;</code></td></tr>
         <tr><td><code>disabled</code></td><td>Field not editable, not submitted</td><td><code>&lt;input disabled&gt;</code></td></tr>
         <tr><td><code>readonly</code></td><td>Not editable, but IS submitted</td><td><code>&lt;input readonly&gt;</code></td></tr>
@@ -655,12 +830,35 @@ form.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>,
   }
 });
 
-<span class="cm">// Constraint Validation API</span>
-input.<span class="prop">validity</span>.<span class="prop">valid</span>        <span class="cm">// true if all constraints pass</span>
-input.<span class="prop">validity</span>.<span class="prop">valueMissing</span>  <span class="cm">// true if required and empty</span>
-input.<span class="prop">validity</span>.<span class="prop">patternMismatch</span>
-input.<span class="fn">setCustomValidity</span>(<span class="str">"Custom message"</span>);
-input.<span class="fn">reportValidity</span>();</pre>
+<span class="cm">// Constraint Validation API — check validity state</span>
+input.<span class="prop">validity</span>.<span class="prop">valid</span>          <span class="cm">// true if ALL constraints pass</span>
+input.<span class="prop">validity</span>.<span class="prop">valueMissing</span>   <span class="cm">// true if field is required but empty</span>
+input.<span class="prop">validity</span>.<span class="prop">patternMismatch</span> <span class="cm">// true if value doesn't match pattern=""</span>
+input.<span class="prop">validity</span>.<span class="prop">typeMismatch</span>    <span class="cm">// true if value doesn't match type (e.g., invalid email)</span>
+input.<span class="prop">validity</span>.<span class="prop">rangeOverflow</span>   <span class="cm">// true if value > max</span>
+input.<span class="prop">validity</span>.<span class="prop">rangeUnderflow</span>  <span class="cm">// true if value &lt; min</span>
+input.<span class="fn">setCustomValidity</span>(<span class="str">"Custom message"</span>);  <span class="cm">// custom error message</span>
+input.<span class="fn">reportValidity</span>();                      <span class="cm">// show validation UI</span></pre>
+
+      <div class="study-h3">Regex Pattern Basics</div>
+      <div class="key-concept">
+        The <code>pattern</code> attribute accepts a <strong>regular expression</strong> to validate input format.
+      </div>
+      <table class="study-table">
+        <tr><th>Pattern</th><th>Matches</th></tr>
+        <tr><td><code>[A-Z]</code></td><td>Any single uppercase letter A–Z</td></tr>
+        <tr><td><code>[a-z]</code></td><td>Any single lowercase letter a–z</td></tr>
+        <tr><td><code>[A-Za-z]</code></td><td>Any single letter (upper or lower)</td></tr>
+        <tr><td><code>[0-9]</code></td><td>Any single digit</td></tr>
+        <tr><td><code>{3}</code></td><td>Exactly 3 of the preceding</td></tr>
+        <tr><td><code>{2,5}</code></td><td>Between 2 and 5 of the preceding</td></tr>
+        <tr><td><code>[A-Za-z]{3}</code></td><td>Exactly 3 letters (upper or lower)</td></tr>
+        <tr><td><code>\d</code></td><td>Any digit (shorthand for [0-9])</td></tr>
+        <tr><td><code>\w</code></td><td>Any word character (letter, digit, underscore)</td></tr>
+        <tr><td><code>+</code></td><td>One or more of the preceding</td></tr>
+        <tr><td><code>*</code></td><td>Zero or more of the preceding</td></tr>
+        <tr><td><code>?</code></td><td>Zero or one of the preceding (optional)</td></tr>
+      </table>
 
       <div class="warning-box">Always validate on the server side too — client-side validation can be bypassed!</div>
     </div>
@@ -699,6 +897,22 @@ input.<span class="fn">reportValidity</span>();</pre>
         <li>Open-source licenses (MIT, GPL, Apache) have specific requirements</li>
       </ul>
 
+      <div class="study-h3">Cultural Sensitivity in Web Design</div>
+      <ul class="study-list">
+        <li>Colors carry different cultural meanings — red means luck in China but danger in the West; white is associated with mourning in some Asian cultures</li>
+        <li>Symbols and icons can be offensive or meaningless in other cultures (e.g., hand gestures, religious symbols)</li>
+        <li>Design for internationalization (i18n) — consider text expansion in translation, RTL languages (Arabic, Hebrew), and locale-specific date/number formats</li>
+        <li>Avoid idioms and slang that don't translate well across languages</li>
+      </ul>
+
+      <div class="study-h3">Customer Service & Client Communication</div>
+      <ul class="study-list">
+        <li>Understanding client needs is critical — ask questions, listen actively, and document requirements</li>
+        <li>Communicate project status, delays, and changes proactively</li>
+        <li>Manage expectations around scope, timelines, and deliverables</li>
+        <li>Professional communication builds trust and leads to long-term client relationships</li>
+      </ul>
+
       <div class="study-h3">Web Security Basics</div>
       <ul class="study-list">
         <li><strong>HTTPS</strong> — encrypts data in transit via TLS/SSL; required for forms handling sensitive data</li>
@@ -723,6 +937,31 @@ input.<span class="fn">reportValidity</span>();</pre>
         <li><strong>Agile</strong> — iterative, flexible, cross-functional teams, user stories, sprints</li>
         <li><strong>Waterfall</strong> — sequential, rigid, each phase completes before next starts</li>
         <li><strong>Scrum</strong> — Agile framework; sprints (1–4 weeks); Daily standups; Product backlog; Sprint backlog</li>
+      </ul>
+
+      <div class="study-h3">Project Planning Tools</div>
+      <div class="key-concept">
+        <strong>Gantt Chart</strong> — a horizontal bar chart used to visualize project tasks, their durations, and timeline. Shows task start/end dates, dependencies, and overall project schedule at a glance. Commonly used in Waterfall PM.
+      </div>
+      <div class="two-col">
+        <div class="mini-card"><strong>Gantt Chart</strong>Horizontal bars = tasks; horizontal axis = time. Shows overlapping tasks, dependencies, milestones. Good for communicating schedule to stakeholders.</div>
+        <div class="mini-card"><strong>Milestone</strong>A significant event or checkpoint in a project (e.g., design approval, beta launch). Has no duration — it's a point in time.</div>
+      </div>
+
+      <div class="study-h3">Management & Leadership Styles</div>
+      <div class="two-col">
+        <div class="mini-card"><strong>Laissez-faire</strong>"Hands-off" — leader delegates authority, gives team autonomy and minimal intervention. Works best with self-motivated, experienced teams.</div>
+        <div class="mini-card"><strong>Autocratic / Directive</strong>Leader makes decisions unilaterally. Fast decision-making but low team morale in long term.</div>
+        <div class="mini-card"><strong>Democratic / Participative</strong>Team input is solicited before decisions. Higher buy-in, slower decisions.</div>
+        <div class="mini-card"><strong>Adaptive / Flexible</strong>Effective leaders adapt their style to the situation, team needs, and changing requirements. Adaptability is a key leadership quality.</div>
+      </div>
+
+      <div class="study-h3">Work-Based Learning</div>
+      <ul class="study-list">
+        <li>Hands-on experience in real work environments reinforces and extends classroom learning</li>
+        <li>Benefits: practical skill development, professional networking, exposure to industry tools and workflows</li>
+        <li>Examples: internships, apprenticeships, co-ops, job shadowing</li>
+        <li>Bridges the gap between academic knowledge and workplace expectations</li>
       </ul>
 
       <div class="study-h3">Common Website Issues & Troubleshooting</div>
