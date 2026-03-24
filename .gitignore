@@ -1,1 +1,4 @@
 .vercel
+/.idea/prettier.xml
+/Resources
+.claude/settings.local.json
